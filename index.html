@@ -3,224 +3,440 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>可算名詞と不可算名詞、数量詞の用法 - 英語学習ガイド</title>
-    <!-- SEO対策: サイトの説明 -->
-    <meta name="description" content="英語の可算名詞と不可算名詞、そしてmuch, many, little, few, some, anyなどの数量詞の正しい使い方を分かりやすく解説。例文を豊富に掲載し、英語学習をサポートします。">
-    <!-- SEO対策: キーワード -->
-    <meta name="keywords" content="可算名詞, 不可算名詞, 数量詞, much, many, little, few, a little, a few, a lot of, lots of, plenty of, a good deal of, a great deal of, some, any, all, most, no, each, every, either, neither, 英語学習, 文法, 英語">
-    <!-- SEO対策: 著者情報 (任意) -->
-    <meta name="author" content="AI Language Guide">
+    <title>英語 可算名詞・不可算名詞を徹底攻略！定量表現マスタークイズ | 英語学習ツール</title>
+    <meta name="description" content="英語の可算名詞・不可算名詞と定量表現をインタラクティブに学習できる無料ツール。基本ルールから応用、意味によって変わる名詞、クイズで実践力を高め、英語文法をマスターしましょう。">
+    <meta name="keywords" content="英語,可算名詞,不可算名詞,定量表現,英語学習,英語文法,英語クイズ,英会話,名詞 覚え方,英語 数量詞,英語 マスター">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://example.com/interactive-english-nouns-tool"> <!-- 実際のURLに置き換えてください -->
 
-    <!-- Tailwind CSS CDNを読み込み -->
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://example.com/interactive-english-nouns-tool"> <!-- 実際のURLに置き換えてください -->
+    <meta property="og:title" content="英語 可算名詞・不可算名詞を徹底攻略！定量表現マスタークイズ | 英語学習ツール">
+    <meta property="og:description" content="英語の可算名詞・不可算名詞と定量表現をインタラクティブに学習できる無料ツール。基本ルールから応用、意味によって変わる名詞、クイズで実践力を高め、英語文法をマスターしましょう。">
+    <meta property="og:image" content="https://placehold.co/1200x630/52796f/ffffff?text=English+Nouns+Master"> <!-- ツールを表す画像URLに置き換えてください -->
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://example.com/interactive-english-nouns-tool"> <!-- 実際のURLに置き換えてください -->
+    <meta property="twitter:title" content="英語 可算名詞・不可算名詞を徹底攻略！定量表現マスタークイズ | 英語学習ツール">
+    <meta property="twitter:description" content="英語の可算名詞・不可算名詞と定量表現をインタラクティブに学習できる無料ツール。基本ルールから応用、意味によって変わる名詞、クイズで実践力を高め、英語文法をマスターしましょう。">
+    <meta property="twitter:image" content="https://placehold.co/1200x630/52796f/ffffff?text=English+Nouns+Master"> <!-- ツールを表す画像URLに置き換えてください -->
+
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: A three-part interactive dashboard structure is designed to guide the user through a natural learning flow: 1) "The Basics" for foundational concepts, 2) "The Explorer" for in-depth, interactive exploration of rules and exceptions, and 3) "The Trainer" for practical application and knowledge reinforcement via a quiz. This task-oriented structure breaks down the dense report into manageable, engaging modules, prioritizing active user interaction (toggling, selecting, quizzing) over passive reading. This design is chosen because it transforms a static document into a dynamic learning tool, making complex grammar more accessible and memorable for the learner. -->
+    <!-- Visualization & Content Choices: 
+        - [The Basics] Report Info: Core definitions of countable/uncountable. Goal: Inform. Viz/Method: Interactive HTML/CSS toggle switch. Interaction: Click to reveal rules for each type. Justification: Visually represents the core dichotomy, making it instantly understandable.
+        - [Quantifier Explorer] Report Info: Quantifier rules (many/much, etc.). Goal: Compare. Viz/Method: Custom interactive HTML/CSS diagram with buttons. Interaction: Clicking a quantifier button highlights applicable noun types and shows examples. Justification: Directly links quantifiers to noun types, clarifying usage rules more effectively than a static list.
+        - [Noun Switcher] Report Info: Nouns that can be both C/U (work, paper, etc.). Goal: Organize/Compare. Viz/Method: HTML dropdown controlling side-by-side display cards. Interaction: Select a noun to see its dual meanings compared. Justification: Simplifies the complex comparison table by focusing on one noun at a time.
+        - [Quiz Trainer] Report Info: Learning strategies. Goal: Apply/Reinforce. Viz/Method: Interactive quiz using HTML forms and JS logic. Interaction: User selects an answer and gets immediate feedback. Justification: Active recall is a powerful learning technique that solidifies understanding.
+        - All visualizations are built with HTML/CSS/JS, avoiding external libraries for core logic to maintain simplicity and performance. No complex charting libraries are needed.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
-        /* Google Fonts - Interを読み込み */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8; /* 薄い背景色 */
-            color: #334155; /* 濃いテキスト色 */
-        }
-        .container {
-            max-width: 960px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background-color: #ffffff;
-            border-radius: 1rem; /* 角を丸くする */
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* 影を追加 */
-        }
-        h1 {
-            color: #1e3a8a; /* 濃い青 */
-            border-bottom: 2px solid #bfdbfe; /* 下線 */
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-        h2 {
-            color: #2563eb; /* 中くらいの青 */
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-        }
-        h3 {
-            color: #3b82f6; /* 明るい青 */
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
-        }
-        .example-box {
-            background-color: #eff6ff; /* 例の背景色 */
-            border-left: 4px solid #60a5fa; /* 左側にボーダー */
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-radius: 0.5rem; /* 角を丸くする */
-        }
-        .example-box p {
-            margin: 0.25rem 0;
-        }
-        .note {
-            background-color: #fffbeb; /* 注意事項の背景色 */
-            border-left: 4px solid #f59e0b; /* 左側にボーダー */
-            padding: 1rem;
-            margin-top: 1.5rem;
-            border-radius: 0.5rem;
-            color: #92400e;
-        }
+        body { font-family: 'Noto Sans JP', sans-serif; background-color: #f4f5f5; color: #354f52; }
+        .tab-button.active { background-color: #52796f; color: white; }
+        .tab-button { background-color: #cad2c5; color: #354f52; }
+        .content-card { background-color: white; border-left: 5px solid #84a98c; transition: all 0.3s ease-in-out; }
+        .dual-noun-card { transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; background-color: #ffffff; border-color: #84a98c; }
+        .quantifier-btn.active { background-color: #52796f; color: white; transform: scale(1.05); }
+        .quantifier-btn { transition: all 0.2s ease-in-out; }
+        .quantifier-box { transition: all 0.3s ease-in-out; border: 2px solid transparent; }
+        .quantifier-box.highlight { border-color: #52796f; background-color: #e8f0e9; }
+        .quiz-btn { border: 2px solid #84a98c; color: #354f52; }
+        .quiz-btn:hover { background-color: #84a98c; color: white; }
+        .feedback { transition: opacity 0.5s ease-in-out; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: auto; min-height: 250px; }
     </style>
 </head>
-<body class="p-4 sm:p-6 lg:p-8">
-    <div class="container">
-        <h1 class="text-3xl sm:text-4xl font-bold text-center mb-6">可算名詞と不可算名詞、数量詞の用法</h1>
+<body class="antialiased">
 
-        <section>
-            <h2 class="text-2xl font-semibold">可算名詞 (Countable Nouns)</h2>
-            <p class="text-lg leading-relaxed">数えられる名詞を指します。単数形と複数形があり、数字や "a/an" と一緒に使うことができます。</p>
-            <div class="example-box">
-                <p>例: apple (リンゴ), book (本), car (車), student (生徒)</p>
-                <p>・I have <strong>an apple</strong>. (私はリンゴを一つ持っています。)</p>
-                <p>・She has <strong>two books</strong>. (彼女は本を二冊持っています。)</p>
-            </div>
-
-            <h2 class="text-2xl font-semibold">不可算名詞 (Uncountable Nouns)</h2>
-            <p class="text-lg leading-relaxed">数えられない名詞を指します。通常、単数形しかなく、"a/an" や数字と一緒に使うことはできません。量を示す言葉（例: "some", "much"）と一緒に使います。</p>
-            <div class="example-box">
-                <p>例: water (水), information (情報), money (お金), advice (アドバイス), furniture (家具)</p>
-                <p>・I need <strong>some water</strong>. (私は水が必要です。)</p>
-                <p>・He gave me <strong>a lot of advice</strong>. (彼は私にたくさんのアドバイスをくれました。)</p>
-            </div>
-        </section>
-
-        <section>
-            <h2 class="text-2xl font-semibold">主要な数量詞の用法</h2>
-
-            <h3 class="text-xl font-semibold">much (多くの)</h3>
-            <p><strong>不可算名詞</strong>に使います。主に否定文や疑問文で使われます。</p>
-            <div class="example-box">
-                <p>・I don't have <strong>much money</strong>. (私はあまりお金を持っていません。)</p>
-                <p>・Do you have <strong>much time</strong>? (あなたは時間がたくさんありますか？)</p>
-            </div>
-
-            <h3 class="text-xl font-semibold">many (多くの)</h3>
-            <p><strong>可算名詞</strong>に使います。主に否定文や疑問文で使われます。</p>
-            <div class="example-box">
-                <p>・There aren't <strong>many students</strong> in the class. (クラスにはあまり生徒がいません。)</p>
-                <p>・Did you buy <strong>many books</strong>? (あなたはたくさんの本を買いましたか？)</p>
-            </div>
-
-            <h3 class="text-xl font-semibold">little (ほとんど〜ない)</h3>
-            <p><strong>不可算名詞</strong>に使います。「ほとんどない」という否定的な意味合いを持ちます。</p>
-            <div class="example-box">
-                <p>・She has <strong>little hope</strong> of winning. (彼女には勝つ望みがほとんどありません。)</p>
-                <p>・There is <strong>little water</strong> left in the bottle. (ボトルには水がほとんど残っていません。)</p>
-            </div>
-
-            <h3 class="text-xl font-semibold">few (ほとんど〜ない)</h3>
-            <p><strong>可算名詞</strong>に使います。「ほとんどない」という否定的な意味合いを持ちます。</p>
-            <div class="example-box">
-                <p>・He has <strong>few friends</strong>. (彼には友達がほとんどいません。)</p>
-                <p>・There are <strong>few cars</strong> on the road today. (今日は道に車がほとんどありません。)</p>
-            </div>
-
-            <h3 class="text-xl font-semibold">a little (少しは〜ある)</h3>
-            <p><strong>不可算名詞</strong>に使います。「少しはある」という肯定的な意味合いを持ちます。</p>
-            <div class="example-box">
-                <p>・I have <strong>a little money</strong>. (私は少しお金を持っています。)</p>
-                <p>・Could you give me <strong>a little advice</strong>? (少しアドバイスをいただけますか？)</p>
-            </div>
-
-            <h3 class="text-xl font-semibold">a few (少しは〜ある)</h3>
-            <p><strong>可算名詞</strong>に使います。「少しはある」という肯定的な意味合いを持ちます。</p>
-            <div class="example-box">
-                <p>・She has <strong>a few friends</strong>. (彼女には友達が何人かいます。)</p>
-                <p>・I bought <strong>a few books</strong> yesterday. (昨日、本を何冊か買いました。)</p>
-            </div>
-
-            <h3 class="text-xl font-semibold">a lot of / lots of (多くの)</h3>
-            <p><strong>可算名詞、不可算名詞の両方</strong>に使えます。肯定文でよく使われます。</p>
-            <div class="example-box">
-                <p>・He has <strong>a lot of friends</strong>. (彼にはたくさんの友達がいます。) - 可算名詞</p>
-                <p>・We have <strong>lots of time</strong>. (私たちにはたくさんの時間があります。) - 不可算名詞</p>
-            </div>
-
-            <h3 class="text-xl font-semibold">plenty of (十分な量の/数の)</h3>
-            <p><strong>可算名詞、不可算名詞の両方</strong>に使えます。「十分すぎるほどある」という意味合いです。</p>
-            <div class="example-box">
-                <p>・There's <strong>plenty of food</strong> for everyone. (みんなに十分な食料があります。) - 不可算名詞</p>
-                <p>・We have <strong>plenty of chairs</strong>. (私たちは十分な数の椅子を持っています。) - 可算名詞</p>
-            </div>
-
-            <h3 class="text-xl font-semibold">a good deal of / a great deal of (かなりの量の)</h3>
-            <p><strong>不可算名詞</strong>に使います。「かなりの量」という意味で、比較的フォーマルな表現です。</p>
-            <div class="example-box">
-                <p>・He spent <strong>a good deal of time</strong> on the project. (彼はそのプロジェクトにかなりの時間を費やしました。)</p>
-                <p>・They caused <strong>a great deal of trouble</strong>. (彼らはかなりの問題を引き起こしました。)</p>
-            </div>
-
-            <h3 class="text-xl font-semibold">some (いくつかの/いくらかの)</h3>
-            <p><strong>可算名詞の複数形、不可算名詞の両方</strong>に使えます。主に肯定文や、依頼・申し出の疑問文で使われます。</p>
-            <div class="example-box">
-                <p>・I have <strong>some questions</strong>. (いくつか質問があります。) - 可算名詞</p>
-                <p>・Would you like <strong>some coffee</strong>? (コーヒーはいかがですか？) - 不可算名詞</p>
-            </div>
-
-            <h3 class="text-xl font-semibold">any (いくつかの/いくらかの)</h3>
-            <p><strong>可算名詞の複数形、不可算名詞の両方</strong>に使えます。主に疑問文や否定文で使われます。</p>
-            <div class="example-box">
-                <p>・Do you have <strong>any questions</strong>? (何か質問はありますか？) - 可算名詞</p>
-                <p>・I don't have <strong>any money</strong>. (私は全くお金を持っていません。) - 不可算名詞</p>
-            </div>
-
-            <h3 class="text-xl font-semibold">all (全ての)</h3>
-            <p><strong>可算名詞の複数形、不可算名詞の両方</strong>に使えます。「全体」を意味します。</p>
-            <div class="example-box">
-                <p>・<strong>All students</strong> must attend. (全ての生徒が出席しなければなりません。) - 可算名詞</p>
-                <p>・<strong>All information</strong> is confidential. (全ての情報は機密です。) - 不可算名詞</p>
-            </div>
-
-            <h3 class="text-xl font-semibold">most (ほとんどの)</h3>
-            <p><strong>可算名詞の複数形、不可算名詞の両方</strong>に使えます。「大部分」を意味します。</p>
-            <div class="example-box">
-                <p>・<strong>Most people</strong> agree. (ほとんどの人が同意します。) - 可算名詞</p>
-                <p>・<strong>Most of the water</strong> evaporated. (ほとんどの水が蒸発しました。) - 不可算名詞</p>
-            </div>
-
-            <h3 class="text-xl font-semibold">no (全く〜ない)</h3>
-            <p><strong>可算名詞、不可算名詞の両方</strong>に使えます。「全く〜ない」という否定的な意味を持ちます。</p>
-            <div class="example-box">
-                <p>・There are <strong>no tickets</strong> left. (チケットは全く残っていません。) - 可算名詞</p>
-                <p>・I have <strong>no idea</strong>. (全く分かりません。) - 不可算名詞</p>
-            </div>
-
-            <h3 class="text-xl font-semibold">each (それぞれ)</h3>
-            <p><strong>可算名詞の単数形</strong>に使います。「個々」を強調します。</p>
-            <div class="example-box">
-                <p>・<strong>Each student</strong> received a prize. (それぞれの生徒が賞を受け取りました。)</p>
-                <p>・<strong>Each country</strong> has its own culture. (それぞれの国には独自の文化があります。)</p>
-            </div>
-
-            <h3 class="text-xl font-semibold">every (あらゆる)</h3>
-            <p><strong>可算名詞の単数形</strong>に使います。「全て」を包括的に指します。</p>
-            <div class="example-box">
-                <p>・<strong>Every person</strong> needs water. (あらゆる人が水を必要とします。)</p>
-                <p>・I go to the gym <strong>every day</strong>. (私は毎日ジムに行きます。)</p>
-            </div>
-
-            <h3 class="text-xl font-semibold">either (2つのうちどちらか一方)</h3>
-            <p>2つの選択肢のうち「どちらか一方」を意味します。</p>
-            <div class="example-box">
-                <p>・You can choose <strong>either</strong> option. (どちらかの選択肢を選ぶことができます。)</p>
-                <p>・<strong>Either</strong> answer is correct. (どちらの答えも正しいです。)</p>
-            </div>
-
-            <h3 class="text-xl font-semibold">neither (2つのうちどちらも〜ない)</h3>
-            <p>2つの選択肢のうち「どちらも〜ない」を意味します。</p>
-            <div class="example-box">
-                <p>・<strong>Neither</strong> statement is true. (どちらの声明も真実ではありません。)</p>
-                <p>・I like <strong>neither</strong> coffee nor tea. (私はコーヒーも紅茶も好きではありません。)</p>
-            </div>
-        </section>
-
-        <div class="note">
-            <p class="font-bold">補足:</p>
-            <p>これらの数量詞は文脈によってニュアンスが変わることがあります。多くの英語学習者が混乱しやすいポイントですので、例文を参考にしながら慣れていくことが大切です。</p>
+    <header class="bg-[#354f52] text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4 md:py-6">
+            <h1 class="text-2xl md:text-4xl font-bold text-center">インタラクティブ英語名詞学習ツール</h1>
+            <p class="text-center text-sm md:text-base text-[#cad2c5] mt-2">英語の可算名詞・不可算名詞、定量表現を「本質」から理解してマスターしよう！</p>
         </div>
-    </div>
+    </header>
+
+    <nav class="sticky top-0 bg-white/80 backdrop-blur-sm shadow-md z-10">
+        <div class="container mx-auto px-4">
+            <ul class="flex justify-center space-x-2 sm:space-x-4 md:space-x-8 py-3">
+                <li><a href="#basics" class="text-sm sm:text-base text-[#354f52] hover:text-[#52796f] font-semibold transition-colors duration-300 pb-2 border-b-2 border-transparent hover:border-[#52796f]">基本のキ</a></li>
+                <li><a href="#explorer" class="text-sm sm:text-base text-[#354f52] hover:text-[#52796f] font-semibold transition-colors duration-300 pb-2 border-b-2 border-transparent hover:border-[#52796f]">探検しよう</a></li>
+                <li><a href="#trainer" class="text-sm sm:text-base text-[#354f52] hover:text-[#52796f] font-semibold transition-colors duration-300 pb-2 border-b-2 border-transparent hover:border-[#52796f]">練習しよう</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8 md:py-12">
+
+        <!-- Section 1: The Basics -->
+        <section id="basics" class="mb-16 scroll-mt-20">
+            <h2 class="text-2xl md:text-3xl font-bold text-center text-[#354f52] mb-4">基本のキ：英語の可算名詞 vs 不可算名詞</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-600 mb-8">
+                英語の名詞は「数えられるか（可算名詞）」と「数えられないか（不可算名詞）」で、文法上の扱いが大きく変わります。下のトグルをクリックして、それぞれの基本的な特徴と「本質」の違いを掴み、英語文法の基礎を固めましょう。
+            </p>
+
+            <div class="max-w-lg mx-auto bg-gray-200 rounded-full p-1 flex items-center mb-6">
+                <button id="countable-tab" class="w-1/2 p-2 rounded-full text-center font-semibold tab-button active">可算名詞</button>
+                <button id="uncountable-tab" class="w-1/2 p-2 rounded-full text-center font-semibold tab-button">不可算名詞</button>
+            </div>
+
+            <div id="content-display" class="max-w-3xl mx-auto">
+                <!-- Content will be injected here by JS -->
+            </div>
+        </section>
+
+        <!-- Section 2: The Explorer -->
+        <section id="explorer" class="mb-16 scroll-mt-20">
+            <h2 class="text-2xl md:text-3xl font-bold text-center text-[#354f52] mb-4">探検しよう：定量表現のルールを体感する</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-600 mb-12">
+                ここでは、より具体的なルールをインタラクティブに探求します。「定量表現（数量詞）」が名詞の種類によってどう変わるか、また、同じ単語が文脈によって「可算」と「不可算」をどう行き来するのかを見ていきましょう。英語の数量詞をマスターしましょう。
+            </p>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-12">
+                <h3 class="text-xl md:text-2xl font-bold text-[#354f52] mb-2 text-center">定量表現マスター</h3>
+                 <p class="max-w-2xl mx-auto text-center text-gray-600 mb-6">
+                    下の定量表現ボタンをクリックすると、どのタイプの英語名詞で使えるかがハイライトされます。
+                </p>
+                <div class="flex justify-center flex-wrap gap-3 mb-6">
+                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="many">many</button>
+                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="much">much</button>
+                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="a few">a few</button>
+                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="a little">a little</button>
+                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="some">some</button>
+                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="a lot of">a lot of</button>
+                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="few">few</button>
+                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="little">little</button>
+                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="any">any</button>
+                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="no">no</button>
+                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="several">several</button>
+                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="plenty of">plenty of</button>
+                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="numerous">numerous</button>
+                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="each">each</button>
+                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="every">every</button>
+                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="all">all</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    <div id="countable-box" class="quantifier-box border rounded-lg p-4">
+                        <h4 class="font-bold text-lg text-center mb-2">可算名詞で使える</h4>
+                        <p id="countable-example" class="text-center text-gray-600 h-12 flex items-center justify-center"></p>
+                    </div>
+                    <div id="uncountable-box" class="quantifier-box border rounded-lg p-4">
+                        <h4 class="font-bold text-lg text-center mb-2">不可算名詞で使える</h4>
+                        <p id="uncountable-example" class="text-center text-gray-600 h-12 flex items-center justify-center"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <h3 class="text-xl md:text-2xl font-bold text-[#354f52] mb-2 text-center">どっちにもなれる名詞の使い分け</h3>
+                <p class="max-w-2xl mx-auto text-center text-gray-600 mb-6">
+                    同じ単語でも、意味によって可算・不可算が変わることがあります。下のメニューから単語を選んで、その「本質」の変化を見て、英語の奥深さを探求しましょう。
+                </p>
+                <div class="max-w-sm mx-auto mb-8">
+                    <select id="dual-noun-select" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#52796f] focus:border-[#52796f] transition">
+                        <option value="">単語を選択してください</option>
+                        <option value="work">work</option>
+                        <option value="time">time</option>
+                        <option value="paper">paper</option>
+                        <option value="light">light</option>
+                        <option value="experience">experience</option>
+                        <option value="hair">hair</option>
+                        <option value="coffee">coffee</option>
+                    </select>
+                </div>
+                <div id="dual-noun-display" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 min-h-[250px]">
+                    <!-- Dual noun info will be injected here -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Section 3: The Trainer -->
+        <section id="trainer" class="scroll-mt-20">
+            <h2 class="text-2xl md:text-3xl font-bold text-center text-[#354f52] mb-4">練習しよう：英語の定量表現クイズで知識を試す</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-600 mb-8">
+                知識は使ってこそ身につきます。ここでは、簡単なクイズで理解度をチェックします。間違えても大丈夫！何度も挑戦して、英語の可算・不可算名詞と定量表現の感覚を養い、英会話に役立てましょう。
+            </p>
+            <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <div id="quiz-container">
+                    <p id="quiz-question" class="text-center text-lg md:text-xl font-semibold mb-6 h-16 flex items-center justify-center"></p>
+                    <div id="quiz-options" class="flex justify-center flex-wrap gap-4 mb-6">
+                        <!-- Quiz options will be injected here -->
+                    </div>
+                    <div id="quiz-feedback" class="text-center h-8 font-bold feedback opacity-0"></div>
+                </div>
+                <div class="text-center mt-6">
+                    <button id="next-question-btn" class="px-6 py-2 bg-[#52796f] text-white font-bold rounded-full hover:bg-[#354f52] transition-colors">次の問題へ</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-[#354f52] text-white mt-16">
+        <div class="container mx-auto px-4 py-6 text-center">
+            <p class="text-sm text-[#cad2c5]">© 2025 Interactive English Noun Learning Tool. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- Data ---
+        const contentData = {
+            countable: {
+                title: '可算名詞 (Countable Nouns)',
+                icon: '🍎',
+                essence: '「具体的な形」があり、1つ、2つと個別に数えられるモノ。',
+                points: [
+                    '単数形と複数形がある (例: book → books)',
+                    '単数形には a/an が付くことが多い (例: a cat)',
+                    '数を尋ねる時は How many ...? を使う'
+                ],
+                example: 'I have <strong>three apples</strong>.'
+            },
+            uncountable: {
+                title: '不可算名詞 (Uncountable Nouns)',
+                icon: '💧',
+                essence: '「決まった形」がなく、量で捉えるモノや抽象的な概念。',
+                points: [
+                    '複数形はない (例: water → waters とはならない)',
+                    'a/an は付かない',
+                    '量を尋ねる時は How much ...? を使う'
+                ],
+                example: 'I need <strong>some water</strong>.'
+            }
+        };
+
+        const dualNounsData = {
+            work: {
+                c: { title: '可算 [C]', meaning: '作品、業績', example: 'Picasso produced many great <strong>works</strong>.' },
+                u: { title: '不可算 [U]', meaning: '仕事、労働（活動全般）', example: 'I have too much <strong>work</strong> to do.' }
+            },
+            time: {
+                c: { title: '可算 [C]', meaning: '回数、～な時間', example: 'I went there three <strong>times</strong>. We had a great <strong>time</strong>.' },
+                u: { title: '不可算 [U]', meaning: '時間（概念）', example: 'We don\'t have much <strong>time</strong> left.' }
+            },
+            paper: {
+                c: { title: '可算 [C]', meaning: '新聞、論文、書類', example: 'I need to write <strong>a paper</strong> for my class.' },
+                u: { title: '不可算 [U]', meaning: '紙（物質）', example: 'Can I have some <strong>paper</strong> to write on?' }
+            },
+            light: {
+                c: { title: '可算 [C]', meaning: '光源（電灯など）', example: 'Please turn on the <strong>lights</strong>.' },
+                u: { title: '不可算 [U]', meaning: '光（概念）', example: 'The room was full of <strong>light</strong>.' }
+            },
+            experience: {
+                c: { title: '可算 [C]', meaning: '（個々の）体験', example: 'I had many interesting <strong>experiences</strong> in Japan.' },
+                u: { title: '不可算 [U]', meaning: '（知識としての）経験', example: 'She has a lot of <strong>experience</strong> in teaching.' }
+            },
+            hair: {
+                c: { title: '可算 [C]', meaning: '（一本一本の）髪の毛', example: 'I found <strong>a hair</strong> in my soup!' },
+                u: { title: '不可算 [U]', meaning: '髪（全体）', example: 'She has beautiful long <strong>hair</strong>.' }
+            },
+            coffee: {
+                c: { title: '可算 [C]', meaning: '（一杯の）コーヒー', example: '<strong>Two coffees</strong>, please.' },
+                u: { title: '不可算 [U]', meaning: 'コーヒー（物質・飲料）', example: 'I don\'t drink <strong>coffee</strong>.' }
+            }
+        };
+
+        const quantifiersData = {
+            'many': { c: true, u: false, exampleC: 'many books', exampleU: '' },
+            'much': { c: false, u: true, exampleC: '', exampleU: 'much money' },
+            'a few': { c: true, u: false, exampleC: 'a few friends', exampleU: '' },
+            'a little': { c: false, u: true, exampleC: '', exampleU: 'a little sugar' },
+            'some': { c: true, u: true, exampleC: 'some apples', exampleU: 'some advice' },
+            'a lot of': { c: true, u: true, exampleC: 'a lot of people', exampleU: 'a lot of traffic' },
+            'few': { c: true, u: false, exampleC: 'few friends (ほとんどいない)', exampleU: '' },
+            'little': { c: false, u: true, exampleC: '', exampleU: 'little money (ほとんどない)' },
+            'any': { c: true, u: true, exampleC: 'any questions (疑問文・否定文)', exampleU: 'any information (疑問文・否定文)' },
+            'no': { c: true, u: true, exampleC: 'no books (全くない)', exampleU: 'no money (全くない)' },
+            'several': { c: true, u: false, exampleC: 'several ideas (いくつかの)', exampleU: '' },
+            'plenty of': { c: true, u: true, exampleC: 'plenty of chairs (十分な量の)', exampleU: 'plenty of time (十分な量の)' },
+            'numerous': { c: true, u: false, exampleC: 'numerous stars (多数の)', exampleU: '' },
+            'each': { c: true, u: false, exampleC: 'each student (各生徒)', exampleU: '' },
+            'every': { c: true, u: false, exampleC: 'every day (毎日)', exampleU: '' },
+            'all': { c: true, u: true, exampleC: 'all students (全ての生徒)', exampleU: 'all water (全ての水)' }
+        };
+        
+        const quizData = [
+            { question: 'How ___ money do you have?', options: ['many', 'much'], answer: 'much' },
+            { question: 'There are so ___ cars on the street.', options: ['many', 'much'], answer: 'many' },
+            { question: 'I need ___ advice.', options: ['an', 'some'], answer: 'some' },
+            { question: 'She has beautiful long ___.', options: ['hair', 'hairs'], answer: 'hair' },
+            { question: 'We had ___ interesting experiences on our trip.', options: ['much', 'many'], answer: 'many' },
+            { question: 'Can you give me ___ water?', options: ['a', 'some'], answer: 'some' },
+            { question: 'He doesn\'t have ___ friends.', options: ['many', 'much'], answer: 'many' },
+            { question: 'It takes ___ time to learn a language.', options: ['a lot of', 'many'], answer: 'a lot of' },
+        ];
+        let currentQuestionIndex = 0;
+
+
+        // --- DOM Elements ---
+        const countableTab = document.getElementById('countable-tab');
+        const uncountableTab = document.getElementById('uncountable-tab');
+        const contentDisplay = document.getElementById('content-display');
+        const dualNounSelect = document.getElementById('dual-noun-select');
+        const dualNounDisplay = document.getElementById('dual-noun-display');
+        const quantifierButtons = document.querySelectorAll('.quantifier-btn');
+        const countableBox = document.getElementById('countable-box');
+        const uncountableBox = document.getElementById('uncountable-box');
+        const countableExample = document.getElementById('countable-example');
+        const uncountableExample = document.getElementById('uncountable-example');
+
+        const quizQuestionEl = document.getElementById('quiz-question');
+        const quizOptionsEl = document.getElementById('quiz-options');
+        const quizFeedbackEl = document.getElementById('quiz-feedback');
+        const nextQuestionBtn = document.getElementById('next-question-btn');
+
+
+        // --- Functions ---
+        function updateContent(type) {
+            const data = contentData[type];
+            contentDisplay.innerHTML = `
+                <div class="content-card shadow-lg rounded-lg p-6 md:p-8 transform hover:scale-105">
+                    <h3 class="text-xl md:text-2xl font-bold text-[#354f52] mb-4 flex items-center">
+                        <span class="text-3xl mr-3">${data.icon}</span>
+                        ${data.title}
+                    </h3>
+                    <p class="text-gray-700 font-semibold mb-4">${data.essence}</p>
+                    <ul class="space-y-2 mb-4 list-disc list-inside text-gray-600">
+                        ${data.points.map(point => `<li>${point}</li>`).join('')}
+                    </ul>
+                    <p class="text-center bg-gray-100 p-3 rounded-md text-gray-800">例: ${data.example}</p>
+                </div>
+            `;
+        }
+
+        function updateDualNounDisplay(noun) {
+            if (!noun || !dualNounsData[noun]) {
+                dualNounDisplay.innerHTML = '<p class="text-center text-gray-500 md:col-span-2">上記から単語を選択してください。</p>';
+                return;
+            }
+            const data = dualNounsData[noun];
+            dualNounDisplay.innerHTML = `
+                <div class="dual-noun-card p-4 border-l-4 rounded-md shadow opacity-0 transform -translate-y-4">
+                    <h4 class="font-bold text-lg text-green-700">${data.c.title}</h4>
+                    <p class="font-semibold text-gray-800 my-1">${data.c.meaning}</p>
+                    <p class="text-sm text-gray-600">例: ${data.c.example}</p>
+                </div>
+                <div class="dual-noun-card p-4 border-l-4 rounded-md shadow opacity-0 transform translate-y-4">
+                    <h4 class="font-bold text-lg text-blue-700">${data.u.title}</h4>
+                    <p class="font-semibold text-gray-800 my-1">${data.u.meaning}</p>
+                    <p class="text-sm text-gray-600">例: ${data.u.example}</p>
+                </div>
+            `;
+
+            setTimeout(() => {
+                const cards = dualNounDisplay.querySelectorAll('.dual-noun-card');
+                cards.forEach(card => {
+                    card.classList.remove('opacity-0', 'transform', '-translate-y-4', 'translate-y-4');
+                    card.classList.add('opacity-100');
+                });
+            }, 50);
+        }
+
+        function updateQuantifierDisplay(quantifier) {
+            quantifierButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.quantifier === quantifier);
+            });
+
+            const data = quantifiersData[quantifier];
+            countableBox.classList.toggle('highlight', data.c);
+            uncountableBox.classList.toggle('highlight', data.u);
+            countableExample.textContent = data.c ? `例: ${data.exampleC}` : '';
+            uncountableExample.textContent = data.u ? `例: ${data.exampleU}` : '';
+        }
+
+        function loadQuizQuestion() {
+            const currentQuiz = quizData[currentQuestionIndex];
+            const questionText = currentQuiz.question.replace('___', '<span class="text-[#52796f] font-bold">___</span>');
+            quizQuestionEl.innerHTML = questionText;
+            quizOptionsEl.innerHTML = '';
+            
+            // Randomize options order
+            const shuffledOptions = [...currentQuiz.options].sort(() => Math.random() - 0.5);
+
+            shuffledOptions.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('quiz-btn', 'px-5', 'py-2', 'rounded-full', 'font-semibold', 'transition-all');
+                button.onclick = () => checkAnswer(option);
+                quizOptionsEl.appendChild(button);
+            });
+
+            quizFeedbackEl.textContent = '';
+            quizFeedbackEl.classList.add('opacity-0');
+            quizFeedbackEl.classList.remove('text-green-600', 'text-red-600');
+            nextQuestionBtn.style.visibility = 'hidden';
+        }
+
+        function checkAnswer(selectedOption) {
+            const buttons = quizOptionsEl.querySelectorAll('button');
+            buttons.forEach(button => button.disabled = true);
+            
+            const currentQuiz = quizData[currentQuestionIndex];
+            if (selectedOption === currentQuiz.answer) {
+                quizFeedbackEl.textContent = '正解！ 🎉';
+                quizFeedbackEl.classList.add('text-green-600');
+            } else {
+                quizFeedbackEl.textContent = `残念！正解は「${currentQuiz.answer}」です。`;
+                quizFeedbackEl.classList.add('text-red-600');
+            }
+            quizFeedbackEl.classList.remove('opacity-0');
+            nextQuestionBtn.style.visibility = 'visible';
+        }
+        
+        function handleNextQuestion() {
+            currentQuestionIndex = (currentQuestionIndex + 1) % quizData.length;
+            loadQuizQuestion();
+        }
+
+        // --- Event Listeners ---
+        countableTab.addEventListener('click', () => {
+            countableTab.classList.add('active');
+            uncountableTab.classList.remove('active');
+            updateContent('countable');
+        });
+
+        uncountableTab.addEventListener('click', () => {
+            uncountableTab.classList.add('active');
+            countableTab.classList.remove('active');
+            updateContent('uncountable');
+        });
+
+        dualNounSelect.addEventListener('change', (e) => {
+            updateDualNounDisplay(e.target.value);
+        });
+
+        quantifierButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                updateQuantifierDisplay(button.dataset.quantifier);
+            });
+        });
+
+        nextQuestionBtn.addEventListener('click', handleNextQuestion);
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // --- Initial Load ---
+        updateContent('countable');
+        updateDualNounDisplay('');
+        updateQuantifierDisplay('many'); // Default selection
+        loadQuizQuestion();
+    });
+    </script>
 </body>
 </html>

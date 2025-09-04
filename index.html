@@ -3,488 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>英語 可算名詞・不可算名詞を徹底攻略！定量表現マスタークイズ | 英語学習ツール</title>
-    <meta name="description" content="英語の可算名詞・不可算名詞と定量表現をインタラクティブに学習できる無料ツール。基本ルールから応用、意味によって変わる名詞、クイズで実践力を高め、英語文法をマスターしましょう。">
-    <meta name="keywords" content="英語,可算名詞,不可算名詞,定量表現,英語学習,英語文法,英語クイズ,英会話,名詞 覚え方,英語 数量詞,英語 マスター,無料学習ツール">
-    <meta name="robots" content="index, follow">
-    <!-- 正しい正規URLに置き換えてください。例: https://yourdomain.com/english-quantifiers-guide/ -->
-    <link rel="canonical" href="https://gaburieru-dotcom.github.io/english-quantifiers-guide/">
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <!-- 実際のURLに置き換えてください -->
-    <meta property="og:url" content="https://gaburieru-dotcom.github.io/english-quantifiers-guide/">
-    <meta property="og:title" content="英語 可算名詞・不可算名詞を徹底攻略！定量表現マスタークイズ | 英語学習ツール">
-    <meta property="og:description" content="英語の可算名詞・不可算名詞と定量表現をインタラクティブに学習できる無料ツール。基本ルールから応用、意味によって変わる名詞、クイズで実践力を高め、英語文法をマスターしましょう。">
-    <!-- 実際のサイトの内容を表す高品質な画像URLに置き換えてください -->
-    <meta property="og:image" content="https://placehold.co/1200x630/52796f/ffffff?text=English+Nouns+Master">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <!-- 実際のURLに置き換えてください -->
-    <meta property="twitter:url" content="https://gaburieru-dotcom.github.io/english-quantifiers-guide/">
-    <meta property="twitter:title" content="英語 可算名詞・不可算名詞を徹底攻略！定量表現マスタークイズ | 英語学習ツール">
-    <meta property="twitter:description" content="英語の可算名詞・不可算名詞と定量表現をインタラクティブに学習できる無料ツール。基本ルールから応用、意味によって変わる名詞、クイズで実践力を高め、英語文法をマスターしましょう。">
-    <!-- 実際のサイトの内容を表す高品質な画像URLに置き換えてください -->
-    <meta property="twitter:image" content="https://placehold.co/1200x630/52796f/ffffff?text=English+Nouns+Master">
-
+    <title>暗記無双 公式単語集 | 英語・中国語・韓国語・第二外国語</title>
+    <meta name="description" content="暗記無双アプリで使える公式単語集ウェブサイト。TOEIC、HSK、大学受験から第二外国語まで、豊富な語彙であなたの語学学習を強力にサポートします。">
+    <!-- Tailwind CSS CDNを読み込み -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Google Search Consoleの認証コード。もし別の新しいサイトであれば、新しいコードに置き換えてください。 -->
-    <meta name="google-site-verification" content="JpNguBMjeo64DaSQ1m09sM6eV-MC2g-qFZ70qCFUMDo" />
-    
     <style>
-        body { font-family: 'Noto Sans JP', sans-serif; background-color: #f4f5f5; color: #354f52; }
-        .tab-button.active { background-color: #52796f; color: white; }
-        .tab-button { background-color: #cad2c5; color: #354f52; }
-        .content-card { background-color: white; border-left: 5px solid #84a98c; transition: all 0.3s ease-in-out; }
-        .dual-noun-card { transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out; background-color: #ffffff; border-color: #84a98c; }
-        .quantifier-btn.active { background-color: #52796f; color: white; transform: scale(1.05); }
-        .quantifier-btn { transition: all 0.2s ease-in-out; }
-        .quantifier-box { transition: all 0.3s ease-in-out; border: 2px solid transparent; }
-        .quantifier-box.highlight { border-color: #52796f; background-color: #e8f0e9; }
-        .quiz-btn { border: 2px solid #84a98c; color: #354f52; }
-        .quiz-btn:hover { background-color: #84a98c; color: white; }
-        .feedback { transition: opacity 0.5s ease-in-out; }
-        .chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: auto; min-height: 250px; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
     </style>
-
-    <!-- Schema.org 構造化データ (JSON-LD) の追加 -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "LearningResource",
-          "name": "英語 可算名詞・不可算名詞を徹底攻略！定量表現マスタークイズ",
-          "description": "英語の可算名詞・不可算名詞と定量表現をインタラクティブに学習できる無料ツール。基本ルールから応用、意味によって変わる名詞、クイズで実践力を高め、英語文法をマスターしましょう。",
-          "url": "https://gaburieru-dotcom.github.io/english-quantifiers-guide/",
-          "learningResourceType": ["Interactive Guide", "Quiz", "Grammar Lesson"],
-          "educationalLevel": ["Beginner", "Intermediate"],
-          "about": [
-            { "@type": "Thing", "name": "English Grammar" },
-            { "@type": "Thing", "name": "Countable Nouns" },
-            { "@type": "Thing", "name": "Uncountable Nouns" },
-            { "@type": "Thing", "name": "Quantifiers" }
-          ],
-          "publisher": {
-            "@type": "Organization",
-            "name": "英語学習ツール"
-          },
-          "image": "https://placehold.co/1200x630/52796f/ffffff?text=English+Nouns+Master"
-        },
-        {
-          "@type": "Quiz",
-          "name": "英語の定量表現マスタークイズ",
-          "description": "英語の可算名詞・不可算名詞と定量表現の理解度を試すインタラクティブクイズ。",
-          "about": {
-            "@type": "Thing",
-            "name": "English Quantifiers"
-          },
-          "numberOfQuestions": 8,
-          "url": "https://gaburieru-dotcom.github.io/english-quantifiers-guide/#trainer"
-        }
-      ]
-    }
-    </script>
 </head>
-<body class="antialiased">
+<body class="bg-gray-50 text-gray-800 antialiased">
 
-    <header class="bg-[#354f52] text-white shadow-lg">
-        <div class="container mx-auto px-4 py-4 md:py-6">
-            <h1 class="text-2xl md:text-4xl font-bold text-center">インタラクティブ英語名詞学習ツール</h1>
-            <p class="text-center text-sm md:text-base text-[#cad2c5] mt-2">英語の可算名詞・不可算名詞、定量表現を「本質」から理解してマスターしよう！</p>
-        </div>
-    </header>
-
-    <nav class="sticky top-0 bg-white/80 backdrop-blur-sm shadow-md z-10">
-        <div class="container mx-auto px-4">
-            <ul class="flex justify-center space-x-2 sm:space-x-4 md:space-x-8 py-3">
-                <li><a href="#basics" class="text-sm sm:text-base text-[#354f52] hover:text-[#52796f] font-semibold transition-colors duration-300 pb-2 border-b-2 border-transparent hover:border-[#52796f]">基本のキ</a></li>
-                <li><a href="#explorer" class="text-sm sm:text-base text-[#354f52] hover:text-[#52796f] font-semibold transition-colors duration-300 pb-2 border-b-2 border-transparent hover:border-[#52796f]">探検しよう</a></li>
-                <li><a href="#trainer" class="text-sm sm:text-base text-[#354f52] hover:text-[#52796f] font-semibold transition-colors duration-300 pb-2 border-b-2 border-transparent hover:border-[#52796f]">練習しよう</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <main class="container mx-auto px-4 py-8 md:py-12">
-
-        <!-- Section 1: The Basics -->
-        <section id="basics" class="mb-16 scroll-mt-20">
-            <h2 class="text-2xl md:text-3xl font-bold text-center text-[#354f52] mb-4">基本のキ：英語の可算名詞 vs 不可算名詞</h2>
-            <p class="max-w-3xl mx-auto text-center text-gray-600 mb-8">
-                英語の名詞は「数えられるか（可算名詞）」と「数えられないか（不可算名詞）」で、文法上の扱いが大きく変わります。下のトグルをクリックして、それぞれの基本的な特徴と「本質」の違いを掴み、英語文法の基礎を固めましょう。
+    <div class="container mx-auto p-4 md:p-8">
+        <!-- ヘッダーセクション -->
+        <header class="flex flex-col items-center text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-blue-600 mb-4 tracking-tight">
+                暗記無双 単語集ウェブサイト
+            </h1>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl">
+                「暗記無双」アプリで使える、豊富な単語集を閲覧できるウェブサイトへようこそ。あなたの学習をサポートします。
             </p>
+        </header>
 
-            <div class="max-w-lg mx-auto bg-gray-200 rounded-full p-1 flex items-center mb-6">
-                <button id="countable-tab" class="w-1/2 p-2 rounded-full text-center font-semibold tab-button active">可算名詞</button>
-                <button id="uncountable-tab" class="w-1/2 p-2 rounded-full text-center font-semibold tab-button">不可算名詞</button>
-            </div>
-
-            <div id="content-display" class="max-w-3xl mx-auto">
-                <!-- Content will be injected here by JS -->
-            </div>
-        </section>
-
-        <!-- Section 2: The Explorer -->
-        <section id="explorer" class="mb-16 scroll-mt-20">
-            <h2 class="text-2xl md:text-3xl font-bold text-center text-[#354f52] mb-4">探検しよう：定量表現のルールを体感する</h2>
-            <p class="max-w-3xl mx-auto text-center text-gray-600 mb-12">
-                ここでは、より具体的なルールをインタラクティブに探求します。「定量表現（数量詞）」が名詞の種類によってどう変わるか、また、同じ単語が文脈によって「可算」と「不可算」をどう行き来するのかを見ていきましょう。英語の数量詞をマスターしましょう。
-            </p>
-
-            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-12">
-                <h3 class="text-xl md:text-2xl font-bold text-[#354f52] mb-2 text-center">定量表現マスター</h3>
-                 <p class="max-w-2xl mx-auto text-center text-gray-600 mb-6">
-                    下の定量表現ボタンをクリックすると、どのタイプの英語名詞で使えるかがハイライトされます。
-                </p>
-                <div class="flex justify-center flex-wrap gap-3 mb-6">
-                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="many">many</button>
-                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="much">much</button>
-                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="a few">a few</button>
-                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="a little">a little</button>
-                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="some">some</button>
-                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="a lot of">a lot of</button>
-                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="few">few</button>
-                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="little">little</button>
-                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="any">any</button>
-                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="no">no</button>
-                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="several">several</button>
-                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="plenty of">plenty of</button>
-                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="numerous">numerous</button>
-                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="each">each</button>
-                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="every">every</button>
-                    <button class="quantifier-btn px-4 py-2 bg-white border-2 border-[#52796f] rounded-full font-semibold" data-quantifier="all">all</button>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                    <div id="countable-box" class="quantifier-box border rounded-lg p-4">
-                        <h4 class="font-bold text-lg text-center mb-2">可算名詞で使える</h4>
-                        <p id="countable-example" class="text-center text-gray-600 h-12 flex items-center justify-center"></p>
+        <!-- メインコンテンツセクション -->
+        <main class="flex flex-col gap-8 lg:gap-12">
+            <!-- アプリ紹介とYouTube動画 -->
+            <div class="bg-white p-6 rounded-3xl shadow-lg border border-gray-200">
+                <div class="flex flex-col items-center">
+                    <h2 class="text-2xl font-bold text-gray-700 mb-4">「暗記無双」アプリのご紹介</h2>
+                    
+                    <!-- YouTube動画の埋め込み -->
+                    <div class="w-full aspect-video rounded-2xl overflow-hidden mb-6 shadow-md">
+                        <iframe 
+                            class="w-full h-full"
+                            src="https://www.youtube.com/embed/Nt9tToeTSv4?si=1hWlYjXzE_3l5x2T" 
+                            title="YouTube video player" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen>
+                        </iframe>
                     </div>
-                    <div id="uncountable-box" class="quantifier-box border rounded-lg p-4">
-                        <h4 class="font-bold text-lg text-center mb-2">不可算名詞で使える</h4>
-                        <p id="uncountable-example" class="text-center text-gray-600 h-12 flex items-center justify-center"></p>
+
+                    <!-- App Storeへのリンク -->
+                    <a href="https://apps.apple.com/jp/app/%E8%87%AA%E5%88%86%E3%81%A7%E4%BD%9C%E3%82%8B%E5%8D%98%E8%AA%9E%E5%B8%B3-%E6%9A%97%E8%A8%98%E7%84%A1%E5%8F%8B/id6670315761"
+                       target="_blank"
+                       class="inline-flex items-center justify-center bg-blue-500 text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:bg-blue-600 transition-all duration-300 transform hover:scale-105">
+                       App Storeで「暗記無双」をダウンロード
+                    </a>
+                </div>
+            </div>
+
+            <!-- 言語別単語集セクション -->
+            <div class="bg-white p-6 rounded-3xl shadow-lg border border-gray-200">
+                <h2 class="text-2xl font-bold text-gray-700 mb-6 text-center">言語別単語集</h2>
+                <div class="flex flex-col gap-4">
+                    <!-- 英語単語集カード -->
+                    <div class="bg-gray-100 p-4 rounded-2xl border border-gray-200 text-center">
+                        <h3 class="text-xl font-bold text-gray-700 mb-2">英語</h3>
+                        <p class="text-sm text-gray-500 mb-4">TOEIC、TOEFL、大学受験など、英語学習に役立つ単語集です。</p>
+                        <a href="english.html" class="inline-block w-full bg-indigo-500 text-white font-semibold py-2 px-4 rounded-full shadow-md hover:bg-indigo-600 transition-all duration-300">
+                            英語単語集を見る
+                        </a>
+                    </div>
+                    
+                    <!-- 中国語単語集カード -->
+                    <div class="bg-gray-100 p-4 rounded-2xl border border-gray-200 text-center">
+                        <h3 class="text-xl font-bold text-gray-700 mb-2">中国語</h3>
+                        <p class="text-sm text-gray-500 mb-4">HSK、ビジネス、旅行など、中国語学習に役立つ単語集です。</p>
+                        <a href="chinese.html" class="inline-block w-full bg-pink-500 text-white font-semibold py-2 px-4 rounded-full shadow-md hover:bg-pink-600 transition-all duration-300">
+                            中国語単語集を見る
+                        </a>
+                    </div>
+                    
+                    <!-- ドイツ語単語集カード -->
+                    <div class="bg-gray-100 p-4 rounded-2xl border border-gray-200 text-center">
+                        <h3 class="text-xl font-bold text-gray-700 mb-2">ドイツ語</h3>
+                        <p class="text-sm text-gray-500 mb-4">大学の第二外国語で人気。文法や単語を効率よく学習できます。</p>
+                        <a href="german.html" class="inline-block w-full bg-green-500 text-white font-semibold py-2 px-4 rounded-full shadow-md hover:bg-green-600 transition-all duration-300">
+                            ドイツ語単語集を見る
+                        </a>
+                    </div>
+                    
+                    <!-- フランス語単語集カード -->
+                    <div class="bg-gray-100 p-4 rounded-2xl border border-gray-200 text-center">
+                        <h3 class="text-xl font-bold text-gray-700 mb-2">フランス語</h3>
+                        <p class="text-sm text-gray-500 mb-4">美しい響きを持つ言語。旅行や文化に触れたい方におすすめです。</p>
+                        <a href="french.html" class="inline-block w-full bg-purple-500 text-white font-semibold py-2 px-4 rounded-full shadow-md hover:bg-purple-600 transition-all duration-300">
+                            フランス語単語集を見る
+                        </a>
+                    </div>
+                    
+                    <!-- スペイン語単語集カード -->
+                    <div class="bg-gray-100 p-4 rounded-2xl border border-gray-200 text-center">
+                        <h3 class="text-xl font-bold text-gray-700 mb-2">スペイン語</h3>
+                        <p class="text-sm text-gray-500 mb-4">世界中で話されている言語。ラテンアメリカの文化に興味がある方に。</p>
+                        <a href="spanish.html" class="inline-block w-full bg-orange-500 text-white font-semibold py-2 px-4 rounded-full shadow-md hover:bg-orange-600 transition-all duration-300">
+                            スペイン語単語集を見る
+                        </a>
+                    </div>
+                    
+                    <!-- 韓国語単語集カード -->
+                    <div class="bg-gray-100 p-4 rounded-2xl border border-gray-200 text-center">
+                        <h3 class="text-xl font-bold text-gray-700 mb-2">韓国語</h3>
+                        <p class="text-sm text-gray-500 mb-4">ハングル、旅行、K-POPなど、韓国語学習に役立つ単語集です。</p>
+                        <a href="korean.html" class="inline-block w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-full shadow-md hover:bg-red-600 transition-all duration-300">
+                            韓国語単語集を見る
+                        </a>
+                    </div>
+                    
+                    <!-- その他の言語カード -->
+                    <div class="bg-gray-100 p-4 rounded-2xl border border-gray-200 text-center">
+                        <h3 class="text-xl font-bold text-gray-700 mb-2">その他</h3>
+                        <p class="text-sm text-gray-500 mb-4">現在準備中です。ご希望の単語集があれば、お問い合わせください。</p>
+                        <a href="other.html" class="inline-block w-full bg-gray-500 text-white font-semibold py-2 px-4 rounded-full shadow-md hover:bg-gray-600 transition-all duration-300">
+                            その他の単語集を見る
+                        </a>
                     </div>
                 </div>
             </div>
+        </main>
 
-            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
-                <h3 class="text-xl md:text-2xl font-bold text-[#354f52] mb-2 text-center">どっちにもなれる名詞の使い分け</h3>
-                <p class="max-w-2xl mx-auto text-center text-gray-600 mb-6">
-                    同じ単語でも、意味によって可算・不可算が変わることがあります。下のメニューから単語を選んで、その「本質」の変化を見て、英語の奥深さを探求しましょう。
-                </p>
-                <div class="max-w-sm mx-auto mb-8">
-                    <select id="dual-noun-select" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-[#52796f] focus:border-[#52796f] transition">
-                        <option value="">単語を選択してください</option>
-                        <option value="work">work</option>
-                        <option value="time">time</option>
-                        <option value="paper">paper</option>
-                        <option value="light">light</option>
-                        <option value="experience">experience</option>
-                        <option value="hair">hair</option>
-                        <option value="coffee">coffee</option>
-                    </select>
-                </div>
-                <div id="dual-noun-display" class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 min-h-[250px]">
-                    <!-- Dual noun info will be injected here -->
-                </div>
-            </div>
-        </section>
+        <!-- フッターセクション -->
+        <footer class="mt-12 text-center text-gray-400 text-sm">
+            <p>&copy; 2024 暗記無双. All rights reserved.</p>
+        </footer>
+    </div>
 
-
-        <!-- Section 3: The Trainer -->
-        <section id="trainer" class="scroll-mt-20">
-            <h2 class="text-2xl md:text-3xl font-bold text-center text-[#354f52] mb-4">練習しよう：英語の定量表現クイズで知識を試す</h2>
-            <p class="max-w-3xl mx-auto text-center text-gray-600 mb-8">
-                知識は使ってこそ身につきます。ここでは、簡単なクイズで理解度をチェックします。間違えても大丈夫！何度も挑戦して、英語の可算・不可算名詞と定量表現の感覚を養い、英会話に役立てましょう。
-            </p>
-            <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-8">
-                <div id="quiz-container">
-                    <p id="quiz-question" class="text-center text-lg md:text-xl font-semibold mb-6 h-16 flex items-center justify-center"></p>
-                    <div id="quiz-options" class="flex justify-center flex-wrap gap-4 mb-6">
-                        <!-- Quiz options will be injected here -->
-                    </div>
-                    <div id="quiz-feedback" class="text-center h-8 font-bold feedback opacity-0"></div>
-                </div>
-                <div class="text-center mt-6">
-                    <button id="next-question-btn" class="px-6 py-2 bg-[#52796f] text-white font-bold rounded-full hover:bg-[#354f52] transition-colors">次の問題へ</button>
-                </div>
-            </div>
-
-            <!-- App Promotion Section -->
-            <div class="max-w-2xl mx-auto mt-12 p-6 bg-[#e8f0e9] rounded-xl shadow-lg text-center">
-                <h3 class="text-xl font-semibold text-[#354f52] mb-3">さらに深く学びたい方へ：専用アプリで実践力アップ！</h3>
-                <p class="text-gray-700 mb-4">
-                    このウェブツールで学んだ知識をさらに定着させたいですか？私が開発した専用アプリ「**可算名詞or不可算名詞クイズ**」では、さらに多くの問題と詳細な解説で、あなたの理解を深めることができます。
-                </p>
-                <a href="https://apps.apple.com/jp/app/%E5%8F%AF%E7%AE%97%E5%90%8D%E8%A9%9Eor%E4%B8%8D%E5%8F%AF%E7%AE%97%E5%90%8D%E8%A9%9E%E3%82%AF%E3%82%A4%E3%82%BA/id6748223272" target="_blank" rel="noopener noreferrer" class="inline-block bg-[#52796f] text-white px-6 py-3 rounded-full font-bold hover:bg-[#354f52] transition-colors duration-300 shadow-md">
-                    App Storeでアプリをチェック！
-                </a>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="bg-[#354f52] text-white mt-16">
-        <div class="container mx-auto px-4 py-6 text-center">
-            <p class="text-sm text-[#cad2c5]">© 2025 Interactive English Noun Learning Tool. All Rights Reserved.</p>
-        </div>
-    </footer>
-
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-
-        // --- Data ---
-        const contentData = {
-            countable: {
-                title: '可算名詞 (Countable Nouns)',
-                icon: '🍎',
-                essence: '「具体的な形」があり、1つ、2つと個別に数えられるモノ。',
-                points: [
-                    '単数形と複数形がある (例: book → books)',
-                    '単数形には a/an が付くことが多い (例: a cat)',
-                    '数を尋ねる時は How many ...? を使う'
-                ],
-                example: 'I have <strong>three apples</strong>.'
-            },
-            uncountable: {
-                title: '不可算名詞 (Uncountable Nouns)',
-                icon: '💧',
-                essence: '「決まった形」がなく、量で捉えるモノや抽象的な概念。',
-                points: [
-                    '複数形はない (例: water → waters とはならない)',
-                    'a/an は付かない',
-                    '量を尋ねる時は How much ...? を使う'
-                ],
-                example: 'I need <strong>some water</strong>.'
-            }
-        };
-
-        const dualNounsData = {
-            work: {
-                c: { title: '可算 [C]', meaning: '作品、業績', example: 'Picasso produced many great <strong>works</strong>.' },
-                u: { title: '不可算 [U]', meaning: '仕事、労働（活動全般）', example: 'I have too much <strong>work</strong> to do.' }
-            },
-            time: {
-                c: { title: '可算 [C]', meaning: '回数、～な時間', example: 'I went there three <strong>times</strong>. We had a great <strong>time</strong>.' },
-                u: { title: '不可算 [U]', meaning: '時間（概念）', example: 'We don\'t have much <strong>time</strong> left.' }
-            },
-            paper: {
-                c: { title: '可算 [C]', meaning: '新聞、論文、書類', example: 'I need to write <strong>a paper</strong> for my class.' },
-                u: { title: '不可算 [U]', meaning: '紙（物質）', example: 'Can I have some <strong>paper</strong> to write on?' }
-            },
-            light: {
-                c: { title: '可算 [C]', meaning: '光源（電灯など）', example: 'Please turn on the <strong>lights</strong>.' },
-                u: { title: '不可算 [U]', meaning: '光（概念）', example: 'The room was full of <strong>light</strong>.' }
-            },
-            experience: {
-                c: { title: '可算 [C]', meaning: '（個々の）体験', example: 'I had many interesting <strong>experiences</strong> in Japan.' },
-                u: { title: '不可算 [U]', meaning: '（知識としての）経験', example: 'She has a lot of <strong>experience</strong> in teaching.' }
-            },
-            hair: {
-                c: { title: '可算 [C]', meaning: '（一本一本の）髪の毛', example: 'I found <strong>a hair</strong> in my soup!' },
-                u: { title: '不可算 [U]', meaning: '髪（全体）', example: 'She has beautiful long <strong>hair</strong>.' }
-            },
-            coffee: {
-                c: { title: '可算 [C]', meaning: '（一杯の）コーヒー', example: '<strong>Two coffees</strong>, please.' },
-                u: { title: '不可算 [U]', meaning: 'コーヒー（物質・飲料）', example: 'I don\'t drink <strong>coffee</strong>.' }
-            }
-        };
-
-        const quantifiersData = {
-            'many': { c: true, u: false, exampleC: 'many books', exampleU: '' },
-            'much': { c: false, u: true, exampleC: '', exampleU: 'much money' },
-            'a few': { c: true, u: false, exampleC: 'a few friends', exampleU: '' },
-            'a little': { c: false, u: true, exampleC: '', exampleU: 'a little sugar' },
-            'some': { c: true, u: true, exampleC: 'some apples', exampleU: 'some advice' },
-            'a lot of': { c: true, u: true, exampleC: 'a lot of people', exampleU: 'a lot of traffic' },
-            'few': { c: true, u: false, exampleC: 'few friends (ほとんどいない)', exampleU: '' },
-            'little': { c: false, u: true, exampleC: 'no example', exampleU: 'little money (ほとんどない)' },
-            'any': { c: true, u: true, exampleC: 'any questions (疑問文・否定文)', exampleU: 'any information (疑問文・否定文)' },
-            'no': { c: true, u: true, exampleC: 'no books (全くない)', exampleU: 'no money (全くない)' },
-            'several': { c: true, u: false, exampleC: 'several ideas (いくつかの)', exampleU: '' },
-            'plenty of': { c: true, u: true, exampleC: 'plenty of chairs (十分な量の)', exampleU: 'plenty of time (十分な量の)' },
-            'numerous': { c: true, u: false, exampleC: 'numerous stars (多数の)', exampleU: '' },
-            'each': { c: true, u: false, exampleC: 'each student (各生徒)', exampleU: '' },
-            'every': { c: true, u: false, exampleC: 'every day (毎日)', exampleU: '' },
-            'all': { c: true, u: true, exampleC: 'all students (全ての生徒)', exampleU: 'all water (全ての水)' }
-        };
-        
-        const quizData = [
-            { question: 'How ___ money do you have?', options: ['many', 'much'], answer: 'much' },
-            { question: 'There are so ___ cars on the street.', options: ['many', 'much'], answer: 'many' },
-            { question: 'I need ___ advice.', options: ['an', 'some'], answer: 'some' },
-            { question: 'She has beautiful long ___.', options: ['hair', 'hairs'], answer: 'hair' },
-            { question: 'We had ___ interesting experiences on our trip.', options: ['much', 'many'], answer: 'many' },
-            { question: 'Can you give me ___ water?', options: ['a', 'some'], answer: 'some' },
-            { question: 'He doesn\'t have ___ friends.', options: ['many', 'much'], answer: 'many' },
-            { question: 'It takes ___ time to learn a language.', options: ['a lot of', 'many'], answer: 'a lot of' },
-        ];
-        let currentQuestionIndex = 0;
-
-
-        // --- DOM Elements ---
-        const countableTab = document.getElementById('countable-tab');
-        const uncountableTab = document.getElementById('uncountable-tab');
-        const contentDisplay = document.getElementById('content-display');
-        const dualNounSelect = document.getElementById('dual-noun-select');
-        const dualNounDisplay = document.getElementById('dual-noun-display');
-        const quantifierButtons = document.querySelectorAll('.quantifier-btn');
-        const countableBox = document.getElementById('countable-box');
-        const uncountableBox = document.getElementById('uncountable-box');
-        const countableExample = document.getElementById('countable-example');
-        const uncountableExample = document.getElementById('uncountable-example');
-
-        const quizQuestionEl = document.getElementById('quiz-question');
-        const quizOptionsEl = document.getElementById('quiz-options');
-        const quizFeedbackEl = document.getElementById('quiz-feedback');
-        const nextQuestionBtn = document.getElementById('next-question-btn');
-
-
-        // --- Functions ---
-        function updateContent(type) {
-            const data = contentData[type];
-            contentDisplay.innerHTML = `
-                <div class="content-card shadow-lg rounded-lg p-6 md:p-8 transform hover:scale-105">
-                    <h3 class="text-xl md:text-2xl font-bold text-[#354f52] mb-4 flex items-center">
-                        <span class="text-3xl mr-3">${data.icon}</span>
-                        ${data.title}
-                    </h3>
-                    <p class="text-gray-700 font-semibold mb-4">${data.essence}</p>
-                    <ul class="space-y-2 mb-4 list-disc list-inside text-gray-600">
-                        ${data.points.map(point => `<li>${point}</li>`).join('')}
-                    </ul>
-                    <p class="text-center bg-gray-100 p-3 rounded-md text-gray-800">例: ${data.example}</p>
-                </div>
-            `;
-        }
-
-        function updateDualNounDisplay(noun) {
-            if (!noun || !dualNounsData[noun]) {
-                dualNounDisplay.innerHTML = '<p class="text-center text-gray-500 md:col-span-2">上記から単語を選択してください。</p>';
-                return;
-            }
-            const data = dualNounsData[noun];
-            dualNounDisplay.innerHTML = `
-                <div class="dual-noun-card p-4 border-l-4 rounded-md shadow opacity-0 transform -translate-y-4">
-                    <h4 class="font-bold text-lg text-green-700">${data.c.title}</h4>
-                    <p class="font-semibold text-gray-800 my-1">${data.c.meaning}</p>
-                    <p class="text-sm text-gray-600">例: ${data.c.example}</p>
-                </div>
-                <div class="dual-noun-card p-4 border-l-4 rounded-md shadow opacity-0 transform translate-y-4">
-                    <h4 class="font-bold text-lg text-blue-700">${data.u.title}</h4>
-                    <p class="font-semibold text-gray-800 my-1">${data.u.meaning}</p>
-                    <p class="text-sm text-gray-600">例: ${data.u.example}</p>
-                </div>
-            `;
-
-            setTimeout(() => {
-                const cards = dualNounDisplay.querySelectorAll('.dual-noun-card');
-                cards.forEach(card => {
-                    card.classList.remove('opacity-0', 'transform', '-translate-y-4', 'translate-y-4');
-                    card.classList.add('opacity-100');
-                });
-            }, 50);
-        }
-
-        function updateQuantifierDisplay(quantifier) {
-            quantifierButtons.forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.quantifier === quantifier);
-            });
-
-            const data = quantifiersData[quantifier];
-            countableBox.classList.toggle('highlight', data.c);
-            uncountableBox.classList.toggle('highlight', data.u);
-            countableExample.textContent = data.c ? `例: ${data.exampleC}` : '';
-            uncountableExample.textContent = data.u ? `例: ${data.exampleU}` : '';
-        }
-
-        function loadQuizQuestion() {
-            const currentQuiz = quizData[currentQuestionIndex];
-            const questionText = currentQuiz.question.replace('___', '<span class="text-[#52796f] font-bold">___</span>');
-            quizQuestionEl.innerHTML = questionText;
-            quizOptionsEl.innerHTML = '';
-            
-            // Randomize options order
-            const shuffledOptions = [...currentQuiz.options].sort(() => Math.random() - 0.5);
-
-            shuffledOptions.forEach(option => {
-                const button = document.createElement('button');
-                button.textContent = option;
-                button.classList.add('quiz-btn', 'px-5', 'py-2', 'rounded-full', 'font-semibold', 'transition-all');
-                button.onclick = () => checkAnswer(option);
-                quizOptionsEl.appendChild(button);
-            });
-
-            quizFeedbackEl.textContent = '';
-            quizFeedbackEl.classList.add('opacity-0');
-            quizFeedbackEl.classList.remove('text-green-600', 'text-red-600');
-            nextQuestionBtn.style.visibility = 'hidden';
-        }
-
-        function checkAnswer(selectedOption) {
-            const buttons = quizOptionsEl.querySelectorAll('button');
-            buttons.forEach(button => button.disabled = true);
-            
-            const currentQuiz = quizData[currentQuestionIndex];
-            if (selectedOption === currentQuiz.answer) {
-                quizFeedbackEl.textContent = '正解！ 🎉';
-                quizFeedbackEl.classList.add('text-green-600');
-            } else {
-                quizFeedbackEl.textContent = `残念！正解は「${currentQuiz.answer}」です。`;
-                quizFeedbackEl.classList.add('text-red-600');
-            }
-            quizFeedbackEl.classList.remove('opacity-0');
-            nextQuestionBtn.style.visibility = 'visible';
-        }
-        
-        function handleNextQuestion() {
-            currentQuestionIndex = (currentQuestionIndex + 1) % quizData.length;
-            loadQuizQuestion();
-        }
-
-        // --- Event Listeners ---
-        countableTab.addEventListener('click', () => {
-            countableTab.classList.add('active');
-            uncountableTab.classList.remove('active');
-            updateContent('countable');
-        });
-
-        uncountableTab.addEventListener('click', () => {
-            uncountableTab.classList.add('active');
-            countableTab.classList.remove('active');
-            updateContent('uncountable');
-        });
-
-        dualNounSelect.addEventListener('change', (e) => {
-            updateDualNounDisplay(e.target.value);
-        });
-
-        quantifierButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                updateQuantifierDisplay(button.dataset.quantifier);
-            });
-        });
-
-        nextQuestionBtn.addEventListener('click', handleNextQuestion);
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // --- Initial Load ---
-        updateContent('countable');
-        updateDualNounDisplay('');
-        updateQuantifierDisplay('many'); // Default selection
-        loadQuizQuestion();
-    });
-    </script>
 </body>
 </html>

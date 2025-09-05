@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOEIC600点レベル英単語</title>
+    <!-- Tailwind CSSをCDNで読み込み -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* カスタムフォント（Inter）の指定 */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* スクロールバーのスタイル */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 w-full max-w-2xl">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-6 text-center">TOEIC800点レベル英単語</h1>
+
+        <!-- レベル表示とナビゲーションボタン -->
+        <div id="levelNav" class="flex flex-col md:flex-row items-center justify-between mb-6 space-y-4 md:space-y-0 md:space-x-4">
+            <button id="prevLevelBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                前のレベル
+            </button>
+            <span id="currentLevelDisplay" class="text-xl md:text-2xl font-semibold text-gray-700">レベル 1 / 30</span>
+            <button id="nextLevelBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                次のレベル
+            </button>
+        </div>
+        
+        <!-- 全単語コピーボタンとテスト開始ボタン -->
+        <div id="actionButtons" class="text-center mb-6 space-y-4 md:space-y-0 md:space-x-4">
+            <button id="copyAllWordsBtn" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-8 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105">
+                このレベルの全単語をコピー
+            </button>
+            <button id="startTestBtn" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-8 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105">
+                テスト開始
+            </button>
+        </div>
+
+        <!-- コンテンツ表示エリア (単語リスト or テスト) -->
+        <div id="wordListContainer" class="bg-gray-50 rounded-lg p-4 md:p-6 border border-gray-200 h-96 overflow-y-auto">
+            <!-- 単語リストはJavaScriptでここに挿入されます -->
+            <p class="text-gray-500 text-center">単語リストを読み込み中...</p>
+        </div>
+        
+        <!-- テストコンテナ（非表示） -->
+        <div id="testContainer" class="hidden bg-gray-50 rounded-lg p-4 md:p-6 border border-gray-200 h-96 overflow-y-auto flex flex-col justify-between">
+            <div id="questionArea">
+                <p id="questionCount" class="text-sm text-gray-500 mb-2"></p>
+                <h3 id="questionText" class="text-xl font-bold mb-4 text-gray-800"></h3>
+                <div id="answerOptions" class="space-y-2"></div>
+            </div>
+            <div id="feedbackArea" class="mt-4 hidden p-4 rounded-lg">
+                <p id="feedbackText" class="font-bold"></p>
+                <p id="rationaleText" class="text-sm mt-2"></p>
+            </div>
+            <div class="mt-auto pt-4 flex justify-between">
+                <button id="nextQuestionBtn" class="hidden bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105">
+                    次の問題
+                </button>
+                <button id="endTestBtn" class="hidden bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105">
+                    テスト終了
+                </button>
+            </div>
+        </div>
+        
+        <!-- 結果コンテナ（非表示） -->
+        <div id="resultsContainer" class="hidden bg-gray-50 rounded-lg p-4 md:p-6 border border-gray-200 h-96 overflow-y-auto">
+            <h3 class="text-2xl font-bold text-center mb-4 text-gray-800">テスト結果</h3>
+            <p id="testScore" class="text-xl font-semibold text-center mb-4 text-gray-700"></p>
+            
+            <h4 id="incorrectWordsHeading" class="text-lg font-bold mt-6 mb-2 text-red-600">間違えた単語</h4>
+            <div id="incorrectWordsList" class="space-y-2"></div>
+
+            <div id="incorrectCopyButton" class="mt-4 text-center hidden">
+                <button id="copyIncorrectWordsBtn" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-8 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105">
+                    間違えた単語をすべてコピー
+                </button>
+            </div>
+            
+            <div class="mt-6 text-center">
+                <button id="backToLevelBtn" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105">
+                    レベル選択に戻る
+                </button>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        // 単語の配列。ここに追加するだけで自動的にレベル分けされます。
+        // TOEIC600点レベルの単語リスト
+        const allWords = [
+            { "english": "caused", "japanese": "引き起こした" },
+　　　　　　　{ "english": "broadcast", "japanese": "を放送する" },
+            { "english": "consult", "japanese": "相談する" },
+            { "english": "wood", "japanese": "木材" },
+            { "english": "inquire", "japanese": "問い合わせる" },
+            { "english": "advance", "japanese": "前進する/前進，事前" },
+            { "english": "announcement", "japanese": "発表，告知" },
+            { "english": "encouraged", "japanese": "励ました" },
+            { "english": "expired", "japanese": "期限切れの" },
+            { "english": "concern", "japanese": "懸案する" },
+            { "english": "relation", "japanese": "関係" },
+            { "english": "unclear", "japanese": "はっきりしない" },
+            { "english": "conveniently", "japanese": "便利に" },
+            { "english": "deposit", "japanese": "お金を預ける" },
+            { "english": "explanation", "japanese": "説明" },
+            { "english": "launch", "japanese": "送り出す" },
+            { "english": "assignment", "japanese": "宿題" },
+            { "english": "quarter", "japanese": "四半期" },
+            { "english": "developed", "japanese": "開発された" },
+            { "english": "architecture", "japanese": "建築" },
+            { "english": "arrangement", "japanese": "手配" },
+            { "english": "single", "japanese": "一つの，一人の，独身の" },
+            { "english": "opinion", "japanese": "意見" },
+            { "english": "category", "japanese": "部門，部類" },
+            { "english": "adjust", "japanese": "を調節する，順応する" },
+            { "english": "follow", "japanese": "の後を追う" },
+            { "english": "along", "japanese": "に沿って" },
+            { "english": "author", "japanese": "著者，作家" },
+            { "english": "ever", "japanese": "今まで" },
+            { "english": "obtain", "japanese": "を手に入れる" },
+            { "english": "procedure", "japanese": "手順" },
+            { "english": "noticed", "japanese": "気づいた" },
+            { "english": "college", "japanese": "大学" },
+            { "english": "prefer", "japanese": "をより好む" },
+            { "english": "social", "japanese": "社会の，社交の" },
+            { "english": "consumer", "japanese": "消費者" },
+            { "english": "accountant", "japanese": "会計士" },
+            { "english": "on site", "japanese": "現場で" },
+            { "english": "conducted", "japanese": "導かれた" },
+            { "english": "approve", "japanese": "承認する" },
+            { "english": "expand", "japanese": "を拡大する" },
+            { "english": "convention", "japanese": "（大規模な）会議" },
+            { "english": "housing", "japanese": "住宅" },
+            { "english": "solution", "japanese": "解決法" },
+            { "english": "lease", "japanese": "貸す" },
+            { "english": "hesitate", "japanese": "ためらう" },
+            { "english": "outstanding", "japanese": "目立った" },
+            { "english": "regularly", "japanese": "規則的に，定期的に" },
+            { "english": "national", "japanese": "国家の，国民の" },
+            { "english": "congratulation", "japanese": "祝福" },
+            { "english": "replaced", "japanese": "置き換えた" },
+            { "english": "renowned", "japanese": "有名な" },
+            { "english": "participation", "japanese": "参加" },
+            { "english": "content", "japanese": "中身，目次/満足して" },
+            { "english": "appreciation", "japanese": "感謝" },
+            { "english": "skin", "japanese": "皮膚，皮膜" },
+            { "english": "participant", "japanese": "参加者" },
+            { "english": "prevent", "japanese": "を妨げる" },
+            { "english": "success", "japanese": "成功" },
+            { "english": "except", "japanese": "を除いて" },
+            { "english": "historic", "japanese": "由緒のある" },
+            { "english": "proposed", "japanese": "提案した" },
+            { "english": "accommodate", "japanese": "収容する" },
+            { "english": "previously", "japanese": "以前は" },
+            { "english": "labor", "japanese": "労働" },
+            { "english": "grant", "japanese": "給付金/を与える" },
+            { "english": "blend", "japanese": "混ぜる" },
+            { "english": "crew", "japanese": "乗組員，一団" },
+            { "english": "head", "japanese": "頭，先頭" },
+            { "english": "organic", "japanese": "無農薬の" },
+            { "english": "suitable", "japanese": "適した" },
+            { "english": "comparable", "japanese": "比較できる" },
+            { "english": "unless", "japanese": "でない限り" },
+            { "english": "rate", "japanese": "率，割合" },
+            { "english": "location", "japanese": "場所" },
+            { "english": "agreement", "japanese": "同意，一致" },
+            { "english": "implied", "japanese": "暗示した" },
+            { "english": "fully", "japanese": "十分に，完全に" },
+            { "english": "especially", "japanese": "特に" },
+            { "english": "greeting", "japanese": "あいさつ" },
+            { "english": "usual", "japanese": "通常の" },
+            { "english": "either", "japanese": "もまた～でない" },
+            { "english": "exhibitor", "japanese": "展示者" },
+            { "english": "install", "japanese": "導入する" },
+            { "english": "quest", "japanese": "探求" },
+            { "english": "island", "japanese": "島" },
+            { "english": "regret", "japanese": "後悔する" },
+            { "english": "fuel", "japanese": "燃料" },
+            { "english": "section", "japanese": "部門" },
+            { "english": "country", "japanese": "国，いなか，地方" },
+            { "english": "landscape", "japanese": "景観" },
+            { "english": "private", "japanese": "個人的な，私的な" },
+            { "english": "voucher", "japanese": "引換券" },
+            { "english": "loan", "japanese": "融資する" },
+            { "english": "vendor", "japanese": "売り手" },
+            { "english": "suggestion", "japanese": "提案" },
+            { "english": "surprise", "japanese": "を驚かせる/驚き" },
+            { "english": "official", "japanese": "公式の" },
+            { "english": "workplace", "japanese": "職場" },
+            { "english": "volunteer", "japanese": "ボランティア，志願兵" },
+            { "english": "reach", "japanese": "着く，届く" },
+            { "english": "designer", "japanese": "設計者、デザイナー" },
+            { "english": "log", "japanese": "丸太、日誌" },
+            { "english": "praise", "japanese": "をほめる" },
+            { "english": "strategy", "japanese": "戦略" },
+            { "english": "verify", "japanese": "確かめる" },
+            { "english": "orientation", "japanese": "適応，順応，方向付け" },
+            { "english": "agent", "japanese": "代理人，代理店" },
+            { "english": "Poor", "japanese": "貧乏な，かわいそうな" },
+            { "english": "partner", "japanese": "伴侶、相方" },
+            { "english": "Whom", "japanese": "誰を" },
+            { "english": "advertisements", "japanese": "広告" },
+            { "english": "legal", "japanese": "法律の，合法な" },
+            { "english": "identification", "japanese": "身分証明書" },
+            { "english": "extend", "japanese": "延びる，を拡張する" },
+            { "english": "transfer", "japanese": "を移す" },
+            { "english": "significant", "japanese": "重要な" },
+            { "english": "implemented", "japanese": "実行された" },
+            { "english": "reimbursement", "japanese": "返済" },
+            { "english": "terms", "japanese": "期間、用語" },
+            { "english": "routine", "japanese": "いつもの/いつもの手順" },
+            { "english": "applicant", "japanese": "応募者，候補者" },
+            { "english": "extension", "japanese": "拡張" },
+            { "english": "approval", "japanese": "承認" },
+            { "english": "emphasize", "japanese": "を強調する" },
+            { "english": "branch", "japanese": "枝，支店" },
+            { "english": "catering", "japanese": "出前，仕出し" },
+            { "english": "sculpture", "japanese": "彫刻" },
+            { "english": "instructed", "japanese": "指示された" },
+            { "english": "alternate", "japanese": "代わりの" },
+            { "english": "investment", "japanese": "投資" },
+            { "english": "virtual", "japanese": "仮想の" },
+            { "english": "garage", "japanese": "倉庫" },
+            { "english": "agenda", "japanese": "議題" },
+            { "english": "load", "japanese": "積み荷/を積む" },
+            { "english": "subscription", "japanese": "購読，寄付" },
+            { "english": "appearance", "japanese": "出現，外見" },
+            { "english": "valuable", "japanese": "貴重な" },
+            { "english": "requirement", "japanese": "要求される事柄，必要なもの" },
+            { "english": "distribute", "japanese": "配布する" },
+            { "english": "accepted", "japanese": "受け入れられた" },
+            { "english": "affected", "japanese": "影響を受けた" },
+            { "english": "reason", "japanese": "理由，原因" },
+            { "english": "considering", "japanese": "考慮している" },
+            { "english": "provider", "japanese": "生産者，供給者" },
+            { "english": "chart", "japanese": "ひょう，図" },
+            { "english": "reschedule", "japanese": "再度計画する" },
+            { "english": "boulevard", "japanese": "大通り" },
+            { "english": "role", "japanese": "役割" },
+            { "english": "informed", "japanese": "知らせた" },
+            { "english": "useful", "japanese": "役に立つ" },
+            { "english": "departure", "japanese": "出発" },
+            { "english": "skill", "japanese": "能力" },
+            { "english": "coupon", "japanese": "割引購入権" },
+            { "english": "market", "japanese": "市場、しじょう" },
+            { "english": "progress", "japanese": "進歩" },
+            { "english": "direct", "japanese": "直接の" },
+            { "english": "tax", "japanese": "税" },
+            { "english": "accurate", "japanese": "正確な" },
+            { "english": "administrative", "japanese": "行政の" },
+            { "english": "region", "japanese": "地域，地方" },
+            { "english": "significantly", "japanese": "かなり" },
+            { "english": "fact", "japanese": "事実" },
+            { "english": "farmer", "japanese": "農家" },
+            { "english": "aware", "japanese": "気づいている" },
+            { "english": "Associate", "japanese": "を結びつけて考える" },
+            { "english": "considered", "japanese": "考慮された" },
+            { "english": "trained", "japanese": "訓練された" },
+            { "english": "whenever", "japanese": "する時はいつでも" },
+            { "english": "listed", "japanese": "上場した" },
+            { "english": "explore", "japanese": "を探索，探検する" },
+            { "english": "expecting", "japanese": "期待している" },
+            { "english": "increasing", "japanese": "増加している" },
+            { "english": "simply", "japanese": "単に" },
+            { "english": "link", "japanese": "つながる" },
+            { "english": "organized", "japanese": "組織された" },
+            { "english": "eligible", "japanese": "資格のある" },
+            { "english": "keynote", "japanese": "要旨，基本方針" },
+            { "english": "Awareness", "japanese": "気づき" },
+            { "english": "retired", "japanese": "引退した" },
+            { "english": "united", "japanese": "一致団結した" },
+            { "english": "particular", "japanese": "特定の，特にその，気むずかしい" },
+            { "english": "responsible", "japanese": "責任がある" },
+            { "english": "reviewing", "japanese": "見直している" },
+            { "english": "complex", "japanese": "複雑な" },
+            { "english": "corporation", "japanese": "法人" },
+            { "english": "limit", "japanese": "限度，制限/を制限する" },
+            { "english": "attachment", "japanese": "付属物" },
+            { "english": "typically", "japanese": "典型的に" },
+            { "english": "kitchenware", "japanese": "台所用品" },
+            { "english": "processor", "japanese": "処理装置" },
+            { "english": "detailed", "japanese": "詳細の" },
+            { "english": "closely", "japanese": "綿密に，密接に" },
+            { "english": "unfortunately", "japanese": "残念なことに" },
+            { "english": "displayed", "japanese": "表示された" },
+            { "english": "necessary", "japanese": "必要な" },
+            { "english": "valid", "japanese": "有効な" },
+            { "english": "relatively", "japanese": "比較的に" },
+            { "english": "reported", "japanese": "報告された" },
+            { "english": "reliable", "japanese": "頼りになる" },
+            { "english": "critics", "japanese": "批評" },
+            { "english": "impressed", "japanese": "感動した，印象付けられた" },
+            { "english": "plant", "japanese": "植物" },
+            { "english": "Beyond", "japanese": "を超えて" },
+            { "english": "detergent", "japanese": "洗剤" },
+            { "english": "surface", "japanese": "表面" },
+            { "english": "quote", "japanese": "見積り/見積る" },
+            { "english": "path", "japanese": "小道" },
+            { "english": "audit", "japanese": "監査" },
+            { "english": "placid", "japanese": "穏かな" },
+            { "english": "porch", "japanese": "玄関" },
+            { "english": "custom", "japanese": "習慣" },
+            { "english": "propose", "japanese": "を提案する" },
+            { "english": "tool", "japanese": "道具" },
+            { "english": "decline", "japanese": "を断る，衰退する/低下，衰退" },
+            { "english": "bill", "japanese": "請求書，紙幣，法案" },
+            { "english": "patient", "japanese": "我慢強い/患者" },
+            { "english": "relocation", "japanese": "移転" },
+            { "english": "merchandise", "japanese": "商品" },
+            { "english": "interior", "japanese": "内部の" },
+            { "english": "clerk", "japanese": "店員" },
+            { "english": "household", "japanese": "家族，家" },
+            { "english": "government", "japanese": "政府，統治" },
+            { "english": "entry", "japanese": "入場" },
+            { "english": "itinerary", "japanese": "旅程" },
+            { "english": "poorly", "japanese": "かわいそうに" },
+            { "english": "initiative", "japanese": "主導権" },
+            { "english": "arranged", "japanese": "手配された" },
+            { "english": "luncheon", "japanese": "昼食" },
+            { "english": "compared", "japanese": "比較された" },
+            { "english": "activate", "japanese": "作動させる" },
+            { "english": "collect", "japanese": "集める" },
+            { "english": "scientist", "japanese": "科学者" },
+            { "english": "expanded", "japanese": "拡大された" },
+            { "english": "profit", "japanese": "利益" },
+            { "english": "status", "japanese": "状態，社会的地位" },
+            { "english": "internship", "japanese": "実習" },
+            { "english": "affordable", "japanese": "入手できる，お金の足りる" },
+            { "english": "relocate", "japanese": "移転させる" },
+            { "english": "business card", "japanese": "名刺" },
+            { "english": "supposed", "japanese": "想定した" },
+            { "english": "baggage", "japanese": "荷物" },
+            { "english": "gather", "japanese": "を集める，集まる" },
+            { "english": "convenience", "japanese": "便利" },
+            { "english": "directory", "japanese": "住所氏名録" },
+            { "english": "postpone", "japanese": "延期する" },
+            { "english": "artwork", "japanese": "芸術作品" },
+            { "english": "picture", "japanese": "絵，写真" },
+            { "english": "period", "japanese": "期間，時代" },
+            { "english": "efficiency", "japanese": "効率性" },
+            { "english": "anniversary", "japanese": "～周年" },
+            { "english": "congratulate", "japanese": "お祝いする" },
+            { "english": "talented", "japanese": "才能のある" },
+            { "english": "institute", "japanese": "研究所" },
+            { "english": "electricity", "japanese": "電気" },
+            { "english": "length", "japanese": "長さ" },
+            { "english": "editor", "japanese": "編集者" },
+            { "english": "grocery", "japanese": "食料品" },
+            { "english": "similar", "japanese": "よく似た" },
+            { "english": "properly", "japanese": "適切に" },
+            { "english": "productivity", "japanese": "生産性" },
+            { "english": "twice", "japanese": "2回" },
+            { "english": "laptop", "japanese": "ノートパソコン" },
+            { "english": "permission", "japanese": "許可" },
+            { "english": "participated", "japanese": "参加した" },
+            { "english": "athletic", "japanese": "競技の" },
+            { "english": "competitive", "japanese": "競争力のある" },
+            { "english": "spokesperson", "japanese": "代弁者，代表者" },
+            { "english": "trend", "japanese": "傾向，流行" },
+            { "english": "diverse", "japanese": "多様な" },
+            { "english": "fund", "japanese": "資金" },
+            { "english": "clarify", "japanese": "明らかにする" },
+            { "english": "thoroughly", "japanese": "徹底的に" },
+            { "english": "remove", "japanese": "を取り除く" },
+            { "english": "handle", "japanese": "を手で扱う，にうまく対処する" },
+            { "english": "delighted", "japanese": "喜んで" },
+            { "english": "physical", "japanese": "身体の，物理的な" },
+            { "english": "involve", "japanese": "関与する" },
+            { "english": "ideal", "japanese": "理想/理想の" },
+            { "english": "exceptional", "japanese": "並外れた" },
+            { "english": "confident", "japanese": "自信のある" },
+            { "english": "extensive", "japanese": "広範な" },
+            { "english": "responsibility", "japanese": "責任" },
+            { "english": "compete", "japanese": "競争する" },
+            { "english": "equal", "japanese": "等しい/に等しい" },
+            { "english": "seek", "japanese": "を求める" },
+            { "english": "statement", "japanese": "話，陳述，声明" },
+            { "english": "laboratory", "japanese": "実験室" },
+            { "english": "finally", "japanese": "ついに" },
+            { "english": "CEO", "japanese": "代表取締役" },
+            { "english": "toward", "japanese": "に向かって" },
+            { "english": "critic", "japanese": "批評家，批判者" },
+            { "english": "figure", "japanese": "図，表" },
+            { "english": "compare", "japanese": "を比較する，をたとえる" },
+            { "english": "entire", "japanese": "全体の，全体" },
+            { "english": "residential", "japanese": "居住の" },
+            { "english": "reasonable", "japanese": "合理的な" },
+            { "english": "draw", "japanese": "描く，引く" },
+            { "english": "attract", "japanese": "を引きつける" },
+            { "english": "cooperation", "japanese": "協力" },
+            { "english": "unexpected", "japanese": "予期せぬ" },
+            { "english": "loyal", "japanese": "忠実な" },
+            { "english": "reminder", "japanese": "催促" },
+            { "english": "track", "japanese": "足跡" },
+            { "english": "former", "japanese": "前の/前者" },
+            { "english": "long-term", "japanese": "長期的な" },
+            { "english": "actually", "japanese": "実際に，現実に" },
+            { "english": "anticipated", "japanese": "期待した" },
+            { "english": "rest", "japanese": "休息する" },
+            { "english": "value", "japanese": "価値/を重んじる" },
+            { "english": "bright", "japanese": "明るい" },
+            { "english": "regional", "japanese": "地方の" },
+            { "english": "notification", "japanese": "通知" },
+            { "english": "rely", "japanese": "頼る，信頼する" },
+            { "english": "thus", "japanese": "このように" },
+            { "english": "pastry", "japanese": "パン菓子" },
+            { "english": "state", "japanese": "状態，国家，州" },
+            { "english": "brief", "japanese": "短い" },
+            { "english": "insight", "japanese": "洞察" },
+            { "english": "operate", "japanese": "操作する" },
+            { "english": "temple", "japanese": "寺院" },
+            { "english": "search", "japanese": "を捜す/探索，捜索" },
+            { "english": "internal", "japanese": "内部の" },
+            { "english": "critical", "japanese": "極めて重要な，非常に深刻な" },
+            { "english": "maximum", "japanese": "最大の" },
+            { "english": "moment", "japanese": "瞬間，時" },
+            { "english": "highly", "japanese": "とても，高く" },
+            { "english": "improvement", "japanese": "改善" },
+            { "english": "exact", "japanese": "正確な" },
+            { "english": "botanical", "japanese": "植物の" },
+            { "english": "lovely", "japanese": "美しい" },
+            { "english": "highlight", "japanese": "目立たせる" },
+            { "english": "committee", "japanese": "委員会" },
+            { "english": "means", "japanese": "手段" },
+            { "english": "prior", "japanese": "優先の" },
+            { "english": "frequent", "japanese": "頻繁な" },
+            { "english": "appear", "japanese": "現れる，のように思われる" },
+            { "english": "cause", "japanese": "原因/の原因となる，" },
+            { "english": "publisher", "japanese": "出版社" },
+            { "english": "outline", "japanese": "概要" },
+            { "english": "accommodation", "japanese": "宿泊施設" },
+            { "english": "lab", "japanese": "研究室" },
+            { "english": "funding", "japanese": "資金調達" },
+            { "english": "supplier", "japanese": "供給者" },
+            { "english": "machinery", "japanese": "機械" },
+            { "english": "coworker", "japanese": "同僚" },
+            { "english": "salesperson", "japanese": "販売員" },
+            { "english": "receptionist", "japanese": "受付係" },
+            { "english": "rule", "japanese": "を統治する/規則，習慣" },
+            { "english": "background", "japanese": "背景，経歴" },
+            { "english": "appropriate", "japanese": "適当な，適切な" },
+            { "english": "manufacture", "japanese": "製造する" },
+            { "english": "assign", "japanese": "割り当てる" },
+            { "english": "competitor", "japanese": "競合他社" },
+            { "english": "analyze", "japanese": "を分析する" },
+            { "english": "inconvenient", "japanese": "不便な" },
+            { "english": "reception", "japanese": "応接" },
+            { "english": "economics", "japanese": "経済学" },
+            { "english": "incomplete", "japanese": "不完全な" },
+            { "english": "temporarily", "japanese": "一時的に" },
+            { "english": "automobile", "japanese": "自動車" },
+            { "english": "reimburse", "japanese": "弁償する" },
+            { "english": "promotional", "japanese": "販促の" },
+            { "english": "mayor", "japanese": "市長" },
+            { "english": "closure", "japanese": "閉鎖" },
+            { "english": "decrease", "japanese": "減少する/減少" },
+            { "english": "donation", "japanese": "寄付" },
+            { "english": "habit", "japanese": "習慣" },
+            { "english": "neighborhood", "japanese": "近所" },
+            { "english": "specific", "japanese": "具体的な，特定の" },
+            { "english": "publication", "japanese": "出版物" },
+            { "english": "contain", "japanese": "を含む，が入っている" },
+            { "english": "refrigerator", "japanese": "冷蔵庫" },
+            { "english": "demonstrate", "japanese": "実証する" },
+            { "english": "priority", "japanese": "優先度" },
+            { "english": "individual", "japanese": "個人の，個々の/個人" },
+            { "english": "election", "japanese": "選挙" },
+            { "english": "authorize", "japanese": "許可する" },
+            { "english": "portfolio", "japanese": "人物像" },
+            { "english": "inspiration", "japanese": "ひらめき" },
+            { "english": "preserve", "japanese": "を保存［保護］する" },
+            { "english": "profitable", "japanese": "利益のある" },
+            { "english": "mission", "japanese": "使命、任務" },
+            { "english": "recruit", "japanese": "採用する、雇う" },
+            { "english": "headquarters", "japanese": "本部" },
+            { "english": "sensitive", "japanese": "敏感な，神経質な" },
+            { "english": "graduate", "japanese": "卒業する" },
+            { "english": "Annually", "japanese": "毎年の" },
+            { "english": "ongoing", "japanese": "進行中の" },
+            { "english": "curator", "japanese": "学芸員" },
+            { "english": "expertise", "japanese": "専門知識" },
+            { "english": "approach", "japanese": "に近づく" },
+            { "english": "draft", "japanese": "草案" },
+            { "english": "district", "japanese": "地域，地区" },
+            { "english": "thousands of", "japanese": "数千の" },
+            { "english": "faculty", "japanese": "学部" },
+            { "english": "showcase", "japanese": "陳列棚" },
+            { "english": "preparation", "japanese": "準備" },
+            { "english": "eliminate", "japanese": "を取り除く" },
+            { "english": "rarely", "japanese": "めったに～ない" },
+            { "english": "reputation", "japanese": "評判" },
+            { "english": "exception", "japanese": "例外" },
+            { "english": "adequate", "japanese": "十分な" },
+            { "english": "resolve", "japanese": "解決する" },
+            { "english": "shade", "japanese": "陰" },
+            { "english": "bottom", "japanese": "底" },
+            { "english": "multinational", "japanese": "多国籍の" },
+            { "english": "assembly", "japanese": "集合" },
+            { "english": "particularly", "japanese": "特に" },
+            { "english": "metal", "japanese": "金属" },
+            { "english": "specifically", "japanese": "特に" },
+            { "english": "vacate", "japanese": "逃げる" },
+            { "english": "worth", "japanese": "の価値がある" },
+            { "english": "inexpensive", "japanese": "安価な" },
+            { "english": "economic", "japanese": "経済の，経済的な" },
+            { "english": "arena", "japanese": "舞台" },
+            { "english": "qualification", "japanese": "資格" },
+            { "english": "promptly", "japanese": "早速" },
+            { "english": "clearly", "japanese": "明確に" },
+            { "english": "Asia", "japanese": "アジア" },
+            { "english": "popularity", "japanese": "人気" },
+            { "english": "despite", "japanese": "にもかかわらず" },
+            { "english": "depend", "japanese": "依存する，次第である" },
+            { "english": "achieve", "japanese": "を達成する" },
+            { "english": "lagoon", "japanese": "環礁" },
+            { "english": "flexible", "japanese": "柔軟な" },
+            { "english": "inconvenience", "japanese": "不便" },
+            { "english": "submission", "japanese": "提出" },
+            { "english": "via", "japanese": "～経由で" },
+            { "english": "guess", "japanese": "だと思う，を推測する" },
+            { "english": "attentive", "japanese": "注意深い" },
+            { "english": "otherwise", "japanese": "さもなければ，それとは違うように" },
+            { "english": "ordinance", "japanese": "条例" },
+            { "english": "kettle", "japanese": "やかん" },
+            { "english": "assemble", "japanese": "組み立てる" },
+            { "english": "largely", "japanese": "主として" },
+            { "english": "rear", "japanese": "後部の" },
+            { "english": "electrical", "japanese": "電気の" },
+            { "english": "dirt", "japanese": "泥" },
+            { "english": "crisp", "japanese": "新鮮な" },
+            { "english": "whereas", "japanese": "である一方で" },
+            { "english": "inquiry", "japanese": "問い合わせ" },
+            { "english": "evenly", "japanese": "均等に" },
+            { "english": "seem", "japanese": "～のように思われる" },
+            { "english": "feasible", "japanese": "実行可能な" },
+            { "english": "crowd", "japanese": "群衆" },
+            { "english": "revenue", "japanese": "収益" },
+            { "english": "resolution", "japanese": "解決" },
+            { "english": "entertainment", "japanese": "娯楽" },
+            { "english": "guarantee", "japanese": "を保証する" },
+            { "english": "ownership", "japanese": "所有権" },
+            { "english": "retailer", "japanese": "小売業者" },
+            { "english": "population", "japanese": "人口，国民" },
+            { "english": "stationery", "japanese": "文房具" },
+            { "english": "confidential", "japanese": "機密の" },
+            { "english": "environment", "japanese": "環境，状況" },
+            { "english": "gain", "japanese": "を得る/獲得" },
+            { "english": "asset", "japanese": "資産" },
+            { "english": "rapid", "japanese": "急速な" },
+            { "english": "invest", "japanese": "投資する" },
+            { "english": "species", "japanese": "（動植物の）種" },
+            { "english": "spring", "japanese": "泉，春" },
+            { "english": "strive", "japanese": "努力する" },
+            { "english": "potentially", "japanese": "潜在的に" },
+            { "english": "preference", "japanese": "好み" },
+            { "english": "incentive", "japanese": "動機" },
+            { "english": "innovation", "japanese": "革新" },
+            { "english": "flow", "japanese": "流れる/流れ" },
+            { "english": "combine", "japanese": "を結合させる" },
+            { "english": "wholesale", "japanese": "卸し" },
+            { "english": "assumption", "japanese": "想定，思いこみ" },
+            { "english": "valuation", "japanese": "評価" },
+            { "english": "obligation", "japanese": "義務" },
+            { "english": "identify", "japanese": "を見分ける" },
+            { "english": "outlet", "japanese": "出口" },
+            { "english": "flat", "japanese": "平らな" },
+            { "english": "behalf", "japanese": "代わって" },
+            { "english": "native", "japanese": "生まれ故郷の，生来の" },
+            { "english": "domestic", "japanese": "国内の，家庭内の" },
+            { "english": "century", "japanese": "世紀" },
+            { "english": "specification", "japanese": "仕様" },
+            { "english": "enhance", "japanese": "高める，増す" },
+            { "english": "Mercury", "japanese": "水星" },
+            { "english": "structure", "japanese": "構造" },
+            { "english": "sector", "japanese": "分野" },
+            { "english": "ash", "japanese": "灰" },
+            { "english": "comply", "japanese": "準拠する" },
+            { "english": "shareholder", "japanese": "株主" },
+            { "english": "assessment", "japanese": "評価" },
+            { "english": "exporter", "japanese": "輸出者" },
+            { "english": "yield", "japanese": "産出する" },
+            { "english": "export", "japanese": "を輸出する/輸出" },
+            { "english": "Ad", "japanese": "広告" },
+            { "english": "upstairs", "japanese": "上階" },
+            { "english": "scene", "japanese": "場面" },
+            { "english": "competence", "japanese": "力量，能力" },
+            { "english": "defect", "japanese": "欠陥" },
+            { "english": "container", "japanese": "容器" },
+            { "english": "bite", "japanese": "を噛む" },
+            { "english": "perspective", "japanese": "見地，視座" },
+            { "english": "faith", "japanese": "信頼，信仰" },
+            { "english": "faithfully", "japanese": "忠実に" },
+            { "english": "primarily", "japanese": "主として" },
+            { "english": "rubbish", "japanese": "ごみ" },
+            { "english": "attach", "japanese": "を貼り付ける，を取り付ける" },
+            { "english": "subsidiary", "japanese": "子会社" },
+            { "english": "perception", "japanese": "洞察（力），知覚" },
+            { "english": "wonder", "japanese": "不思議に思う" },
+            { "english": "objective", "japanese": "目標、目的" },
+            { "english": "establish", "japanese": "を設立する" },
+            { "english": "poll", "japanese": "投票" },
+            { "english": "relevant", "japanese": "関連のある" },
+            { "english": "feed", "japanese": "に食べ物を与える，を養う" },
+            { "english": "vote", "japanese": "投票する/投票" },
+            { "english": "retention", "japanese": "保持" },
+            { "english": "external", "japanese": "外部の" },
+            { "english": "fabric", "japanese": "織物" },
+            { "english": "generate", "japanese": "を発生させる" },
+            { "english": "souvenir", "japanese": "お土産" },
+            { "english": "downside", "japanese": "欠点" },
+            { "english": "minister", "japanese": "大臣" },
+            { "english": "debt", "japanese": "借金，負債" },
+            { "english": "employer", "japanese": "雇用者" },
+            { "english": "maintain", "japanese": "を維持する，だと主張する" },
+            { "english": "income", "japanese": "所得" },
+            { "english": "timber", "japanese": "木材" },
+            { "english": "shape", "japanese": "形/を形作る" },
+            { "english": "chemical", "japanese": "化学の/化学製品" },
+            { "english": "venture", "japanese": "冒険的事業" },
+            { "english": "query", "japanese": "疑問" },
+            { "english": "cupboard", "japanese": "食器棚" },
+            { "english": "drawer", "japanese": "引き出し" },
+            { "english": "applicable", "japanese": "該当する" },
+            { "english": "locate", "japanese": "特定する" },
+            { "english": "capability", "japanese": "容量" },
+            { "english": "formula", "japanese": "式" },
+            { "english": "enclose", "japanese": "囲む、同封する" },
+            { "english": "administration", "japanese": "機関" },
+            { "english": "charm", "japanese": "魅力/を魅了する" },
+            { "english": "conservative", "japanese": "保守的な" },
+            { "english": "earn", "japanese": "を稼ぐ" },
+            { "english": "countryside", "japanese": "田舎" },
+            { "english": "transaction", "japanese": "取引" },
+            { "english": "exclusive", "japanese": "排他的な" },
+            { "english": "maker", "japanese": "製造元" },
+            { "english": "economy", "japanese": "経済" },
+            { "english": "effectively", "japanese": "効果的に" },
+            { "english": "implement", "japanese": "実施する" },
+            { "english": "expectation", "japanese": "期待" },
+            { "english": "independent", "japanese": "独立した，自立した" },
+            { "english": "acquisition", "japanese": "取得" },
+            { "english": "marine", "japanese": "海の" },
+            { "english": "commission", "japanese": "手数料" },
+            { "english": "sustainable", "japanese": "持続可能な" },
+            { "english": "bulk", "japanese": "大きさ" },
+            { "english": "comprehensive", "japanese": "包括的な" },
+            { "english": "dedicate", "japanese": "捧げる" },
+            { "english": "contribution", "japanese": "寄付，貢献" },
+            { "english": "attachment", "japanese": "添付" },
+            { "english": "determine", "japanese": "を決める" },
+            { "english": "quantity", "japanese": "量" },
+            { "english": "vent", "japanese": "排出口" },
+            { "english": "ceiling", "japanese": "天井" },
+            { "english": "origin", "japanese": "起源" },
+            { "english": "overtime", "japanese": "延長時間，残業" },
+            { "english": "outage", "japanese": "停電" },
+            { "english": "rebate", "japanese": "払い戻し/払戻す" },
+            { "english": "fiction", "japanese": "創作" },
+            { "english": "nutrition", "japanese": "栄養" },
+            { "english": "shortage", "japanese": "不足" },
+            { "english": "method", "japanese": "方法" },
+            { "english": "referral", "japanese": "照会" },
+            { "english": "questionnaire", "japanese": "質問表" },
+            { "english": "disappointment", "japanese": "失望" },
+            { "english": "deserve", "japanese": "値する" },
+            { "english": "proof", "japanese": "証拠" },
+            { "english": "audience", "japanese": "聴衆，観客，視聴者" },
+            { "english": "friendliness", "japanese": "親しみやすさ" },
+            { "english": "chemistry", "japanese": "化学" },
+            { "english": "taste", "japanese": "味/な味がする" },
+            { "english": "fund-raising", "japanese": "資金調達" },
+            { "english": "calculation", "japanese": "計算" },
+            { "english": "prescription", "japanese": "処方箋" },
+            { "english": "fulfill", "japanese": "を果たす，をかなえる" },
+            { "english": "collaborate", "japanese": "協力する" },
+            { "english": "pharmacy", "japanese": "薬局" },
+            { "english": "valley", "japanese": "谷" },
+            { "english": "qualify", "japanese": "資格を与える" },
+            { "english": "trial", "japanese": "裁判，試み" },
+            { "english": "inspector", "japanese": "検査官" },
+            { "english": "recognize", "japanese": "認識する" },
+            { "english": "accompany", "japanese": "に付き添う" },
+            { "english": "reflect", "japanese": "を反映する，熟考する" },
+            { "english": "accomplishment", "japanese": "成就，達成" },
+            { "english": "preservation", "japanese": "保存" },
+            { "english": "slip", "japanese": "滑る" },
+            { "english": "disruption", "japanese": "破壊" },
+            { "english": "supervise", "japanese": "監督する" },
+            { "english": "agriculture", "japanese": "農業" },
+            { "english": "academy", "japanese": "学会、協会" },
+            { "english": "boast", "japanese": "自慢する" },
+            { "english": "supervision", "japanese": "監督" },
+            { "english": "apprenticeship", "japanese": "見習い" },
+            { "english": "represent", "japanese": "を表す，を代表する" },
+            { "english": "courtesy", "japanese": "礼儀" },
+            { "english": "expansion", "japanese": "拡張" },
+            { "english": "troubleshooting", "japanese": "問題処理" },
+            { "english": "verification", "japanese": "立証" },
+            { "english": "recall", "japanese": "呼び戻す" },
+            { "english": "enable", "japanese": "可能にする" },
+            { "english": "ore", "japanese": "鉱石" },
+            { "english": "kitchenette", "japanese": "簡易キッチン" },
+            { "english": "contribute", "japanese": "寄付する，貢献する" },
+            { "english": "pour", "japanese": "を注ぐ" },
+            { "english": "counter", "japanese": "相対する" },
+            { "english": "acclaim", "japanese": "称賛する" },
+            { "english": "decade", "japanese": "10年" },
+            { "english": "reduction", "japanese": "削減" },
+            { "english": "edition", "japanese": "版" },
+            { "english": "destination", "japanese": "目的地" },
+            { "english": "pedestrian", "japanese": "歩行者" },
+            { "english": "pier", "japanese": "桟橋" },
+            { "english": "patience", "japanese": "辛抱強さ，忍耐" },
+            { "english": "gas", "japanese": "ガソリン" },
+            { "english": "aspect", "japanese": "局面" },
+            { "english": "situation", "japanese": "状況，情勢" },
+            { "english": "residence", "japanese": "住宅" },
+            { "english": "utopia", "japanese": "理想郷" },
+            { "english": "comparison", "japanese": "比較" },
+            { "english": "refurbish", "japanese": "改修する" },
+            { "english": "pond", "japanese": "池" },
+            { "english": "equip", "japanese": "に備え付ける" },
+            { "english": "compile", "japanese": "編集する" },
+            { "english": "assure", "japanese": "保証する" },
+            { "english": "transition", "japanese": "遷移" },
+            { "english": "delicatessen", "japanese": "惣菜" },
+            { "english": "alternative", "japanese": "代替となるもの/代替の" },
+            { "english": "walkway", "japanese": "歩道" },
+            { "english": "apology", "japanese": "謝罪" },
+            { "english": "failure", "japanese": "失敗，失敗作，失敗者" },
+            { "english": "crack", "japanese": "亀裂" },
+            { "english": "comprehension", "japanese": "理解" },
+            { "english": "novel", "japanese": "小説/新奇な" },
+            { "english": "overwhelm", "japanese": "圧倒する" },
+            { "english": "affect", "japanese": "に影響を与える" },
+            { "english": "debris", "japanese": "破片" },
+            { "english": "grateful", "japanese": "感謝して" },
+            { "english": "evaluate", "japanese": "評価する" },
+            { "english": "cuisine", "japanese": "料理" },
+            { "english": "childhood", "japanese": "子供時代" },
+            { "english": "column", "japanese": "柱、段" },
+            { "english": "lifetime", "japanese": "寿命" },
+            { "english": "rotate", "japanese": "回転する" },
+            { "english": "temperature", "japanese": "温度，体温" },
+            { "english": "iris", "japanese": "虹彩" },
+            { "english": "talent", "japanese": "才能" },
+            { "english": "significance", "japanese": "重要性，意義" },
+            { "english": "frequency", "japanese": "周波数" },
+            { "english": "peak", "japanese": "頂上" },
+            { "english": "vary", "japanese": "変える，変更する" },
+            { "english": "utilize", "japanese": "利用する，活用する" },
+            { "english": "presence", "japanese": "存在" },
+            { "english": "enterprise", "japanese": "企業" },
+            { "english": "sidewalk", "japanese": "歩道" },
+            { "english": "optics", "japanese": "光学" },
+            { "english": "examine", "japanese": "を検査する，を調べる" },
+            { "english": "contributor", "japanese": "貢献者，寄与者" },
+            { "english": "engagement", "japanese": "約束" },
+            { "english": "array", "japanese": "整列させる" },
+            { "english": "honor", "japanese": "名誉，敬意" },
+            { "english": "addendum", "japanese": "追加，付録" },
+            { "english": "leftover", "japanese": "残り物" },
+            { "english": "purse", "japanese": "財布" },
+            { "english": "stimulate", "japanese": "を刺激する" },
+            { "english": "wheat", "japanese": "小麦" },
+            { "english": "stain", "japanese": "汚れ" },
+            { "english": "infer", "japanese": "推察する，考える" },
+            { "english": "demand", "japanese": "要求，需要/…を要求する" },
+            { "english": "booking", "japanese": "予約" },
+            { "english": "browse", "japanese": "見て回る，拾い読みする" },
+            { "english": "loosen", "japanese": "緩む" },
+            { "english": "admiration", "japanese": "感心，称賛" },
+            { "english": "blame", "japanese": "非難する" },
+            { "english": "workforce", "japanese": "労働力" },
+            { "english": "shuttle", "japanese": "往復運転で運ぶ" },
+            { "english": "fire", "japanese": "解雇する" },
+            { "english": "commute", "japanese": "通勤する" },
+            { "english": "attain", "japanese": "を実現する，達成する" },
+            { "english": "confess", "japanese": "告白する" },
+            { "english": "greet", "japanese": "挨拶する" },
+            { "english": "saving", "japanese": "貯蓄，値引き" },
+            { "english": "obey", "japanese": "従う" },
+            { "english": "display", "japanese": "展示/展示する" },
+            { "english": "exclude", "japanese": "を除く，排除する" },
+            { "english": "résumé", "japanese": "履歴書" },
+            { "english": "feedback", "japanese": "反応" },
+            { "english": "ladder", "japanese": "はしご" },
+            { "english": "prohibit", "japanese": "禁止する" },
+            { "english": "determination", "japanese": "決定，決意" },
+            { "english": "polish", "japanese": "磨く" },
+            { "english": "tie", "japanese": "結ぶ，ネクタイ" },
+            { "english": "rent", "japanese": "家賃/賃貸借する" },
+            { "english": "boost", "japanese": "を強化する，増加させる" },
+            { "english": "inspect", "japanese": "検査する，点検する" },
+            { "english": "book", "japanese": "予約する" },
+            { "english": "foresee", "japanese": "予見する，予測する" },
+            { "english": "plug", "japanese": "差し込む，接続する" },
+            { "english": "sew", "japanese": "縫う" },
+            { "english": "lean", "japanese": "寄りかかる，かがむ" },
+            { "english": "store", "japanese": "保存する，蓄える" },
+            { "english": "appoint", "japanese": "任命する，指名する" },
+            { "english": "relief", "japanese": "安堵，軽減" },
+            { "english": "vase", "japanese": "花瓶" },
+            { "english": "patio", "japanese": "テラス，中庭" },
+            { "english": "takeoff", "japanese": "離陸，出発" },
+            { "english": "lighthouse", "japanese": "灯台" },
+            { "english": "fountain", "japanese": "噴水" },
+            { "english": "transact", "japanese": "（取引，業務など）を行う" },
+            { "english": "withdraw", "japanese": "撤回する，引き出す" },
+            { "english": "allocate", "japanese": "割り当てる" },
+            { "english": "probability", "japanese": "確率，可能性" },
+            { "english": "expiration", "japanese": "期限切れ，（契約などの）終了" },
+            { "english": "application", "japanese": "申し込み，応用" },
+            { "english": "unload", "japanese": "（荷物など）を降ろす" },
+            { "english": "theme", "japanese": "テーマ，論題" },
+            { "english": "abolish", "japanese": "を廃止する" },
+            { "english": "suspend", "japanese": "中断する" },
+            { "english": "paperwork", "japanese": "書類，書類作業" },
+            { "english": "restore", "japanese": "復旧させる，取り戻す" },
+            { "english": "initiate", "japanese": "開始する" },
+            { "english": "disregard", "japanese": "無視する" },
+            { "english": "interact", "japanese": "交流する" },
+            { "english": "administer", "japanese": "管理する" },
+            { "english": "acquire", "japanese": "を身につける" },
+            { "english": "edge", "japanese": "端" },
+            { "english": "bond", "japanese": "拘束、きずな" },
+            { "english": "consortium", "japanese": "連合" },
+            { "english": "affiliate", "japanese": "連携させる" },
+            { "english": "army", "japanese": "陸軍" },
+            { "english": "clutter", "japanese": "乱雑" },
+            { "english": "mate", "japanese": "友達" },
+            { "english": "witness", "japanese": "目撃者，証人/…を目撃する" },
+            { "english": "conglomerate", "japanese": "密集した" },
+            { "english": "membrane", "japanese": "膜" },
+            { "english": "inflation", "japanese": "膨張" },
+            { "english": "equation", "japanese": "方程式" },
+            { "english": "treasury", "japanese": "宝庫" },
+            { "english": "remuneration", "japanese": "報酬" },
+            { "english": "compensation", "japanese": "補償" },
+            { "english": "indemnity", "japanese": "補償" },
+            { "english": "variable", "japanese": "変化しやすい" },
+            { "english": "lord", "japanese": "封建君主，…卿，（（大文字で））神" },
+            { "english": "weapon", "japanese": "武器" },
+            { "english": "expression", "japanese": "表現" },
+            { "english": "secretary", "japanese": "秘書" },
+            { "english": "opposition", "japanese": "反対" },
+            { "english": "rebel", "japanese": "反逆者" },
+            { "english": "crate", "japanese": "箱" },
+            { "english": "bomb", "japanese": "爆弾" },
+            { "english": "dividend", "japanese": "配当" },
+            { "english": "ability", "japanese": "能力" },
+            { "english": "inlet", "japanese": "入り江" },
+            { "english": "patent", "japanese": "特許" },
+            { "english": "consensus", "japanese": "同意" },
+            { "english": "motivate", "japanese": "動機付ける" },
+            { "english": "motion", "japanese": "動き" },
+            { "english": "consolidate", "japanese": "統合する" },
+            { "english": "integrate", "japanese": "統合する" },
+            { "english": "union", "japanese": "統合" },
+            { "english": "consolidation", "japanese": "統合" },
+            { "english": "investor", "japanese": "投資家" },
+            { "english": "soil", "japanese": "土" },
+            { "english": "transmission", "japanese": "伝送" },
+            { "english": "heaven", "japanese": "天" },
+            { "english": "tighten", "japanese": "締める" },
+            { "english": "currency", "japanese": "通貨" },
+            { "english": "summit", "japanese": "頂上" },
+            { "english": "leap", "japanese": "跳ぶ" },
+            { "english": "procurement", "japanese": "調達" },
+            { "english": "arbitration", "japanese": "仲裁" },
+            { "english": "intelligence", "japanese": "知能，諜報" },
+            { "english": "unity", "japanese": "団結" },
+            { "english": "arrest", "japanese": "逮捕する" },
+            { "english": "await", "japanese": "待つ" },
+            { "english": "exist", "japanese": "存在する" },
+            { "english": "transmit", "japanese": "送信する" },
+            { "english": "dispute", "japanese": "争議，口論" },
+            { "english": "lawsuit", "japanese": "訴訟" },
+            { "english": "designate", "japanese": "選定する" },
+            { "english": "liability", "japanese": "責任" },
+            { "english": "condemn", "japanese": "責める" },
+            { "english": "generation", "japanese": "世代" },
+            { "english": "hydrogen", "japanese": "水素" },
+            { "english": "portrait", "japanese": "肖像画" },
+            { "english": "victory", "japanese": "勝利" },
+            { "english": "flexibility", "japanese": "柔軟性" },
+            { "english": "termination", "japanese": "終了" },
+            { "english": "convergence", "japanese": "収束" },
+            { "english": "capital", "japanese": "首都" },
+            { "english": "debit", "japanese": "借り方" },
+            { "english": "compliance", "japanese": "社会規範" },
+            { "english": "implementation", "japanese": "実装" },
+            { "english": "incident", "japanese": "事件" },
+            { "english": "expenditure", "japanese": "支出" },
+            { "english": "indicator", "japanese": "指示者" },
+            { "english": "dare", "japanese": "思い切って…する，生意気にも…する" },
+            { "english": "cell", "japanese": "細胞" },
+            { "english": "restructure", "japanese": "再構築する" },
+            { "english": "frustrate", "japanese": "挫折させる" },
+            { "english": "framework", "japanese": "骨格" },
+            { "english": "protest", "japanese": "抗議する/抗議" },
+            { "english": "equity", "japanese": "公平" },
+            { "english": "negotiate", "japanese": "交渉する" },
+            { "english": "principle", "japanese": "原理・原則，主義" },
+            { "english": "constitution", "japanese": "憲法" },
+            { "english": "marriage", "japanese": "結婚" },
+            { "english": "reckon", "japanese": "計算する" },
+            { "english": "scheme", "japanese": "計画" },
+            { "english": "prison", "japanese": "刑務所" },
+            { "english": "troop", "japanese": "群れ" },
+            { "english": "diligence", "japanese": "勤勉" },
+            { "english": "church", "japanese": "教会" },
+            { "english": "provision", "japanese": "供給" },
+            { "english": "payroll", "japanese": "給与" },
+            { "english": "palace", "japanese": "宮殿" },
+            { "english": "casualty", "japanese": "犠牲者" },
+            { "english": "cavalry", "japanese": "騎兵" },
+            { "english": "orbit", "japanese": "軌道" },
+            { "english": "regulator", "japanese": "規定者" },
+            { "english": "prayer", "japanese": "祈り" },
+            { "english": "term", "japanese": "期間，学期，用語，条件，間柄" },
+            { "english": "administrator", "japanese": "管理者" },
+            { "english": "stem", "japanese": "幹" },
+            { "english": "skid", "japanese": "滑り止め" },
+            { "english": "allot", "japanese": "割り当てる" },
+            { "english": "memorandum", "japanese": "覚え書き" },
+            { "english": "prey", "japanese": "獲物" },
+            { "english": "revise", "japanese": "改訂する" },
+            { "english": "chairman", "japanese": "会長" },
+            { "english": "entertain", "japanese": "楽しませる" },
+            { "english": "pulp", "japanese": "果肉" },
+            { "english": "landlord", "japanese": "家主" },
+            { "english": "accelerate", "japanese": "加速する" },
+            { "english": "flame", "japanese": "炎" },
+            { "english": "aid", "japanese": "援助/…を助ける" },
+            { "english": "satellite", "japanese": "衛星" },
+            { "english": "quotation", "japanese": "引用" },
+            { "english": "glance", "japanese": "一目見る" },
+            { "english": "stitch", "japanese": "一編み" },
+            { "english": "pharmaceutical", "japanese": "医薬品の" },
+            { "english": "breach", "japanese": "違反" },
+            { "english": "commitment", "japanese": "委託、献身" },
+            { "english": "consignment", "japanese": "委託" },
+            { "english": "stability", "japanese": "安定" },
+            { "english": "pump", "japanese": "ポンプ" },
+            { "english": "perk", "japanese": "ぴんと上げる" },
+            { "english": "pursuant", "japanese": "に従って" },
+            { "english": "tunnel", "japanese": "トンネル" },
+            { "english": "row", "japanese": "こぐ" },
+            { "english": "stick", "japanese": "くっつく，固執する/棒きれ" },
+            { "english": "stake", "japanese": "くい、棒" },
+            { "english": "tale", "japanese": "お話" },
+            { "english": "nod", "japanese": "うなずく" },
+            { "english": "billion", "japanese": "10億" },
+            { "english": "million", "japanese": "100万" },
+            { "english": "defeat", "japanese": "を負かす" },
+            { "english": "fold", "japanese": "を折りたたむ" },
+            { "english": "publish", "japanese": "を出版する" },
+            { "english": "employ", "japanese": "を雇う" },
+            { "english": "observe", "japanese": "を観察する，を遵守する" },
+            { "english": "pretend", "japanese": "のふりをする" },
+            { "english": "murder", "japanese": "(故意の）殺人/…を（故意に）殺す" },
+            { "english": "fetch", "japanese": "取ってくる，誘い出す" },
+            { "english": "bloom", "japanese": "咲く" },
+            { "english": "premise", "japanese": "前提，建物" },
+            { "english": "appraisal", "japanese": "鑑定，見積もり" },
+            { "english": "criterion", "japanese": "基準" },
+            { "english": "variance", "japanese": "相違，分散" },
+            { "english": "profitability", "japanese": "収益性" },
+            { "english": "overhead", "japanese": "間接の" },
+            { "english": "certificate", "japanese": "証明書" },
+            { "english": "takeover", "japanese": "引継ぎ，買収" },
+            { "english": "bankruptcy", "japanese": "倒産" },
+            { "english": "capitalisation", "japanese": "資本化" },
+            { "english": "clause", "japanese": "節，条項" },
+            { "english": "appraisee", "japanese": "鑑定人" },
+            { "english": "clearance", "japanese": "片付け，除去" },
+            { "english": "cargo", "japanese": "貨物" },
+            { "english": "cashflow", "japanese": "現金流量" },
+            { "english": "arbitrator", "japanese": "仲裁人" },
+            { "english": "stockholder", "japanese": "株主" },
+            { "english": "trademark", "japanese": "商標" },
+            { "english": "depot", "japanese": "停車場，倉庫" },
+            { "english": "demerger", "japanese": "解体" },
+            { "english": "spec", "japanese": "仕様" },
+            { "english": "turnover", "japanese": "売上高，転職率" },
+            { "english": "layoff", "japanese": "解雇" },
+            { "english": "insolvency", "japanese": "債務超過" },
+            { "english": "accession", "japanese": "接近，加盟" },
+            { "english": "brokerage", "japanese": "仲介" },
+            { "english": "core competency", "japanese": "核となる技術" },
+            { "english": "privatization", "japanese": "民営化" },
+            { "english": "liquidity", "japanese": "流動性" },
+            { "english": "trillion", "japanese": "兆" },
+            { "english": "accountancy", "japanese": "会計職" },
+            { "english": "niche", "japanese": "適所" },
+            { "english": "speculator", "japanese": "投機家" },
+            { "english": "tactics", "japanese": "戦術" },
+            { "english": "equities", "japanese": "株式" },
+            { "english": "enhancement", "japanese": "強化" },
+            { "english": "creditor", "japanese": "債権者" },
+            { "english": "depreciation", "japanese": "減価償却" },
+            { "english": "insurer", "japanese": "保険会社" },
+            { "english": "overdraft", "japanese": "当座貸越" },
+            { "english": "emulation", "japanese": "競争，対抗" },
+            { "english": "allegation", "japanese": "申し立て" },
+            { "english": "receivables", "japanese": "債権" },
+            { "english": "synergy", "japanese": "相乗効果" },
+            { "english": "deregulation", "japanese": "規制緩和" },
+            { "english": "digit", "japanese": "桁" },
+            { "english": "scaffolding", "japanese": "足場" },
+            { "english": "borrowing", "japanese": "借入" },
+            { "english": "underlie", "japanese": "根底にある" },
+            { "english": "underwrite", "japanese": "保険債務を負う" },
+            { "english": "incur", "japanese": "負う" },
+            { "english": "allege", "japanese": "主張する" },
+            { "english": "liquidate", "japanese": "現金化する，清算する" },
+            { "english": "orientate", "japanese": "方向づける" },
+            { "english": "interface", "japanese": "接点" },
+            { "english": "outsource", "japanese": "外注する" },
+            { "english": "parcel", "japanese": "小包" },
+            { "english": "outlaw", "japanese": "無法者" },
+            { "english": "benchmark", "japanese": "基準" },
+            { "english": "solvent", "japanese": "支払い能力のある" }
+        ];
+
+        // 単語を50個ずつに分割
+        const wordsPerLevel = 50;
+        const levelData = [];
+        for (let i = 0; i < allWords.length; i += wordsPerLevel) {
+            levelData.push({
+                level: levelData.length + 1,
+                words: allWords.slice(i, i + wordsPerLevel)
+            });
+        }
+        
+        let currentLevelIndex = 0; // 現在表示しているレベルのインデックス (0から始まる)
+        const totalLevels = levelData.length;
+        let testQuestions = [];
+        let currentQuestionIndex = 0;
+        let incorrectWords = [];
+        let score = 0;
+
+        const wordListContainer = document.getElementById('wordListContainer');
+        const testContainer = document.getElementById('testContainer');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const currentLevelDisplay = document.getElementById('currentLevelDisplay');
+        const prevLevelBtn = document.getElementById('prevLevelBtn');
+        const nextLevelBtn = document.getElementById('nextLevelBtn');
+        const copyAllWordsBtn = document.getElementById('copyAllWordsBtn');
+        const startTestBtn = document.getElementById('startTestBtn');
+        const backToLevelBtn = document.getElementById('backToLevelBtn');
+        const copyIncorrectWordsBtn = document.getElementById('copyIncorrectWordsBtn');
+        const questionArea = document.getElementById('questionArea');
+        const questionCount = document.getElementById('questionCount');
+        const questionText = document.getElementById('questionText');
+        const answerOptions = document.getElementById('answerOptions');
+        const feedbackArea = document.getElementById('feedbackArea');
+        const feedbackText = document.getElementById('feedbackText');
+        const rationaleText = document.getElementById('rationaleText');
+        const levelNav = document.getElementById('levelNav');
+        const actionButtons = document.getElementById('actionButtons');
+
+        function displayWordList(levelIndex) {
+            hideAllContainers();
+            wordListContainer.classList.remove('hidden');
+            
+            if (levelIndex < 0 || levelIndex >= levelData.length) {
+                wordListContainer.innerHTML = `<p class="text-red-500 text-center">このレベルのデータはまだありません。</p>`;
+                currentLevelDisplay.textContent = `レベル ${levelIndex + 1} / ${totalLevels}`;
+                prevLevelBtn.disabled = levelIndex === 0;
+                nextLevelBtn.disabled = levelIndex >= totalLevels - 1;
+                copyAllWordsBtn.disabled = true;
+                startTestBtn.disabled = true;
+                return;
+            }
+
+            const currentLevel = levelData[levelIndex];
+            let htmlContent = `<ul class="list-disc pl-5 space-y-2 text-gray-700">`;
+            currentLevel.words.forEach(word => {
+                htmlContent += `
+                    <li class="flex items-center justify-between">
+                        <span class="flex-1">
+                            <strong class="text-blue-600">${word.english}</strong> (<span class="text-gray-500">${word.japanese}</span>)
+                        </span>
+                        <button onclick="copyWord('${word.english.replace(/'/g, "\\'")}', '${word.japanese.replace(/'/g, "\\'")}')" class="bg-green-200 hover:bg-green-300 text-green-800 text-xs font-semibold py-1 px-2 rounded-full shadow-sm transition-colors duration-200 ml-2 flex-shrink-0">
+                            コピー
+                        </button>
+                    </li>`;
+            });
+            htmlContent += `</ul>`;
+            wordListContainer.innerHTML = htmlContent;
+
+            currentLevelDisplay.textContent = `レベル ${currentLevel.level} / ${totalLevels}`;
+            prevLevelBtn.disabled = currentLevelIndex === 0;
+            nextLevelBtn.disabled = currentLevelIndex >= totalLevels - 1;
+            copyAllWordsBtn.disabled = false;
+            startTestBtn.disabled = false;
+            levelNav.classList.remove('hidden');
+            actionButtons.classList.remove('hidden');
+        }
+
+        function copyWord(english, japanese) {
+            const textToCopy = `${english} (${japanese})`;
+            copyToClipboard(textToCopy);
+            showFeedback('単語をコピーしました！');
+        }
+
+        function copyAllWords() {
+            if (currentLevelIndex >= levelData.length) {
+                showFeedback('このレベルのデータはありません。');
+                return;
+            }
+            const currentLevel = levelData[currentLevelIndex];
+            const allWordsText = currentLevel.words.map(word => `${word.english} (${word.japanese})`).join('\n');
+            copyToClipboard(allWordsText);
+            showFeedback('全単語をコピーしました！');
+        }
+        
+        function copyIncorrectWords() {
+            if (incorrectWords.length === 0) {
+                showFeedback('間違えた単語はありません。');
+                return;
+            }
+            const allWordsText = incorrectWords.map(word => `${word.english} (${word.japanese})`).join('\n');
+            copyToClipboard(allWordsText);
+            showFeedback('間違えた単語をすべてコピーしました！');
+        }
+
+        function copyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+            } catch (err) {
+                console.error('コピーに失敗しました', err);
+            } finally {
+                document.body.removeChild(textarea);
+            }
+        }
+
+        function showFeedback(message) {
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.textContent = message;
+            feedbackDiv.className = 'fixed bottom-4 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50 transition-opacity duration-300 opacity-0';
+            document.body.appendChild(feedbackDiv);
+
+            setTimeout(() => {
+                feedbackDiv.classList.remove('opacity-0');
+                feedbackDiv.classList.add('opacity-100');
+            }, 10);
+
+            setTimeout(() => {
+                feedbackDiv.classList.remove('opacity-100');
+                feedbackDiv.classList.add('opacity-0');
+                feedbackDiv.addEventListener('transitionend', () => feedbackDiv.remove(), { once: true });
+            }, 2000);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function hideAllContainers() {
+            wordListContainer.classList.add('hidden');
+            testContainer.classList.add('hidden');
+            resultsContainer.classList.add('hidden');
+            levelNav.classList.add('hidden');
+            actionButtons.classList.add('hidden');
+        }
+
+        function startTest() {
+            hideAllContainers();
+            testContainer.classList.remove('hidden');
+            
+            const currentWords = levelData[currentLevelIndex].words;
+            shuffleArray(currentWords);
+            testQuestions = currentWords.map(word => createQuestion(word, currentWords));
+            
+            currentQuestionIndex = 0;
+            incorrectWords = [];
+            score = 0;
+            
+            displayQuestion();
+        }
+
+        function createQuestion(correctWord, allWords) {
+            const questionType = Math.random() < 0.5 ? 'englishToJapanese' : 'japaneseToEnglish';
+            let questionTextContent;
+            let correctAnswer;
+
+            if (questionType === 'englishToJapanese') {
+                questionTextContent = `「${correctWord.english}」の意味として正しいものを選びなさい。`;
+                correctAnswer = correctWord.japanese;
+            } else {
+                questionTextContent = `「${correctWord.japanese}」に当てはまる英単語として正しいものを選びなさい。`;
+                correctAnswer = correctWord.english;
+            }
+        
+            // 選択肢を生成するための単語リスト
+            const potentialWords = allWords.filter(word => word !== correctWord);
+            shuffleArray(potentialWords);
+        
+            const answerOptions = [correctAnswer];
+        
+            // 最大3つの誤った選択肢を追加
+            const numIncorrectOptions = Math.min(3, potentialWords.length);
+            for (let i = 0; i < numIncorrectOptions; i++) {
+                if (questionType === 'englishToJapanese') {
+                    answerOptions.push(potentialWords[i].japanese);
+                } else {
+                    answerOptions.push(potentialWords[i].english);
+                }
+            }
+        
+            shuffleArray(answerOptions);
+        
+            const options = answerOptions.map(option => ({
+                text: option,
+                isCorrect: option === correctAnswer
+            }));
+        
+            const hint = `正解は「${correctWord.japanese}」です。`;
+            const rationale = `正解は「${correctWord.japanese}」です。`;
+        
+            return {
+                question: questionTextContent,
+                options: options,
+                hint: hint,
+                correctWord: correctWord
+            };
+        }
+
+        function displayQuestion() {
+            feedbackArea.classList.add('hidden');
+            
+            if (currentQuestionIndex >= testQuestions.length) {
+                showResults();
+                return;
+            }
+            
+            const question = testQuestions[currentQuestionIndex];
+            
+            questionCount.textContent = `問題 ${currentQuestionIndex + 1} / ${testQuestions.length}`;
+            questionText.textContent = question.question;
+            
+            answerOptions.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('button');
+                optionElement.textContent = option.text;
+                optionElement.className = 'w-full text-left p-3 rounded-lg border border-gray-300 bg-white hover:bg-gray-100 transition-colors duration-200';
+                optionElement.dataset.isCorrect = option.isCorrect;
+                optionElement.addEventListener('click', () => {
+                    checkAnswer(optionElement);
+                });
+                answerOptions.appendChild(optionElement);
+            });
+        }
+
+        function checkAnswer(selectedOption) {
+            const isCorrect = selectedOption.dataset.isCorrect === 'true';
+            
+            document.querySelectorAll('#answerOptions button').forEach(btn => {
+                const optionIsCorrect = btn.dataset.isCorrect === 'true';
+                if (optionIsCorrect) {
+                    btn.classList.remove('bg-white', 'border-gray-300', 'hover:bg-gray-100');
+                    btn.classList.add('bg-green-200', 'border-green-500');
+                } else if (btn === selectedOption) {
+                    btn.classList.remove('bg-blue-100', 'border-blue-500');
+                    btn.classList.add('bg-red-200', 'border-red-500');
+                }
+                btn.disabled = true;
+            });
+            
+            feedbackArea.classList.remove('hidden');
+            if (isCorrect) {
+                feedbackArea.className = 'mt-4 p-4 rounded-lg bg-green-100';
+                feedbackText.className = 'font-bold text-green-700';
+                feedbackText.textContent = '正解です！';
+                score++;
+            } else {
+                feedbackArea.className = 'mt-4 p-4 rounded-lg bg-red-100';
+                feedbackText.className = 'font-bold text-red-700';
+                feedbackText.textContent = '残念、不正解です。';
+                incorrectWords.push(testQuestions[currentQuestionIndex].correctWord);
+            }
+            rationaleText.textContent = testQuestions[currentQuestionIndex].hint;
+            
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < testQuestions.length) {
+                    displayQuestion();
+                } else {
+                    showResults();
+                }
+            }, 2000);
+        }
+
+        function showResults() {
+            hideAllContainers();
+            resultsContainer.classList.remove('hidden');
+            
+            const totalQuestions = testQuestions.length;
+            testScore.textContent = `正解数: ${score} / ${totalQuestions}`;
+            
+            incorrectWordsList.innerHTML = '';
+            if (incorrectWords.length > 0) {
+                incorrectWordsHeading.classList.remove('hidden');
+                incorrectWords.forEach(word => {
+                    const listItem = document.createElement('div');
+                    listItem.textContent = `${word.english} (${word.japanese})`;
+                    listItem.className = 'bg-white p-3 rounded-lg shadow-sm cursor-pointer hover:bg-gray-100 transition-colors duration-200';
+                    listItem.onclick = () => {
+                        copyWord(word.english, word.japanese);
+                    };
+                    incorrectWordsList.appendChild(listItem);
+                });
+                incorrectCopyButton.classList.remove('hidden');
+            } else {
+                incorrectWordsHeading.classList.add('hidden');
+                incorrectCopyButton.classList.add('hidden');
+                const p = document.createElement('p');
+                p.textContent = 'お見事！すべての問題を正解しました。';
+                p.className = 'text-center text-gray-700';
+                incorrectWordsList.appendChild(p);
+            }
+        }
+
+        prevLevelBtn.addEventListener('click', () => {
+            if (currentLevelIndex > 0) {
+                currentLevelIndex--;
+                displayWordList(currentLevelIndex);
+            }
+        });
+
+        nextLevelBtn.addEventListener('click', () => {
+            if (currentLevelIndex < totalLevels - 1) {
+                currentLevelIndex++;
+                displayWordList(currentLevelIndex);
+            }
+        });
+
+        copyAllWordsBtn.addEventListener('click', copyAllWords);
+        startTestBtn.addEventListener('click', startTest);
+        backToLevelBtn.addEventListener('click', () => {
+            displayWordList(currentLevelIndex);
+        });
+        copyIncorrectWordsBtn.addEventListener('click', copyIncorrectWords);
+
+        window.onload = () => {
+            displayWordList(currentLevelIndex);
+        };
+    </script>
+</body>
+</html>

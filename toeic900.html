@@ -1,0 +1,2094 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOEIC900点レベル英単語</title>
+    <!-- Tailwind CSSをCDNで読み込み -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* カスタムフォント（Inter）の指定 */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* スクロールバーのスタイル */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 w-full max-w-2xl">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-6 text-center">TOEIC900点レベル英単語</h1>
+
+        <!-- レベル表示とナビゲーションボタン -->
+        <div id="levelNav" class="flex flex-col md:flex-row items-center justify-between mb-6 space-y-4 md:space-y-0 md:space-x-4">
+            <button id="prevLevelBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                前のレベル
+            </button>
+            <span id="currentLevelDisplay" class="text-xl md:text-2xl font-semibold text-gray-700">レベル 1 / 30</span>
+            <button id="nextLevelBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                次のレベル
+            </button>
+        </div>
+        
+        <!-- 全単語コピーボタンとテスト開始ボタン -->
+        <div id="actionButtons" class="text-center mb-6 space-y-4 md:space-y-0 md:space-x-4">
+            <button id="copyAllWordsBtn" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-8 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105">
+                このレベルの全単語をコピー
+            </button>
+            <button id="startTestBtn" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-8 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105">
+                テスト開始
+            </button>
+        </div>
+
+        <!-- コンテンツ表示エリア (単語リスト or テスト) -->
+        <div id="wordListContainer" class="bg-gray-50 rounded-lg p-4 md:p-6 border border-gray-200 h-96 overflow-y-auto">
+            <!-- 単語リストはJavaScriptでここに挿入されます -->
+            <p class="text-gray-500 text-center">単語リストを読み込み中...</p>
+        </div>
+        
+        <!-- テストコンテナ（非表示） -->
+        <div id="testContainer" class="hidden bg-gray-50 rounded-lg p-4 md:p-6 border border-gray-200 h-96 overflow-y-auto flex flex-col justify-between">
+            <div id="questionArea">
+                <p id="questionCount" class="text-sm text-gray-500 mb-2"></p>
+                <h3 id="questionText" class="text-xl font-bold mb-4 text-gray-800"></h3>
+                <div id="answerOptions" class="space-y-2"></div>
+            </div>
+            <div id="feedbackArea" class="mt-4 hidden p-4 rounded-lg">
+                <p id="feedbackText" class="font-bold"></p>
+                <p id="rationaleText" class="text-sm mt-2"></p>
+            </div>
+            <div class="mt-auto pt-4 flex justify-between">
+                <button id="nextQuestionBtn" class="hidden bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105">
+                    次の問題
+                </button>
+                <button id="endTestBtn" class="hidden bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105">
+                    テスト終了
+                </button>
+            </div>
+        </div>
+        
+        <!-- 結果コンテナ（非表示） -->
+        <div id="resultsContainer" class="hidden bg-gray-50 rounded-lg p-4 md:p-6 border border-gray-200 h-96 overflow-y-auto">
+            <h3 class="text-2xl font-bold text-center mb-4 text-gray-800">テスト結果</h3>
+            <p id="testScore" class="text-xl font-semibold text-center mb-4 text-gray-700"></p>
+            
+            <h4 id="incorrectWordsHeading" class="text-lg font-bold mt-6 mb-2 text-red-600">間違えた単語</h4>
+            <div id="incorrectWordsList" class="space-y-2"></div>
+
+            <div id="incorrectCopyButton" class="mt-4 text-center hidden">
+                <button id="copyIncorrectWordsBtn" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-8 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105">
+                    間違えた単語をすべてコピー
+                </button>
+            </div>
+            
+            <div class="mt-6 text-center">
+                <button id="backToLevelBtn" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105">
+                    レベル選択に戻る
+                </button>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        // 単語の配列。ここに追加するだけで自動的にレベル分けされます。
+        // TOEIC600点レベルの単語リスト
+        const allWords = [
+           { "english": "capital", "japanese": "首都，資本" },
+{ "english": "equity", "japanese": "公平，普通株" },
+{ "english": "quotation", "japanese": "見積り，引用" },
+{ "english": "pharmaceutical", "japanese": "医薬品の" },
+{ "english": "stability", "japanese": "安定性" },
+{ "english": "overhead", "japanese": "間接の" },
+{ "english": "consolidate", "japanese": "統合する，合併する" },
+{ "english": "glance", "japanese": "ひとめ見る" },
+{ "english": "stitch", "japanese": "ひと編み，縫い目" },
+{ "english": "incur", "japanese": "招く，負う" },
+{ "english": "spruce", "japanese": "気の利いた" },
+{ "english": "artificial", "japanese": "人工的な，作り物の" },
+{ "english": "monetary", "japanese": "金融の，金銭の" },
+{ "english": "statutory", "japanese": "法廷の" },
+{ "english": "anticipate", "japanese": "期待する" },
+{ "english": "drainage", "japanese": "排水，排水路" },
+{ "english": "component", "japanese": "成分，部品" },
+{ "english": "deterioration", "japanese": "悪化" },
+{ "english": "authority", "japanese": "権威" },
+{ "english": "commuter", "japanese": "通勤者" },
+{ "english": "continent", "japanese": "大陸" },
+{ "english": "founder", "japanese": "創設者" },
+{ "english": "illustrate", "japanese": "説明する，図解する" },
+{ "english": "consent", "japanese": "同意する" },
+{ "english": "frame", "japanese": "骨組み，枠組み" },
+{ "english": "scientific", "japanese": "科学の" },
+{ "english": "sturdy", "japanese": "頑丈な" },
+{ "english": "perimeter", "japanese": "周囲" },
+{ "english": "peninsula", "japanese": "半島" },
+{ "english": "enthusiastic", "japanese": "熱狂的な" },
+{ "english": "apart", "japanese": "離れて" },
+{ "english": "bureau", "japanese": "事務局，たんす" },
+{ "english": "depart", "japanese": "出発する" },
+{ "english": "reimbursed", "japanese": "払い戻された" },
+{ "english": "paycheck", "japanese": "給料" },
+{ "english": "devoted", "japanese": "献身的な" },
+{ "english": "permanent", "japanese": "永久の，常設の" },
+{ "english": "in-person", "japanese": "対面で" },
+{ "english": "artistic", "japanese": "芸術的な" },
+{ "english": "string", "japanese": "ひも、糸" },
+{ "english": "quartet", "japanese": "四人組" },
+{ "english": "tenor", "japanese": "進路、趣旨" },
+{ "english": "batch", "japanese": "ひとまとめ" },
+{ "english": "agricultural", "japanese": "農業の" },
+{ "english": "carry-on", "japanese": "続ける" },
+{ "english": "ridge", "japanese": "尾根" },
+{ "english": "supplement", "japanese": "補足" },
+{ "english": "prospect", "japanese": "見通し，見込み" },
+{ "english": "likewise", "japanese": "同様に" },
+{ "english": "justify", "japanese": "を正当化する" },
+{ "english": "realistic", "japanese": "現実的な" },
+{ "english": "wellness", "japanese": "健康" },
+{ "english": "mammal", "japanese": "哺乳動物" },
+{ "english": "nonrefundable", "japanese": "返金不可の" },
+{ "english": "interrupt", "japanese": "の邪魔をする，を中断させる" },
+{ "english": "statistics", "japanese": "統計" },
+{ "english": "attire", "japanese": "服装" },
+{ "english": "accurately", "japanese": "正確に" },
+{ "english": "pharmacist", "japanese": "薬剤師" },
+{ "english": "aviation", "japanese": "航空，航空機産業" },
+{ "english": "endorse", "japanese": "支持する" },
+{ "english": "handout", "japanese": "配布物" },
+{ "english": "monument", "japanese": "記念碑" },
+{ "english": "toll", "japanese": "通行料金" },
+{ "english": "documentary", "japanese": "事実を記録した" },
+{ "english": "wearable", "japanese": "身に付けることの出来る" },
+{ "english": "expedite", "japanese": "促進する" },
+{ "english": "inattentive", "japanese": "不注意な" },
+{ "english": "retrieve", "japanese": "取り戻す" },
+{ "english": "malfunction", "japanese": "故障" },
+{ "english": "inconsistent", "japanese": "一貫しない，矛盾した" },
+{ "english": "occur", "japanese": "発生する" },
+{ "english": "undesirable", "japanese": "望ましくない" },
+{ "english": "surgeon", "japanese": "外科医" },
+{ "english": "superintendent", "japanese": "監督" },
+{ "english": "donate", "japanese": "寄付する" },
+{ "english": "compliment", "japanese": "褒め言葉" },
+{ "english": "in-store", "japanese": "お店の中で" },
+{ "english": "reject", "japanese": "拒否する" },
+{ "english": "custodian", "japanese": "管理人" },
+{ "english": "belongings", "japanese": "持ち物" },
+{ "english": "validate", "japanese": "検証する" },
+{ "english": "tutorial", "japanese": "家庭教師の" },
+{ "english": "reassure", "japanese": "安心させる" },
+{ "english": "absent", "japanese": "欠席の" },
+{ "english": "electric", "japanese": "電気の" },
+{ "english": "overbook", "japanese": "過剰予約する" },
+{ "english": "meal voucher", "japanese": "食事券" },
+{ "english": "refuse", "japanese": "を拒否する" },
+{ "english": "excuse", "japanese": "許す" },
+{ "english": "handicraft", "japanese": "手芸" },
+{ "english": "misunderstand", "japanese": "勘違いする" },
+{ "english": "loose", "japanese": "ゆるんだ" },
+{ "english": "neat", "japanese": "きちんとした" },
+{ "english": "orient", "japanese": "東洋" },
+{ "english": "outgoing", "japanese": "社交的な" },
+{ "english": "colossal", "japanese": "巨大な，途方もなく大きい" },
+{ "english": "unprecedented", "japanese": "前例のない" },
+{ "english": "mineral", "japanese": "鉱物" },
+{ "english": "redesign", "japanese": "再設計，再設計する" },
+{ "english": "duty", "japanese": "職務、義務" },
+{ "english": "enrich", "japanese": "豊かにする" },
+{ "english": "truthful", "japanese": "誠実な" },
+{ "english": "diversity", "japanese": "多様性" },
+{ "english": "compose", "japanese": "構成する" },
+{ "english": "detour", "japanese": "迂回する" },
+{ "english": "rigorous", "japanese": "厳格な" },
+{ "english": "formally", "japanese": "正式に" },
+{ "english": "bulletin", "japanese": "速報，告示" },
+{ "english": "contemporary", "japanese": "現在の，現代の，同時代の" },
+{ "english": "vast", "japanese": "非常に大きな" },
+{ "english": "clay", "japanese": "粘土" },
+{ "english": "pottery", "japanese": "陶器" },
+{ "english": "minute", "japanese": "分，議事録" },
+{ "english": "anyway", "japanese": "ともかく" },
+{ "english": "reconfiguration", "japanese": "再構成" },
+{ "english": "influence", "japanese": "に影響を及ぼす/影響" },
+{ "english": "literacy", "japanese": "読み書き" },
+{ "english": "prescribe", "japanese": "処方する" },
+{ "english": "pediatric", "japanese": "小児科の" },
+{ "english": "dentistry", "japanese": "歯科" },
+{ "english": "tentative", "japanese": "暫定の" },
+{ "english": "shortly", "japanese": "まもなく" },
+{ "english": "plenty", "japanese": "たくさん" },
+{ "english": "checkup", "japanese": "検診" },
+{ "english": "sizable", "japanese": "相当大きな、かなり多くの" },
+{ "english": "cavity", "japanese": "空洞，虫歯" },
+{ "english": "oral", "japanese": "口頭の，口の" },
+{ "english": "stream", "japanese": "流れ" },
+{ "english": "hygiene", "japanese": "衛生" },
+{ "english": "cultivate", "japanese": "を耕作する，を栽培する" },
+{ "english": "wan", "japanese": "血の気のない" },
+{ "english": "enroll", "japanese": "入学する" },
+{ "english": "prerequisite", "japanese": "前提条件" },
+{ "english": "afford", "japanese": "の余裕がある" },
+{ "english": "terrible", "japanese": "ひどい，不快な" },
+{ "english": "dormitory", "japanese": "寮" },
+{ "english": "superb", "japanese": "見事な" },
+{ "english": "desire", "japanese": "願望/を強く望む" },
+{ "english": "glowing", "japanese": "白熱した、真っ赤に熟した" },
+{ "english": "establishment", "japanese": "設立" },
+{ "english": "carpenter", "japanese": "大工" },
+{ "english": "punctual", "japanese": "時間厳守の" },
+{ "english": "spelling", "japanese": "綴り" },
+{ "english": "acknowledged", "japanese": "認めた" },
+{ "english": "favor", "japanese": "親切な行為" },
+{ "english": "favorable", "japanese": "好ましい" },
+{ "english": "slight", "japanese": "かすかな" },
+{ "english": "virus", "japanese": "ウイルス" },
+{ "english": "prediction", "japanese": "予測" },
+{ "english": "considerably", "japanese": "かなり" },
+{ "english": "investigate", "japanese": "を調査する" },
+{ "english": "achievement", "japanese": "達成" },
+{ "english": "proximity", "japanese": "近さ，近接" },
+{ "english": "seldom", "japanese": "めったにしない" },
+{ "english": "unveil", "japanese": "正体を現す" },
+{ "english": "hedge", "japanese": "垣根，防止策" },
+{ "english": "urban", "japanese": "都会の，都市の" },
+{ "english": "commissioned", "japanese": "委託された" },
+{ "english": "eventually", "japanese": "最終的には" },
+{ "english": "interfere", "japanese": "干渉する，阻害する" },
+{ "english": "clarity", "japanese": "明快さ" },
+{ "english": "conversion", "japanese": "変換" },
+{ "english": "faulty", "japanese": "欠点のある" },
+{ "english": "lend", "japanese": "貸す" },
+{ "english": "sue", "japanese": "訴える" },
+{ "english": "discourage", "japanese": "をがっかりさせる" },
+{ "english": "sink", "japanese": "沈む" },
+{ "english": "chronicle", "japanese": "年代記" },
+{ "english": "hereby", "japanese": "ここに" },
+{ "english": "occupation", "japanese": "職業" },
+{ "english": "conflict", "japanese": "対立，争い" },
+{ "english": "authentic", "japanese": "本物の" },
+{ "english": "spectacular", "japanese": "壮観な" },
+{ "english": "attribute", "japanese": "に帰する" },
+{ "english": "identical", "japanese": "全く同じ" },
+{ "english": "concrete", "japanese": "具体的な" },
+{ "english": "crane", "japanese": "鶴" },
+{ "english": "harmonize", "japanese": "調和させる" },
+{ "english": "complement", "japanese": "補足物" },
+{ "english": "weigh", "japanese": "の重さがある" },
+{ "english": "vacated", "japanese": "空いた" },
+{ "english": "barn", "japanese": "納屋" },
+{ "english": "fertilizer", "japanese": "肥料" },
+{ "english": "home appliances", "japanese": "家電" },
+{ "english": "garbage", "japanese": "生ゴミ，くず" },
+{ "english": "decor", "japanese": "装飾" },
+{ "english": "reassurance", "japanese": "安心，再保証" },
+{ "english": "versatile", "japanese": "多才な，多目的に使える" },
+{ "english": "portable", "japanese": "携帯できる" },
+{ "english": "exceptionally", "japanese": "例外的に" },
+{ "english": "slightly", "japanese": "わずかに" },
+{ "english": "inaugurate", "japanese": "就任させる" },
+{ "english": "as a consequence", "japanese": "結果として" },
+{ "english": "proposition", "japanese": "提案，主張" },
+{ "english": "vanguard", "japanese": "前衛" },
+{ "english": "spoilage", "japanese": "腐敗，損傷物" },
+{ "english": "measure", "japanese": "措置，測るもの/を測る" },
+{ "english": "objection", "japanese": "異議" },
+{ "english": "biography", "japanese": "伝記" },
+{ "english": "fortunate", "japanese": "幸運な" },
+{ "english": "readable", "japanese": "読みやすい" },
+{ "english": "disposal", "japanese": "廃棄" },
+{ "english": "initial", "japanese": "当初の" },
+{ "english": "supplementary", "japanese": "補足の，付録の" },
+{ "english": "consequential", "japanese": "重大な，必然の" },
+{ "english": "persistent", "japanese": "根気強い" },
+{ "english": "cooperative", "japanese": "協力的な" },
+{ "english": "excerpt", "japanese": "抜粋" },
+{ "english": "precise", "japanese": "正確な" },
+{ "english": "deducted", "japanese": "差し引かれた" },
+{ "english": "settle", "japanese": "を決着させる，落ち着く" },
+{ "english": "entirely", "japanese": "完全に，全く" },
+{ "english": "numerous", "japanese": "多数の" },
+{ "english": "blank", "japanese": "白紙の" },
+{ "english": "vacancy", "japanese": "欠員，空き" },
+{ "english": "substitute", "japanese": "代替する" },
+{ "english": "willingness", "japanese": "意欲" },
+{ "english": "abstract", "japanese": "抽象的な" },
+{ "english": "vastness", "japanese": "広大さ" },
+{ "english": "critically", "japanese": "批判的に，危なく" },
+{ "english": "in house", "japanese": "社内で，組織内で" },
+{ "english": "attorney", "japanese": "弁護士" },
+{ "english": "counsel", "japanese": "助言，相談，弁護士" },
+{ "english": "representation", "japanese": "表現" },
+{ "english": "stable", "japanese": "安定した" },
+{ "english": "edit", "japanese": "編集する" },
+{ "english": "absolutely", "japanese": "絶対に" },
+{ "english": "resurfaced", "japanese": "再浮上した" },
+{ "english": "scale", "japanese": "規模" },
+{ "english": "courtesy", "japanese": "礼儀" },
+{ "english": "dissatisfaction", "japanese": "不満" },
+{ "english": "proportion", "japanese": "比率，割合" },
+{ "english": "accessible", "japanese": "行きやすい" },
+{ "english": "trail", "japanese": "通った跡，でこぼこ道" },
+{ "english": "pale", "japanese": "青ざめた" },
+{ "english": "amber", "japanese": "琥珀" },
+{ "english": "subtotal", "japanese": "小計" },
+{ "english": "tableware", "japanese": "食器" },
+{ "english": "retain", "japanese": "を保持する" },
+{ "english": "unanticipated", "japanese": "予期していない" },
+{ "english": "clerical", "japanese": "事務職の" },
+{ "english": "lift", "japanese": "持ちあげる" },
+{ "english": "evaluation", "japanese": "評価" },
+{ "english": "extent", "japanese": "程度" },
+{ "english": "enthusiastically", "japanese": "熱狂的に" },
+{ "english": "admit", "japanese": "を認める" },
+{ "english": "worsen", "japanese": "悪化させる" },
+{ "english": "violation", "japanese": "違反" },
+{ "english": "acknowledge", "japanese": "の存在［正しさ］を認める" },
+{ "english": "casual", "japanese": "何気ない" },
+{ "english": "continual", "japanese": "継続的な" },
+{ "english": "modification", "japanese": "変形" },
+{ "english": "enclosure", "japanese": "包囲" },
+{ "english": "inner", "japanese": "内部の" },
+{ "english": "repeatedly", "japanese": "繰り返し" },
+{ "english": "catering", "japanese": "配膳，食事提供" },
+{ "english": "unsubscribe", "japanese": "退会する" },
+{ "english": "be willing to", "japanese": "いとわない，やぶさかでない" },
+{ "english": "meantime", "japanese": "合間" },
+{ "english": "hard-to-reach", "japanese": "到達するのが難しい" },
+{ "english": "routinely", "japanese": "日常的に" },
+{ "english": "customer-satisfaction", "japanese": "顧客満足" },
+{ "english": "removal", "japanese": "除去" },
+{ "english": "plumbing", "japanese": "配管工事" },
+{ "english": "appeal", "japanese": "訴える" },
+{ "english": "fusion", "japanese": "融合，溶解" },
+{ "english": "crescent", "japanese": "三日月" },
+{ "english": "eatery", "japanese": "食堂" },
+{ "english": "flair", "japanese": "才能，勘" },
+{ "english": "heritage", "japanese": "遺産" },
+{ "english": "diner", "japanese": "簡易食堂" },
+{ "english": "giveaway", "japanese": "景品，無料サンプル" },
+{ "english": "occasional", "japanese": "時折の" },
+{ "english": "editorial", "japanese": "編集の" },
+{ "english": "inflate", "japanese": "膨らませる" },
+{ "english": "transferrable", "japanese": "移すことのできる" },
+{ "english": "family-owned", "japanese": "家族経営の" },
+{ "english": "lasting", "japanese": "永続的な" },
+{ "english": "entertain", "japanese": "を楽しませる" },
+{ "english": "portray", "japanese": "描く" },
+{ "english": "respectively", "japanese": "それぞれ" },
+{ "english": "cruise", "japanese": "巡航する" },
+{ "english": "involved", "japanese": "関与した" },
+{ "english": "trustee", "japanese": "受託者" },
+{ "english": "Venus", "japanese": "金星" },
+{ "english": "leisure", "japanese": "余暇" },
+{ "english": "secure", "japanese": "を確保する，を安全にする/ゆるぎない" },
+{ "english": "umbrella", "japanese": "かさ" },
+{ "english": "exactly", "japanese": "正確［厳密］に，ちょうど" },
+{ "english": "legendary", "japanese": "伝説の" },
+{ "english": "consist", "japanese": "成り立つ，存在する" },
+{ "english": "leash", "japanese": "ひも、くさり" },
+{ "english": "embarked", "japanese": "乗り出した" },
+{ "english": "equally", "japanese": "同等に" },
+{ "english": "composition", "japanese": "構成，楽曲" },
+{ "english": "drastically", "japanese": "劇的に" },
+{ "english": "injury", "japanese": "けが" },
+{ "english": "rift", "japanese": "切れ目" },
+{ "english": "practically", "japanese": "実質的に，ほとんど" },
+{ "english": "prudent", "japanese": "用心深い" },
+{ "english": "aim", "japanese": "ねらいをつける/目的" },
+{ "english": "relevance", "japanese": "関連性" },
+{ "english": "sensation", "japanese": "感覚" },
+{ "english": "emphasis", "japanese": "強調" },
+{ "english": "initially", "japanese": "最初に" },
+{ "english": "generally", "japanese": "一般的に" },
+{ "english": "variation", "japanese": "変化、変動" },
+{ "english": "impression", "japanese": "印象" },
+{ "english": "nowhere", "japanese": "どこにも" },
+{ "english": "optimize", "japanese": "最適化する" },
+{ "english": "optimum", "japanese": "最適の" },
+{ "english": "strengthen", "japanese": "を強化する" },
+{ "english": "territory", "japanese": "地域" },
+{ "english": "staircase", "japanese": "階段" },
+{ "english": "disclose", "japanese": "開示する" },
+{ "english": "bride", "japanese": "花嫁" },
+{ "english": "abundant", "japanese": "豊富な" },
+{ "english": "striking", "japanese": "印象的な" },
+{ "english": "ultimately", "japanese": "最終的に" },
+{ "english": "atlantic", "japanese": "大西洋の" },
+{ "english": "significantly", "japanese": "著しく" },
+{ "english": "last", "japanese": "持続する" },
+{ "english": "abundance", "japanese": "豊富さ" },
+{ "english": "prime", "japanese": "主要な，最重要の" },
+{ "english": "cost-effective", "japanese": "費用対効果の高い" },
+{ "english": "corresponding", "japanese": "一致する" },
+{ "english": "emblem", "japanese": "象徴" },
+{ "english": "gala", "japanese": "祭り" },
+{ "english": "breakdown", "japanese": "明細，内訳" },
+{ "english": "enthusiasm", "japanese": "情熱，熱意" },
+{ "english": "top-of-the-line", "japanese": "一線級の" },
+{ "english": "superiority", "japanese": "優越点" },
+{ "english": "awkward", "japanese": "ぎこちない" },
+{ "english": "decent", "japanese": "まともな" },
+{ "english": "criticism", "japanese": "批判" },
+{ "english": "summarize", "japanese": "まとめる" },
+{ "english": "unavoidable", "japanese": "避けられない" },
+{ "english": "circumstance", "japanese": "事情" },
+{ "english": "usability", "japanese": "使いやすさ" },
+{ "english": "noticeable", "japanese": "目立つ" },
+{ "english": "cast", "japanese": "投げる" },
+{ "english": "exert", "japanese": "行使する" },
+{ "english": "impossible", "japanese": "不可能な，だめな" },
+{ "english": "envelope", "japanese": "封筒" },
+{ "english": "predict", "japanese": "を予想する，を予測する" },
+{ "english": "approximate", "japanese": "およその" },
+{ "english": "angular", "japanese": "角のある，角度のある" },
+{ "english": "stimulating", "japanese": "刺激的な" },
+{ "english": "demolition", "japanese": "解体" },
+{ "english": "reasoning", "japanese": "推論" },
+{ "english": "essentially", "japanese": "本質的に" },
+{ "english": "utterly", "japanese": "全く，全然" },
+{ "english": "precision", "japanese": "正確さ" },
+{ "english": "punctuality", "japanese": "時間厳守" },
+{ "english": "crucial", "japanese": "重要な" },
+{ "english": "trait", "japanese": "特性，特徴" },
+{ "english": "investigation", "japanese": "調査" },
+{ "english": "mystery", "japanese": "神秘的な" },
+{ "english": "default", "japanese": "債務不履行" },
+{ "english": "massive", "japanese": "巨大な，大規模な" },
+{ "english": "liberty", "japanese": "自由" },
+{ "english": "manageable", "japanese": "扱いやすい" },
+{ "english": "assurance", "japanese": "保証" },
+{ "english": "delicate", "japanese": "微妙な，繊細な" },
+{ "english": "complication", "japanese": "複雑さ、混乱" },
+{ "english": "complicated", "japanese": "複雑な" },
+{ "english": "complicate", "japanese": "複雑にする" },
+{ "english": "affix", "japanese": "添付する，固定する" },
+{ "english": "justification", "japanese": "正当化" },
+{ "english": "subsequent", "japanese": "その次の" },
+{ "english": "withstand", "japanese": "耐える" },
+{ "english": "equator", "japanese": "赤道" },
+{ "english": "spokesman", "japanese": "代弁者" },
+{ "english": "tolerable", "japanese": "耐えられる" },
+{ "english": "tolerate", "japanese": "耐える" },
+{ "english": "rainfall", "japanese": "雨量，降雨" },
+{ "english": "diversification", "japanese": "多様化" },
+{ "english": "shady", "japanese": "陰になった" },
+{ "english": "waterproof", "japanese": "防水の" },
+{ "english": "rapidly", "japanese": "素早く" },
+{ "english": "landfill", "japanese": "埋め立て" },
+{ "english": "prompted", "japanese": "促した" },
+{ "english": "pursue", "japanese": "を追い求める" },
+{ "english": "sanitary", "japanese": "衛生的な" },
+{ "english": "script", "japanese": "台本" },
+{ "english": "aloud", "japanese": "声に出して" },
+{ "english": "foray", "japanese": "不意打ち" },
+{ "english": "solely", "japanese": "単独で" },
+{ "english": "extract", "japanese": "抽出する" },
+{ "english": "nourish", "japanese": "養う" },
+{ "english": "combination", "japanese": "組み合わせ" },
+{ "english": "logical", "japanese": "論理的な" },
+{ "english": "lay", "japanese": "を横たえる" },
+{ "english": "drain", "japanese": "排出させる" },
+{ "english": "flatten", "japanese": "平らにする" },
+{ "english": "suspect", "japanese": "を疑う" },
+{ "english": "amateur", "japanese": "素人" },
+{ "english": "journal", "japanese": "日誌、日記" },
+{ "english": "esteem", "japanese": "尊重する" },
+{ "english": "nomination", "japanese": "指名" },
+{ "english": "archive", "japanese": "記録保管場所" },
+{ "english": "forum", "japanese": "公開討論会" },
+{ "english": "integration", "japanese": "統合" },
+{ "english": "petrol", "japanese": "ガソリン" },
+{ "english": "waiver", "japanese": "免除，棄権" },
+{ "english": "compatible", "japanese": "互換性のある" },
+{ "english": "lag", "japanese": "遅れる" },
+{ "english": "conserve", "japanese": "保存する" },
+{ "english": "adjustment", "japanese": "調整" },
+{ "english": "unplug", "japanese": "抜く" },
+{ "english": "typical", "japanese": "典型的な" },
+{ "english": "rid", "japanese": "取り除く" },
+{ "english": "tightly", "japanese": "しっかりと" },
+{ "english": "proprietor", "japanese": "所有者" },
+{ "english": "transit", "japanese": "乗り継ぎ" },
+{ "english": "adopt", "japanese": "を自分のものにする" },
+{ "english": "importantly", "japanese": "重要なことに" },
+{ "english": "textile", "japanese": "織物の" },
+{ "english": "tradition", "japanese": "伝統" },
+{ "english": "wearability", "japanese": "装着性" },
+{ "english": "handcrafted", "japanese": "手作りの" },
+{ "english": "garment", "japanese": "衣服" },
+{ "english": "acquaintance", "japanese": "知り合い" },
+{ "english": "sharpen", "japanese": "研ぐ，尖らせる" },
+{ "english": "workday", "japanese": "平日" },
+{ "english": "intrigued", "japanese": "興味をそそられる" },
+{ "english": "remarked", "japanese": "述べた，言った" },
+{ "english": "define", "japanese": "の意味を明確に述べる" },
+{ "english": "industry-wide", "japanese": "業界全体の" },
+{ "english": "undergo", "japanese": "を経験する" },
+{ "english": "haul", "japanese": "運搬する" },
+{ "english": "legally", "japanese": "合法的に" },
+{ "english": "rough", "japanese": "ごつごつした，粗い，大雑把な" },
+{ "english": "fastened", "japanese": "固定した" },
+{ "english": "prohibited", "japanese": "禁止された" },
+{ "english": "allowance", "japanese": "手当" },
+{ "english": "day-to-day", "japanese": "日々の，毎日の" },
+{ "english": "conservatively", "japanese": "保守的に" },
+{ "english": "unpublished", "japanese": "未発表の" },
+{ "english": "intense", "japanese": "激しい" },
+{ "english": "discover", "japanese": "発見する" },
+{ "english": "discovery", "japanese": "発見" },
+{ "english": "distinguish", "japanese": "を区別する" },
+{ "english": "persuade", "japanese": "説得する" },
+{ "english": "alter", "japanese": "を変える" },
+{ "english": "supposedly", "japanese": "たぶん" },
+{ "english": "empower", "japanese": "力を与える" },
+{ "english": "preceding", "japanese": "前述の，先行している" },
+{ "english": "deserving", "japanese": "値する" },
+{ "english": "impress", "japanese": "に感銘を与える" },
+{ "english": "breathtaking", "japanese": "息をのむような" },
+{ "english": "introduction", "japanese": "紹介，導入" },
+{ "english": "furthermore", "japanese": "その上に" },
+{ "english": "translation", "japanese": "翻訳" },
+{ "english": "somewhat", "japanese": "いくぶん" },
+{ "english": "ease", "japanese": "容易さ" },
+{ "english": "entail", "japanese": "伴う" },
+{ "english": "readability", "japanese": "読みやすさ" },
+{ "english": "biweekly", "japanese": "隔週の" },
+{ "english": "enforcement", "japanese": "執行" },
+{ "english": "rural", "japanese": "田舎の" },
+{ "english": "grain", "japanese": "穀物" },
+{ "english": "soak", "japanese": "浸す" },
+{ "english": "exposure", "japanese": "暴露" },
+{ "english": "fading", "japanese": "次第に消えていく" },
+{ "english": "cutting-edge", "japanese": "最先端の" },
+{ "english": "joint", "japanese": "継ぎ目" },
+{ "english": "approximately", "japanese": "おおよそ" },
+{ "english": "square", "japanese": "正方形" },
+{ "english": "exterior", "japanese": "外観" },
+{ "english": "sufficient", "japanese": "十分な" },
+{ "english": "adjacent", "japanese": "隣接している" },
+{ "english": "insulated", "japanese": "絶縁された" },
+{ "english": "combat", "japanese": "戦闘" },
+{ "english": "adequately", "japanese": "適切に" },
+{ "english": "enlarge", "japanese": "拡大する" },
+{ "english": "satisfactory", "japanese": "満足のいく" },
+{ "english": "transport", "japanese": "を輸送する/輸送" },
+{ "english": "consumption", "japanese": "消費" },
+{ "english": "recover", "japanese": "回復する" },
+{ "english": "bold", "japanese": "勇敢な" },
+{ "english": "flagship", "japanese": "旗艦" },
+{ "english": "flavor", "japanese": "風味" },
+{ "english": "step", "japanese": "足元，階段" },
+{ "english": "evidence", "japanese": "証拠" },
+{ "english": "duration", "japanese": "持続時間" },
+{ "english": "exclusively", "japanese": "排他的に" },
+{ "english": "lively", "japanese": "にぎやかな" },
+{ "english": "incorporate", "japanese": "合体させる" },
+{ "english": "sympathize", "japanese": "同情する" },
+{ "english": "sentiment", "japanese": "感情" },
+{ "english": "negative", "japanese": "否定の，悲観的な" },
+{ "english": "meticulously", "japanese": "細心の注意を払って" },
+{ "english": "diagnose", "japanese": "診断する" },
+{ "english": "treat", "japanese": "を扱う" },
+{ "english": "emission", "japanese": "排出" },
+{ "english": "modify", "japanese": "修正する" },
+{ "english": "constructive", "japanese": "建設的な" },
+{ "english": "construct", "japanese": "を組み立てる，を建造する" },
+{ "english": "somewhere", "japanese": "どこか" },
+{ "english": "proficiency", "japanese": "熟達" },
+{ "english": "questionable", "japanese": "疑わしい" },
+{ "english": "assume", "japanese": "を想定する，とみなす" },
+{ "english": "pleasure", "japanese": "楽しみ，喜び" },
+{ "english": "instruct", "japanese": "指示する" },
+{ "english": "copyright", "japanese": "著作権" },
+{ "english": "dietary", "japanese": "食事の" },
+{ "english": "formerly", "japanese": "以前は" },
+{ "english": "obstacle", "japanese": "障害" },
+{ "english": "examination", "japanese": "試験" },
+{ "english": "sleek", "japanese": "なめらかな" },
+{ "english": "fortunately", "japanese": "幸いにも" },
+{ "english": "capable", "japanese": "可能性がある，しかねない，有能な" },
+{ "english": "susceptible", "japanese": "影響を受けやすいです" },
+{ "english": "disabled", "japanese": "障害のある" },
+{ "english": "floor-to-ceiling", "japanese": "床から天井まで" },
+{ "english": "appetizer", "japanese": "前菜" },
+{ "english": "leak", "japanese": "漏れる" },
+{ "english": "insulation", "japanese": "絶縁" },
+{ "english": "mainstream", "japanese": "主流" },
+{ "english": "perennial", "japanese": "一年中続く" },
+{ "english": "passion", "japanese": "熱望，強い関心" },
+{ "english": "aptitude", "japanese": "適性" },
+{ "english": "translate", "japanese": "を翻訳する" },
+{ "english": "fare", "japanese": "運賃" },
+{ "english": "fragile", "japanese": "もろい" },
+{ "english": "era", "japanese": "時代" },
+{ "english": "vacant", "japanese": "空っぽの" },
+{ "english": "distinctive", "japanese": "特有の" },
+{ "english": "aesthetic", "japanese": "美的な" },
+{ "english": "consequently", "japanese": "その結果" },
+{ "english": "on-time", "japanese": "定刻の" },
+{ "english": "cheque", "japanese": "小切手" },
+{ "english": "fault", "japanese": "欠点，過失" },
+{ "english": "pledge", "japanese": "誓約" },
+{ "english": "wrap", "japanese": "包む" },
+{ "english": "stack", "japanese": "積み重ねる" },
+{ "english": "advocate", "japanese": "提唱する" },
+{ "english": "brilliant", "japanese": "すばらしい" },
+{ "english": "funny", "japanese": "おかしな" },
+{ "english": "herb", "japanese": "薬草" },
+{ "english": "compensate", "japanese": "補償する" },
+{ "english": "forthcoming", "japanese": "今後の" },
+{ "english": "lifelong", "japanese": "一生の" },
+{ "english": "pitfall", "japanese": "落とし穴" },
+{ "english": "honest", "japanese": "正直な" },
+{ "english": "facilitator", "japanese": "進行役" },
+{ "english": "swiftly", "japanese": "素早く" },
+{ "english": "rigidly", "japanese": "厳しく" },
+{ "english": "simmer", "japanese": "煮る" },
+{ "english": "suburban", "japanese": "郊外の" },
+{ "english": "prototype", "japanese": "試作品" },
+{ "english": "force", "japanese": "力/を強制する" },
+{ "english": "ambassador", "japanese": "大使" },
+{ "english": "compost", "japanese": "混合物" },
+{ "english": "consideration", "japanese": "考慮" },
+{ "english": "excess", "japanese": "過ぎる" },
+{ "english": "synthetic", "japanese": "統合的な" },
+{ "english": "vulnerable", "japanese": "傷つきやすい" },
+{ "english": "mandatory", "japanese": "強制的な" },
+{ "english": "exceed", "japanese": "超える" },
+{ "english": "arms", "japanese": "武器，兵器" },
+{ "english": "severe", "japanese": "厳しい" },
+{ "english": "wilt", "japanese": "しおれる" },
+{ "english": "ignore", "japanese": "を無視する" },
+{ "english": "generosity", "japanese": "寛大さ" },
+{ "english": "endeavor", "japanese": "努力" },
+{ "english": "alongside", "japanese": "と一緒に" },
+{ "english": "engaged", "japanese": "従事している，婚約している" },
+{ "english": "luxury", "japanese": "贅沢，贅沢品/贅沢な" },
+{ "english": "coalition", "japanese": "連立、連合" },
+{ "english": "sequence", "japanese": "連続、連鎖" },
+{ "english": "companion", "japanese": "連れ，仲間" },
+{ "english": "inferior", "japanese": "劣った" },
+{ "english": "polite", "japanese": "礼儀正しい" },
+{ "english": "similarity", "japanese": "類似（点）" },
+{ "english": "legislation", "japanese": "立法" },
+{ "english": "divorce", "japanese": "離婚" },
+{ "english": "rational", "japanese": "理性的な" },
+{ "english": "element", "japanese": "要素" },
+{ "english": "insist", "japanese": "要求する，主張する" },
+{ "english": "factor", "japanese": "要因，要素" },
+{ "english": "melt", "japanese": "溶ける，を溶かす" },
+{ "english": "infant", "japanese": "幼児" },
+{ "english": "guilty", "japanese": "有罪の" },
+{ "english": "harmful", "japanese": "有害な" },
+{ "english": "courage", "japanese": "勇気" },
+{ "english": "remarkable", "japanese": "目立った，顕著な" },
+{ "english": "fur", "japanese": "毛皮" },
+{ "english": "dull", "japanese": "面白みのない，鈍い" },
+{ "english": "definite", "japanese": "明確な" },
+{ "english": "evident", "japanese": "明らかな" },
+{ "english": "ambition", "japanese": "夢，大望" },
+{ "english": "democratic", "japanese": "民主主義の，民主的な" },
+{ "english": "democracy", "japanese": "民主主義" },
+{ "english": "genuine", "japanese": "本物の，偽りのない" },
+{ "english": "instinct", "japanese": "本能" },
+{ "english": "cheek", "japanese": "頬" },
+{ "english": "desirable", "japanese": "望ましい" },
+{ "english": "assault", "japanese": "暴行" },
+{ "english": "dialect", "japanese": "方言，なまり" },
+{ "english": "collapse", "japanese": "崩壊する" },
+{ "english": "treasure", "japanese": "宝，財宝" },
+{ "english": "grave", "japanese": "墓/深刻な" },
+{ "english": "odd", "japanese": "変な，奇数の" },
+{ "english": "equality", "japanese": "平等さ" },
+{ "english": "civilization", "japanese": "文明" },
+{ "english": "literally", "japanese": "文字通りに" },
+{ "english": "literary", "japanese": "文学の" },
+{ "english": "literature", "japanese": "文学" },
+{ "english": "atmosphere", "japanese": "雰囲気" },
+{ "english": "sensible", "japanese": "分別［判断力］がある" },
+{ "english": "physics", "japanese": "物理学" },
+{ "english": "object", "japanese": "物体，対象，目的/反対する" },
+{ "english": "substance", "japanese": "物質，実体" },
+{ "english": "complexity", "japanese": "複雑さ" },
+{ "english": "narrow", "japanese": "幅が狭い" },
+{ "english": "tribe", "japanese": "部族，部隊" },
+{ "english": "float", "japanese": "浮かぶ" },
+{ "english": "universal", "japanese": "普遍的な，万国［万人］共通の" },
+{ "english": "extraordinary", "japanese": "普通でない，並はずれた" },
+{ "english": "disadvantage", "japanese": "不利，デメリット" },
+{ "english": "unpleasant", "japanese": "不愉快な" },
+{ "english": "recession", "japanese": "不況，景気後退" },
+{ "english": "disease", "japanese": "病気" },
+{ "english": "necessarily", "japanese": "必然的に" },
+{ "english": "subtle", "japanese": "微妙な" },
+{ "english": "tremendous", "japanese": "非常に大きな" },
+{ "english": "enormous", "japanese": "非常に大きい" },
+{ "english": "inevitable", "japanese": "避けられない" },
+{ "english": "tragedy", "japanese": "悲劇" },
+{ "english": "crime", "japanese": "犯罪" },
+{ "english": "opposite", "japanese": "反対の/と反対側の" },
+{ "english": "contrary", "japanese": "反対の" },
+{ "english": "pronunciation", "japanese": "発音" },
+{ "english": "explosion", "japanese": "爆発" },
+{ "english": "lung", "japanese": "肺" },
+{ "english": "silly", "japanese": "馬鹿な" },
+{ "english": "stupid", "japanese": "馬鹿な" },
+{ "english": "burst", "japanese": "破裂する，を破裂させる" },
+{ "english": "destruction", "japanese": "破壊" },
+{ "english": "pregnant", "japanese": "妊娠した" },
+{ "english": "independence", "japanese": "独立，自立" },
+{ "english": "correspondent", "japanese": "特派員" },
+{ "english": "privilege", "japanese": "特権" },
+{ "english": "virtue", "japanese": "徳，美徳，長所" },
+{ "english": "debate", "japanese": "討論" },
+{ "english": "equivalent", "japanese": "等しい，同等の" },
+{ "english": "foundation", "japanese": "土台，根拠，設立" },
+{ "english": "genius", "japanese": "天才" },
+{ "english": "philosophy", "japanese": "哲学" },
+{ "english": "conclude", "japanese": "締めくくる，という結論を下す" },
+{ "english": "mortgage", "japanese": "抵当" },
+{ "english": "definition", "japanese": "定義" },
+{ "english": "pursuit", "japanese": "追跡，追求" },
+{ "english": "wage", "japanese": "賃金" },
+{ "english": "harmony", "japanese": "調和" },
+{ "english": "compound", "japanese": "調合する" },
+{ "english": "tide", "japanese": "潮，風潮" },
+{ "english": "shame", "japanese": "恥，不名誉，残念なこと" },
+{ "english": "intelligent", "japanese": "知能の高い" },
+{ "english": "intellectual", "japanese": "知的な，知性の" },
+{ "english": "carbon", "japanese": "炭素" },
+{ "english": "merely", "japanese": "単に" },
+{ "english": "principal", "japanese": "第一の，主要な/校長，学長" },
+{ "english": "presidential", "japanese": "大統領の" },
+{ "english": "majority", "japanese": "大多数，大半" },
+{ "english": "yell", "japanese": "大声を上げる" },
+{ "english": "roughly", "japanese": "大雑把に" },
+{ "english": "contrast", "japanese": "対照" },
+{ "english": "cope", "japanese": "対処する" },
+{ "english": "compromise", "japanese": "妥協" },
+{ "english": "funeral", "japanese": "葬式" },
+{ "english": "opponent", "japanese": "相手" },
+{ "english": "ancestor", "japanese": "祖先" },
+{ "english": "prejudice", "japanese": "先入観，偏見" },
+{ "english": "extinction", "japanese": "絶滅" },
+{ "english": "absolute", "japanese": "絶対的な，完全な" },
+{ "english": "constant", "japanese": "絶え間ない" },
+{ "english": "keen", "japanese": "切望した，熱意のある" },
+{ "english": "deficit", "japanese": "赤字" },
+{ "english": "spiritual", "japanese": "精神の，精神的な" },
+{ "english": "biological", "japanese": "生物学上の" },
+{ "english": "raw", "japanese": "生の，原料のままの" },
+{ "english": "precisely", "japanese": "正確に" },
+{ "english": "regime", "japanese": "政権" },
+{ "english": "mature", "japanese": "成熟した" },
+{ "english": "racial", "japanese": "人種の" },
+{ "english": "evolve", "japanese": "進化する" },
+{ "english": "evolution", "japanese": "進化，進展" },
+{ "english": "intimate", "japanese": "親密な" },
+{ "english": "myth", "japanese": "神話" },
+{ "english": "profound", "japanese": "深い，大きな" },
+{ "english": "behave", "japanese": "振る舞う" },
+{ "english": "psychologist", "japanese": "心理学者" },
+{ "english": "anxiety", "japanese": "心配，不安" },
+{ "english": "uncomfortable", "japanese": "心地の悪い" },
+{ "english": "appetite", "japanese": "食欲" },
+{ "english": "profession", "japanese": "職業" },
+{ "english": "colony", "japanese": "植民地" },
+{ "english": "passenger", "japanese": "乗客" },
+{ "english": "impulse", "japanese": "衝動" },
+{ "english": "symptom", "japanese": "症状" },
+{ "english": "minority", "japanese": "少数派" },
+{ "english": "merchant", "japanese": "商人" },
+{ "english": "elementary", "japanese": "初歩の，基本の" },
+{ "english": "burden", "japanese": "重荷，負担" },
+{ "english": "conventional", "japanese": "従来の" },
+{ "english": "dwell", "japanese": "住む" },
+{ "english": "concentrate", "japanese": "集中する" },
+{ "english": "amendment", "japanese": "修正" },
+{ "english": "religion", "japanese": "宗教" },
+{ "english": "crop", "japanese": "収穫物" },
+{ "english": "harvest", "japanese": "収穫/を収穫する" },
+{ "english": "sort", "japanese": "種類" },
+{ "english": "elaborate", "japanese": "手の込んだ" },
+{ "english": "clue", "japanese": "手がかり" },
+{ "english": "society", "japanese": "社会" },
+{ "english": "experiment", "japanese": "実験" },
+{ "english": "rude", "japanese": "失礼な" },
+{ "english": "unemployment", "japanese": "失業" },
+{ "english": "confidence", "japanese": "自信，信頼" },
+{ "english": "suicide", "japanese": "自殺" },
+{ "english": "occasionally", "japanese": "時折" },
+{ "english": "affair", "japanese": "事柄，出来事" },
+{ "english": "attempt", "japanese": "試み/を試みる" },
+{ "english": "servant", "japanese": "使用人，お手伝い" },
+{ "english": "task", "japanese": "仕事，作業" },
+{ "english": "acid", "japanese": "酸" },
+{ "english": "disaster", "japanese": "災害" },
+{ "english": "supreme", "japanese": "最高の" },
+{ "english": "desert", "japanese": "砂漠/を立ち去る" },
+{ "english": "confusion", "japanese": "混乱" },
+{ "english": "insect", "japanese": "昆虫" },
+{ "english": "sum", "japanese": "合計" },
+{ "english": "suburb", "japanese": "郊外" },
+{ "english": "conduct", "japanese": "行為/を行う" },
+{ "english": "voyage", "japanese": "航海" },
+{ "english": "attitude", "japanese": "考え方，態度" },
+{ "english": "emperor", "japanese": "皇帝，天皇" },
+{ "english": "widespread", "japanese": "広範囲に渡る" },
+{ "english": "spread", "japanese": "広がる，を広げる" },
+{ "english": "curious", "japanese": "好奇心が強い" },
+{ "english": "curiosity", "japanese": "好奇心" },
+{ "english": "ray", "japanese": "光線" },
+{ "english": "vocabulary", "japanese": "語い" },
+{ "english": "latter", "japanese": "後者の" },
+{ "english": "deliberately", "japanese": "故意に" },
+{ "english": "solid", "japanese": "固い/固体" },
+{ "english": "tongue", "japanese": "言葉，舌" },
+{ "english": "phenomenon", "japanese": "現象" },
+{ "english": "emerge", "japanese": "現れる" },
+{ "english": "diminish", "japanese": "減る，を減らす" },
+{ "english": "strict", "japanese": "厳しい，厳密な" },
+{ "english": "atomic", "japanese": "原子の，原子力の" },
+{ "english": "primitive", "japanese": "原始的な" },
+{ "english": "stranger", "japanese": "見知らぬ人，（ある場所に）初めて来た人" },
+{ "english": "invisible", "japanese": "見えない" },
+{ "english": "conclusion", "japanese": "結論" },
+{ "english": "outcome", "japanese": "結果" },
+{ "english": "suffer", "japanese": "苦しむ，を患う" },
+{ "english": "distinction", "japanese": "区別，違い" },
+{ "english": "ban", "japanese": "禁止する" },
+{ "english": "extreme", "japanese": "極端な" },
+{ "english": "republic", "japanese": "共和国" },
+{ "english": "communist", "japanese": "共産主義者" },
+{ "english": "ultimate", "japanese": "究極の" },
+{ "english": "undoubtedly", "japanese": "疑いなく" },
+{ "english": "victim", "japanese": "犠牲者" },
+{ "english": "sacrifice", "japanese": "犠牲/を犠牲にする" },
+{ "english": "ritual", "japanese": "儀式" },
+{ "english": "hunger", "japanese": "飢え，空腹" },
+{ "english": "arise", "japanese": "起こる，生じる" },
+{ "english": "originate", "japanese": "起こる，生じる" },
+{ "english": "precious", "japanese": "貴重な" },
+{ "english": "pray", "japanese": "祈る" },
+{ "english": "upset", "japanese": "気持ちが動揺した/の心をかき乱す" },
+{ "english": "climate", "japanese": "気候" },
+{ "english": "strange", "japanese": "奇妙な，見知らぬ" },
+{ "english": "peculiar", "japanese": "奇妙な" },
+{ "english": "fundamental", "japanese": "基本的な，根本的な" },
+{ "english": "crisis", "japanese": "危機" },
+{ "english": "observation", "japanese": "観察" },
+{ "english": "plain", "japanese": "簡素な，無地の/高原" },
+{ "english": "infection", "japanese": "感染" },
+{ "english": "altogether", "japanese": "完全に" },
+{ "english": "scholar", "japanese": "学者" },
+{ "english": "revolution", "japanese": "革命" },
+{ "english": "indeed", "japanese": "確かに" },
+{ "english": "nuclear", "japanese": "核の" },
+{ "english": "apparent", "japanese": "外見上の，明らかな" },
+{ "english": "class", "japanese": "階級，等級，授業，学級" },
+{ "english": "interpretation", "japanese": "解釈" },
+{ "english": "science", "japanese": "科学" },
+{ "english": "unlikely", "japanese": "可能性が低い" },
+{ "english": "tone", "japanese": "音，音色，（声・ことばの）調子，" },
+{ "english": "distant", "japanese": "遠く離れた" },
+{ "english": "fate", "japanese": "運命" },
+{ "english": "fortune", "japanese": "運，財産" },
+{ "english": "meanwhile", "japanese": "一方で" },
+{ "english": "disagree", "japanese": "一致しない" },
+{ "english": "gene", "japanese": "遺伝子" },
+{ "english": "illegal", "japanese": "違法の" },
+{ "english": "immigrant", "japanese": "移民" },
+{ "english": "conscious", "japanese": "意識して，気づいて" },
+{ "english": "dignity", "japanese": "威厳，尊厳" },
+{ "english": "dependent", "japanese": "依存している" },
+{ "english": "treatment", "japanese": "扱い，処置，治療" },
+{ "english": "overwhelming", "japanese": "圧倒的な" },
+{ "english": "affection", "japanese": "愛情，好意" },
+{ "english": "struggle", "japanese": "もがき苦しむ" },
+{ "english": "blink", "japanese": "まばたきをする/まばたき" },
+{ "english": "cave", "japanese": "ほら穴" },
+{ "english": "wander", "japanese": "ぶらつく，放浪する" },
+{ "english": "knot", "japanese": "結び目" },
+{ "english": "awful", "japanese": "ひどい" },
+{ "english": "grin", "japanese": "歯を見せて笑う" },
+{ "english": "strain", "japanese": "張る" },
+{ "english": "distinct", "japanese": "はっきり異なる" },
+{ "english": "throat", "japanese": "のど" },
+{ "english": "bid", "japanese": "入札する" },
+{ "english": "refugee", "japanese": "難民" },
+{ "english": "fellow", "japanese": "仲間、同士" },
+{ "english": "bang", "japanese": "ドンドン叩く" },
+{ "english": "peer", "japanese": "同僚、仲間" },
+{ "english": "voter", "japanese": "投票者" },
+{ "english": "somehow", "japanese": "どうにか" },
+{ "english": "palm", "japanese": "手のひら" },
+{ "english": "governor", "japanese": "知事、長官" },
+{ "english": "mere", "japanese": "単なる" },
+{ "english": "sigh", "japanese": "ため息をつく" },
+{ "english": "embrace", "japanese": "抱きしめる" },
+{ "english": "tissue", "japanese": "組織、薄絹" },
+{ "english": "pupil", "japanese": "生徒" },
+{ "english": "readily", "japanese": "すぐに" },
+{ "english": "senator", "japanese": "上院議員" },
+{ "english": "senate", "japanese": "上院" },
+{ "english": "surgery", "japanese": "手術" },
+{ "english": "province", "japanese": "州、省" },
+{ "english": "gaze", "japanese": "じっと見つめる" },
+{ "english": "discipline", "japanese": "しつけ，規律" },
+{ "english": "fade", "japanese": "次第に消える" },
+{ "english": "cling", "japanese": "しがみつく，固執する" },
+{ "english": "whisper", "japanese": "ささやく" },
+{ "english": "proverb", "japanese": "ことわざ" },
+{ "english": "verbal", "japanese": "ことばの，口頭での" },
+{ "english": "remark", "japanese": "ことば，感想/だと述べる" },
+{ "english": "tiny", "japanese": "ごく小さい" },
+{ "english": "traffic jam", "japanese": "交通渋滞" },
+{ "english": "wound", "japanese": "傷" },
+{ "english": "parliament", "japanese": "議会、下院" },
+{ "english": "barely", "japanese": "かろうじて" },
+{ "english": "fairly", "japanese": "かなり，公平に" },
+{ "english": "rather", "japanese": "かなり" },
+{ "english": "multiple", "japanese": "掛け算する" },
+{ "english": "stir", "japanese": "かき回す" },
+{ "english": "regardless", "japanese": "かかわらず，関係なく" },
+{ "english": "bow", "japanese": "お辞儀をする/お辞儀" },
+{ "english": "so-called", "japanese": "いわゆる" },
+{ "english": "commissioner", "japanese": "委員、理事" },
+{ "english": "avenue", "japanese": "通り，大通り" },
+{ "english": "relieve", "japanese": "和らげる，から取り除く" },
+{ "english": "depress", "japanese": "落胆させる" },
+{ "english": "suppress", "japanese": "抑える" },
+{ "english": "imitate", "japanese": "模倣する" },
+{ "english": "expose", "japanese": "明らかにする，をさらす" },
+{ "english": "reveal", "japanese": "明らかにする" },
+{ "english": "fascinate", "japanese": "魅了する" },
+{ "english": "bury", "japanese": "埋める" },
+{ "english": "convert", "japanese": "変える，変わる" },
+{ "english": "divide", "japanese": "分割する" },
+{ "english": "accuse", "japanese": "非難，告発する" },
+{ "english": "exhaust", "japanese": "疲れ果てさせる" },
+{ "english": "criticize", "japanese": "批判する" },
+{ "english": "deny", "japanese": "否定する" },
+{ "english": "bind", "japanese": "縛りつける" },
+{ "english": "govern", "japanese": "統治する" },
+{ "english": "convey", "japanese": "伝える，を運ぶ" },
+{ "english": "confront", "japanese": "直面させる" },
+{ "english": "embarrass", "japanese": "恥ずかしがらせる" },
+{ "english": "perceive", "japanese": "知覚する" },
+{ "english": "ruin", "japanese": "台無しにする" },
+{ "english": "spoil", "japanese": "駄目にする" },
+{ "english": "sweep", "japanese": "掃く，を掃くように動かす" },
+{ "english": "declare", "japanese": "宣言する" },
+{ "english": "occupy", "japanese": "占める，を占領する" },
+{ "english": "accomplish", "japanese": "成し遂げる" },
+{ "english": "restrict", "japanese": "制限する" },
+{ "english": "admire", "japanese": "賞賛する" },
+{ "english": "consume", "japanese": "消費する" },
+{ "english": "possess", "japanese": "所有する" },
+{ "english": "surround", "japanese": "取り囲む" },
+{ "english": "abandon", "japanese": "捨て去る" },
+{ "english": "cure", "japanese": "治療する" },
+{ "english": "dominate", "japanese": "支配する" },
+{ "english": "overcome", "japanese": "克服する" },
+{ "english": "devise", "japanese": "考え出す" },
+{ "english": "constitute", "japanese": "構成する" },
+{ "english": "beg", "japanese": "を乞う" },
+{ "english": "inspire", "japanese": "鼓舞する" },
+{ "english": "isolate", "japanese": "孤立させる" },
+{ "english": "confine", "japanese": "限る，を閉じこめる" },
+{ "english": "overlook", "japanese": "見落とす，を見過ごす" },
+{ "english": "bend", "japanese": "曲げる" },
+{ "english": "absorb", "japanese": "吸収する，を没頭させる" },
+{ "english": "interpret", "japanese": "解釈する，通訳する" },
+{ "english": "bear", "japanese": "我慢する" },
+{ "english": "impose", "japanese": "を課す" },
+{ "english": "swallow", "japanese": "飲み込む" },
+{ "english": "derive", "japanese": "引き出す" },
+{ "english": "cease", "japanese": "やめる，終わる" },
+{ "english": "scatter", "japanese": "まき散らす" },
+{ "english": "astonish", "japanese": "びっくりさせる" },
+{ "english": "hang", "japanese": "つるす，を絞首刑にする" },
+{ "english": "grasp", "japanese": "つかむ，を理解する" },
+{ "english": "stare", "japanese": "じっと見つめる" },
+{ "english": "urge", "japanese": "強く促す/願望" },
+{ "english": "disturb", "japanese": "平穏を妨げる" },
+{ "english": "trace", "japanese": "跡［起源］を辿る/跡，痕跡" },
+{ "english": "neglect", "japanese": "世話を怠る，を省みない" },
+{ "english": "offend", "japanese": "気分を害する" },
+{ "english": "beneath", "japanese": "下に" },
+{ "english": "oppose", "japanese": "反対する" },
+{ "english": "convince", "japanese": "納得させる，説得する" },
+{ "english": "endure", "japanese": "耐える" },
+{ "english": "encounter", "japanese": "遭遇する" },
+{ "english": "argue", "japanese": "だと主張する" },
+{ "english": "devote", "japanese": "時間・努力を注ぐ" },
+{ "english": "commit", "japanese": "罪などを犯す" },
+{ "english": "passage", "japanese": "（文章の）一節，通路" },
+{ "english": "inhabitant", "japanese": "（ある場所の）居住者，生息動物" },
+{ "english": "blow", "japanese": "（を）吹く/打撃" },
+{ "english": "quit", "japanese": "（を）やめる" },
+{ "english": "reinforce", "japanese": "強化する" },
+{ "english": "indispensable", "japanese": "欠かせない、絶対必要な" },
+{ "english": "cutlery", "japanese": "食器" },
+{ "english": "intersection", "japanese": "交差点" },
+{ "english": "trustworthy", "japanese": "信頼できる、信用できる" },
+{ "english": "afterwards", "japanese": "その後" },
+{ "english": "inclusive", "japanese": "含んだ、含めて" },
+{ "english": "occupied", "japanese": "使われている，占領されている" },
+{ "english": "knowledgeable", "japanese": "知識豊富な" },
+{ "english": "considerate", "japanese": "思いやりがある、理解がある" },
+{ "english": "splendid", "japanese": "素晴らしい" },
+{ "english": "doubtful", "japanese": "疑わしい" },
+{ "english": "proficient", "japanese": "堪能な、熟達した" },
+{ "english": "last-minute", "japanese": "間際での" },
+{ "english": "immense", "japanese": "非常に大きな、巨大な" },
+{ "english": "agreeable", "japanese": "快適な、心地良い" },
+{ "english": "persuasive", "japanese": "説得力のある" },
+{ "english": "noted", "japanese": "有名な" },
+{ "english": "unpredictable", "japanese": "予測できない、法外な" },
+{ "english": "timeline", "japanese": "予定表" },
+{ "english": "demanding", "japanese": "要求の厳しい" },
+{ "english": "simultaneous", "japanese": "同時の，同時に起こる" },
+{ "english": "pilot", "japanese": "試験的な" },
+{ "english": "beneficial", "japanese": "有益な" },
+{ "english": "freight", "japanese": "貨物、輸送、輸送料/輸送する" },
+{ "english": "prestigious", "japanese": "権威のある、誉れ高い" },
+{ "english": "inactive", "japanese": "怠惰な、活動していない" },
+{ "english": "neighboring", "japanese": "近隣の" },
+{ "english": "situated", "japanese": "位置している" },
+{ "english": "picturesque", "japanese": "絵のように美しい" },
+{ "english": "minimal", "japanese": "最小の" },
+{ "english": "inclement", "japanese": "荒れ模様の、厳しい" },
+{ "english": "municipal", "japanese": "地方自治体の" },
+{ "english": "legible", "japanese": "判読できる" },
+{ "english": "exhausted", "japanese": "疲れ切った" },
+{ "english": "thrilled", "japanese": "とてもわくわくして、大喜びした" },
+{ "english": "allowable", "japanese": "許される、許容できる/許容量" },
+{ "english": "sophisticated", "japanese": "洗練された、高性能の" },
+{ "english": "revolutionary", "japanese": "革命的な" },
+{ "english": "informative", "japanese": "有益な" },
+{ "english": "compulsory", "japanese": "義務的な" },
+{ "english": "designated", "japanese": "指定された" },
+{ "english": "horizontal", "japanese": "水平の" },
+{ "english": "entertaining", "japanese": "おもしろい、愉快な" },
+{ "english": "permissible", "japanese": "許容される、容認できる" },
+{ "english": "fame", "japanese": "名声" },
+{ "english": "unanimous", "japanese": "満場一致の" },
+{ "english": "ceremonial", "japanese": "儀式上の、形式的な" },
+{ "english": "modest", "japanese": "少しの、高価ではない、謙虚な" },
+{ "english": "premier", "japanese": "最高の、トップの" },
+{ "english": "embarrassing", "japanese": "恥ずかしい" },
+{ "english": "dental", "japanese": "歯科の" },
+{ "english": "utmost", "japanese": "最大限の、これ以上ない" },
+{ "english": "certified", "japanese": "有資格の、公認の" },
+{ "english": "competent", "japanese": "有能な" },
+{ "english": "vertical", "japanese": "垂直な" },
+{ "english": "automated", "japanese": "自動化された" },
+{ "english": "distinguished", "japanese": "際立って優れた、傑出した" },
+{ "english": "shorthanded", "japanese": "人手不足の" },
+{ "english": "wasteful", "japanese": "無駄の多い" },
+{ "english": "suited", "japanese": "適任である" },
+{ "english": "hourly", "japanese": "1時間単位の" },
+{ "english": "arbitrary", "japanese": "恣意的な、任意の" },
+{ "english": "unfavorable", "japanese": "否定的な" },
+{ "english": "endangered", "japanese": "絶滅の危機に瀕した" },
+{ "english": "preferable", "japanese": "望ましい" },
+{ "english": "negotiable", "japanese": "交渉可能な" },
+{ "english": "adverse", "japanese": "良くない、不利な、逆の" },
+{ "english": "beforehand", "japanese": "あらかじめ、事前に" },
+{ "english": "concise", "japanese": "簡潔な" },
+{ "english": "steep", "japanese": "大幅な、急な" },
+{ "english": "continuous", "japanese": "連続の" },
+{ "english": "suspicious", "japanese": "不審な" },
+{ "english": "reluctant", "japanese": "気が進まない" },
+{ "english": "inspiring", "japanese": "やる気が出るような、活気づける" },
+{ "english": "regrettable", "japanese": "残念な" },
+{ "english": "countless", "japanese": "数え切れないほどの、無数の" },
+{ "english": "adapt", "japanese": "適応する、適応させる、改作する" },
+{ "english": "intensive", "japanese": "集中的な" },
+{ "english": "unforeseen", "japanese": "想定外の" },
+{ "english": "ambitious", "japanese": "意欲的な、野心的な" },
+{ "english": "strikingly", "japanese": "著しく" },
+{ "english": "aboard", "japanese": "船に乗って" },
+{ "english": "voluntarily", "japanese": "自発的に、自主的に" },
+{ "english": "independently", "japanese": "単独で、独立して" },
+{ "english": "moderate", "japanese": "ほどほどの、適度な" },
+{ "english": "prominently", "japanese": "目立って、傑出して" },
+{ "english": "reportedly", "japanese": "伝えられるところでは" },
+{ "english": "concentrated", "japanese": "集中的な、濃縮された" },
+{ "english": "informally", "japanese": "くだけて、非公式に" },
+{ "english": "intentionally", "japanese": "意図的に" },
+{ "english": "ample", "japanese": "十分な、あり余るほどの" },
+{ "english": "given", "japanese": "~を考慮すると、~と仮定すると" },
+{ "english": "controversial", "japanese": "議論を引き起こす、議論の的になる" },
+{ "english": "instrumental", "japanese": "重要な役割を果たす" },
+{ "english": "scope", "japanese": "範囲、余地" },
+{ "english": "speculation", "japanese": "推測、推量" },
+{ "english": "understaffed", "japanese": "人手不足の" },
+{ "english": "lumber", "japanese": "材木、製材" },
+{ "english": "commemorate", "japanese": "祝う、記念する" },
+{ "english": "voluntary", "japanese": "自主的な、任意の" },
+{ "english": "deprive", "japanese": "奪う" },
+{ "english": "dismiss", "japanese": "解雇する，退出させる" },
+{ "english": "revert", "japanese": "戻る" },
+{ "english": "oversee", "japanese": "監督する" },
+{ "english": "discontinued", "japanese": "（製造・販売が）終了した" },
+{ "english": "pertain", "japanese": "属する，該当する" },
+{ "english": "spill", "japanese": "こぼす、こぼれる" },
+{ "english": "diversify", "japanese": "多様化する" },
+{ "english": "deplete", "japanese": "使い果たす" },
+{ "english": "speculate", "japanese": "予測する" },
+{ "english": "intervene", "japanese": "介在する、口をはさむ" },
+{ "english": "solicit", "japanese": "求める" },
+{ "english": "comprehend", "japanese": "理解する" },
+{ "english": "emerging", "japanese": "新たに現れた、新興の" },
+{ "english": "scenic", "japanese": "眺めがいい、景色の" },
+{ "english": "acclaimed", "japanese": "絶賛されている、評価された" },
+{ "english": "concede", "japanese": "譲歩する" },
+{ "english": "delegate", "japanese": "委譲する、委任する" },
+{ "english": "resistant", "japanese": "耐えられる、抵抗力のある" },
+{ "english": "disseminate", "japanese": "普及させる" },
+{ "english": "applaud", "japanese": "拍手する" },
+{ "english": "resemble", "japanese": "似ている" },
+{ "english": "hands-on", "japanese": "実地の、実用的な" },
+{ "english": "plummet", "japanese": "急落する" },
+{ "english": "conform", "japanese": "従う、一致する" },
+{ "english": "entrepreneur", "japanese": "起業家" },
+{ "english": "introductory", "japanese": "入門の、最初の、お試しの" },
+{ "english": "dilute", "japanese": "薄める" },
+{ "english": "rectify", "japanese": "是正する" },
+{ "english": "lengthy", "japanese": "長期にわたる、冗長な" },
+{ "english": "misplace", "japanese": "紛失する、置き忘れる" },
+{ "english": "reminisce", "japanese": "懐かしむ" },
+{ "english": "coincide", "japanese": "同時に起こる" },
+{ "english": "procrastinate", "japanese": "先延ばしにする" },
+{ "english": "subside", "japanese": "弱まる，低下する" },
+{ "english": "reunion", "japanese": "同窓会、再会" },
+{ "english": "facilitate", "japanese": "容易にする、促進する" },
+{ "english": "terminate", "japanese": "終わらせる" },
+{ "english": "itemize", "japanese": "箇条書きにする，項目別にする" },
+{ "english": "outweigh", "japanese": "上回る" },
+{ "english": "waive", "japanese": "免除する、放棄する" },
+{ "english": "occupancy", "japanese": "占有、占有人数" },
+{ "english": "controversy", "japanese": "論争" },
+{ "english": "coincidence", "japanese": "偶然" },
+{ "english": "credentials", "japanese": "資格、経歴、資質" },
+{ "english": "oversight", "japanese": "見落とし、手落ち、監視" },
+{ "english": "drapery", "japanese": "カーテン" },
+{ "english": "turnaround", "japanese": "立て直し、好転、処理時間" },
+{ "english": "clasp", "japanese": "留め具、金具" },
+{ "english": "pavement", "japanese": "舗装道路" },
+{ "english": "scrutiny", "japanese": "綿密な調査、凝視" },
+{ "english": "concession", "japanese": "譲歩" },
+{ "english": "apprentice", "japanese": "見習い、実習生" },
+{ "english": "liaison", "japanese": "連絡係、調整" },
+{ "english": "depression", "japanese": "不景気" },
+{ "english": "intermission", "japanese": "休憩時間" },
+{ "english": "amenity", "japanese": "娯楽、生活を便利にするもの" },
+{ "english": "exclusion", "japanese": "除外" },
+{ "english": "momentum", "japanese": "勢い" },
+{ "english": "lapse", "japanese": "間違い、うっかり" },
+{ "english": "tenure", "japanese": "任期" },
+{ "english": "observance", "japanese": "行事、順序" },
+{ "english": "lucrative", "japanese": "儲かっている" },
+{ "english": "prosperous", "japanese": "繁栄している" },
+{ "english": "revival", "japanese": "復活した" },
+{ "english": "sparkle", "japanese": "輝く" },
+{ "english": "interim", "japanese": "合間" },
+{ "english": "subscriber", "japanese": "購読者，加入者" },
+{ "english": "occasion", "japanese": "場合，とき，機会" },
+{ "english": "reimbursement", "japanese": "返済，償還" },
+{ "english": "conservation", "japanese": "保存，管理，維持" },
+{ "english": "disassemble", "japanese": "分解する，解体する" },
+{ "english": "considerable", "japanese": "かなりの" },
+{ "english": "antitrust", "japanese": "独占禁止法" },
+{ "english": "alternatively", "japanese": "代わりに，あるいは" },
+{ "english": "strictly", "japanese": "厳しく，厳密に" },
+{ "english": "mutually", "japanese": "相互に，お互いに" },
+{ "english": "mend", "japanese": "直す，修正する" },
+{ "english": "scarcely", "japanese": "ほとんどない" },
+{ "english": "spouse", "japanese": "配偶者" },
+{ "english": "fluid", "japanese": "流動性の，変わりやすい" },
+{ "english": "scold", "japanese": "叱る，注意する" },
+{ "english": "theoretical", "japanese": "理論上の" },
+{ "english": "rebuild", "japanese": "再建する，建て直す" },
+{ "english": "detective", "japanese": "探偵，刑事" },
+{ "english": "carve", "japanese": "切り分ける，刻む" },
+{ "english": "belly", "japanese": "腹，腹部" },
+{ "english": "counterpart", "japanese": "相手，副本，写し" },
+{ "english": "sorrow", "japanese": "悲しみ，悲哀" },
+{ "english": "amid", "japanese": "真ん中に" },
+{ "english": "spectacle", "japanese": "光景，壮観" },
+{ "english": "spite", "japanese": "悪意，いじわる" },
+{ "english": "carbohydrate", "japanese": "炭水化物" },
+{ "english": "theology", "japanese": "神学" },
+{ "english": "crawl", "japanese": "這う" },
+{ "english": "oxygen", "japanese": "酸素" },
+{ "english": "starve", "japanese": "飢える" },
+{ "english": "donor", "japanese": "提供者，寄贈者" },
+{ "english": "sticky", "japanese": "べたつく，粘着した" },
+{ "english": "sting", "japanese": "刺す" },
+{ "english": "pastor", "japanese": "牧師" },
+{ "english": "surrender", "japanese": "降伏する" },
+{ "english": "sympathetic", "japanese": "思いやりのある" },
+{ "english": "tame", "japanese": "飼いならす" },
+{ "english": "exploration", "japanese": "探査" },
+{ "english": "thereby", "japanese": "それによって" },
+{ "english": "tomb", "japanese": "墓" },
+{ "english": "spectrum", "japanese": "波長分布" },
+{ "english": "tutor", "japanese": "家庭教師" },
+{ "english": "realm", "japanese": "領域" },
+{ "english": "unkind", "japanese": "不親切な" },
+{ "english": "peel", "japanese": "皮をむく" },
+{ "english": "recipient", "japanese": "受取人" },
+{ "english": "urgent", "japanese": "緊急の，急ぎの" },
+{ "english": "vain", "japanese": "うぬぼれが強い" },
+{ "english": "flip", "japanese": "はじく、ひっくり返す" },
+{ "english": "bias", "japanese": "偏見，先入観" },
+{ "english": "metaphor", "japanese": "比喩" },
+{ "english": "verse", "japanese": "詩，韻文" },
+{ "english": "judicial", "japanese": "司法の" },
+{ "english": "entity", "japanese": "実在，実体" },
+{ "english": "diplomatic", "japanese": "外交上の，外交官の" },
+{ "english": "elegant", "japanese": "優雅な" },
+{ "english": "vanish", "japanese": "消える" },
+{ "english": "wicked", "japanese": "邪悪な，不正の" },
+{ "english": "gravity", "japanese": "重力" },
+{ "english": "prevention", "japanese": "防止，予防" },
+{ "english": "yawn", "japanese": "あくびをする" },
+{ "english": "minimize", "japanese": "最小化する" },
+{ "english": "absurd", "japanese": "ばかげた，不合理な" },
+{ "english": "acquaint", "japanese": "知らせる" },
+{ "english": "agony", "japanese": "激しい苦痛" },
+{ "english": "apparatus", "japanese": "器具，装置" },
+{ "english": "arithmetic", "japanese": "算数" },
+{ "english": "ascend", "japanese": "昇る" },
+{ "english": "attendant", "japanese": "付き添いの，付帯の" },
+{ "english": "blaze", "japanese": "火炎" },
+{ "english": "boredom", "japanese": "退屈" },
+{ "english": "breadth", "japanese": "幅" },
+{ "english": "brim", "japanese": "へり，縁" },
+{ "english": "bundle", "japanese": "束" },
+{ "english": "cape", "japanese": "岬" },
+{ "english": "capitalism", "japanese": "資本主義" },
+{ "english": "cathedral", "japanese": "大聖堂" },
+{ "english": "stiff", "japanese": "硬い，硬直した" },
+{ "english": "nominee", "japanese": "候補者" },
+{ "english": "diabetes", "japanese": "糖尿病" },
+{ "english": "toxic", "japanese": "有毒な" },
+{ "english": "alleged", "japanese": "容疑のある" },
+{ "english": "grief", "japanese": "悲しみ" },
+{ "english": "inmate", "japanese": "収容者，同居人" },
+{ "english": "parental", "japanese": "親の" },
+{ "english": "flash", "japanese": "閃光" },
+{ "english": "glory", "japanese": "栄光" },
+{ "english": "tuck", "japanese": "押し込む" },
+{ "english": "conceal", "japanese": "隠す，隠れる" },
+{ "english": "faint", "japanese": "かすかな，わずかな" },
+{ "english": "dilemma", "japanese": "板ばさみ" },
+{ "english": "condense", "japanese": "凝縮する" },
+{ "english": "conductor", "japanese": "導体，案内人，指揮者" },
+{ "english": "shallow", "japanese": "浅い，軽薄な" },
+{ "english": "stadium", "japanese": "競技場" },
+{ "english": "conquest", "japanese": "征服，占領" },
+{ "english": "unite", "japanese": "団結する" },
+{ "english": "cage", "japanese": "かご、おり" },
+{ "english": "rack", "japanese": "置き棚" },
+{ "english": "courtroom", "japanese": "法廷" },
+{ "english": "statute", "japanese": "法令" },
+{ "english": "cartoon", "japanese": "漫画" },
+{ "english": "copper", "japanese": "銅" },
+{ "english": "courageous", "japanese": "勇気のある" },
+{ "english": "cradle", "japanese": "ゆりかご" },
+{ "english": "bug", "japanese": "虫、故障" },
+{ "english": "bless", "japanese": "祝福する" },
+{ "english": "hostile", "japanese": "敵意のある，敵の" },
+{ "english": "conceive", "japanese": "構想する" },
+{ "english": "instantly", "japanese": "すぐに，即座に" },
+{ "english": "cunning", "japanese": "ずる賢い，狡猾な" },
+{ "english": "vaccine", "japanese": "ワクチン" },
+{ "english": "opposed", "japanese": "反対した" },
+{ "english": "damp", "japanese": "湿った，じめじめした" },
+{ "english": "daring", "japanese": "大胆な，向こう見ずな" },
+{ "english": "revelation", "japanese": "啓示" },
+{ "english": "declaration", "japanese": "宣言" },
+{ "english": "delightful", "japanese": "楽しい" },
+{ "english": "sheer", "japanese": "本当の，透き通るような" },
+{ "english": "despise", "japanese": "軽蔑する" },
+{ "english": "destiny", "japanese": "運命" },
+{ "english": "immune", "japanese": "免疫" },
+{ "english": "reliability", "japanese": "信頼性" },
+{ "english": "bush", "japanese": "茂み" },
+{ "english": "exotic", "japanese": "異国情緒の" },
+{ "english": "acute", "japanese": "鋭角の，鋭い" },
+{ "english": "dim", "japanese": "薄暗い" },
+{ "english": "thigh", "japanese": "ふともも" },
+{ "english": "bull", "japanese": "雄牛" },
+{ "english": "disgrace", "japanese": "不名誉，恥辱" },
+{ "english": "disguise", "japanese": "変装させる" },
+{ "english": "secular", "japanese": "世俗の，現世の" },
+{ "english": "disgusting", "japanese": "嫌な，胸が悪くなる" },
+{ "english": "cab", "japanese": "タクシー" },
+{ "english": "dispose", "japanese": "配置する" },
+{ "english": "neutral", "japanese": "中立の" },
+{ "english": "biology", "japanese": "生物学" },
+{ "english": "progressive", "japanese": "革新的な，進歩的な" },
+{ "english": "distress", "japanese": "苦痛，苦悩" },
+{ "english": "conspiracy", "japanese": "陰謀" },
+{ "english": "execution", "japanese": "実行" },
+{ "english": "terrific", "japanese": "すごい，大変な" },
+{ "english": "dread", "japanese": "ひどく怖がる" },
+{ "english": "verdict", "japanese": "評決，判断" },
+{ "english": "skull", "japanese": "頭蓋骨" },
+{ "english": "self-esteem", "japanese": "自尊心" },
+{ "english": "dye", "japanese": "染料" },
+{ "english": "manipulate", "japanese": "操る" },
+{ "english": "eagerly", "japanese": "熱心に" },
+{ "english": "practitioner", "japanese": "開業医、専門家" },
+{ "english": "subsidy", "japanese": "補助金" },
+{ "english": "tragic", "japanese": "悲劇的な" },
+{ "english": "jar", "japanese": "瓶" },
+{ "english": "earthquake", "japanese": "地震" },
+{ "english": "underlying", "japanese": "根底にある" },
+{ "english": "embassy", "japanese": "大使館" },
+{ "english": "sympathy", "japanese": "同情" },
+{ "english": "isolation", "japanese": "隔離" },
+{ "english": "erect", "japanese": "直立の" },
+{ "english": "errand", "japanese": "使い走り，用事" },
+{ "english": "syndrome", "japanese": "症候群" },
+{ "english": "forbidden", "japanese": "禁じられた" },
+{ "english": "eternal", "japanese": "永遠の" },
+{ "english": "breeze", "japanese": "そよ風" },
+{ "english": "exaggerate", "japanese": "誇張する" },
+{ "english": "exclaim", "japanese": "叫ぶ，絶叫する" },
+{ "english": "presumably", "japanese": "たぶん，おそらく" },
+{ "english": "uncertain", "japanese": "不確実な" },
+{ "english": "dissolve", "japanese": "溶かす" },
+{ "english": "statistical", "japanese": "統計的な" },
+{ "english": "fairness", "japanese": "公平さ" },
+{ "english": "famine", "japanese": "食料不足，飢饉" },
+{ "english": "farewell", "japanese": "別れ" },
+{ "english": "fascinating", "japanese": "魅惑的な" },
+{ "english": "crush", "japanese": "押しつぶす" },
+{ "english": "feast", "japanese": "ごちそう，宴会" },
+{ "english": "cliff", "japanese": "崖" },
+{ "english": "fertile", "japanese": "肥沃な，多産な" },
+{ "english": "illusion", "japanese": "幻覚，錯覚" },
+{ "english": "anonymous", "japanese": "匿名の" },
+{ "english": "flatter", "japanese": "お世辞を言う" },
+{ "english": "flourish", "japanese": "繁栄する" },
+{ "english": "flu", "japanese": "インフルエンザ" },
+{ "english": "fluent", "japanese": "流暢な" },
+{ "english": "scramble", "japanese": "素早く進む，急いでする" },
+{ "english": "foam", "japanese": "小さな泡" },
+{ "english": "tumor", "japanese": "腫瘍" },
+{ "english": "pulse", "japanese": "脈動，震動" },
+{ "english": "sibling", "japanese": "兄弟姉妹" },
+{ "english": "irony", "japanese": "皮肉" },
+{ "english": "midst", "japanese": "真ん中" },
+{ "english": "alley", "japanese": "路地" },
+{ "english": "furnish", "japanese": "家具を備える" },
+{ "english": "persist", "japanese": "固執する，やり通す" },
+{ "english": "gleam", "japanese": "きらめき" },
+{ "english": "gloomy", "japanese": "憂鬱な" },
+{ "english": "fruitful", "japanese": "実り多い" },
+{ "english": "glorious", "japanese": "栄光の" },
+{ "english": "forgetful", "japanese": "忘れっぽい" },
+{ "english": "legislature", "japanese": "立法府" },
+{ "english": "grieve", "japanese": "深く悲しむ" },
+{ "english": "mentally", "japanese": "精神的に" },
+{ "english": "foster", "japanese": "養育する" },
+{ "english": "grim", "japanese": "厳格な，恐ろしい" },
+{ "english": "grind", "japanese": "挽く，すりつぶす" },
+{ "english": "cheat", "japanese": "だます、いかさま" },
+{ "english": "groan", "japanese": "うめき声" },
+{ "english": "heal", "japanese": "癒す" },
+{ "english": "fever", "japanese": "熱" },
+{ "english": "halt", "japanese": "立ち止まる，停止する" },
+{ "english": "exploit", "japanese": "偉業" },
+{ "english": "organism", "japanese": "生命体" },
+{ "english": "harmless", "japanese": "無害な" },
+{ "english": "hasten", "japanese": "急ぐ" },
+{ "english": "hay", "japanese": "干し草" },
+{ "english": "shove", "japanese": "突き出す，押し出す" },
+{ "english": "backyard", "japanese": "裏庭" },
+{ "english": "heap", "japanese": "かたまり" },
+{ "english": "comprise", "japanese": "含む，構成する" },
+{ "english": "heir", "japanese": "相続人，承継者" },
+{ "english": "herd", "japanese": "群れ" },
+{ "english": "placement", "japanese": "配置" },
+{ "english": "grandchild", "japanese": "孫" },
+{ "english": "ecological", "japanese": "生態学的な" },
+{ "english": "honorable", "japanese": "尊敬できる" },
+{ "english": "outfit", "japanese": "衣装" },
+{ "english": "horizon", "japanese": "地平線" },
+{ "english": "howl", "japanese": "遠吠えする" },
+{ "english": "trash", "japanese": "ごみ" },
+{ "english": "ideally", "japanese": "理想的には" },
+{ "english": "idiot", "japanese": "馬鹿" },
+{ "english": "texture", "japanese": "生地" },
+{ "english": "imitation", "japanese": "模倣，真似" },
+{ "english": "immensely", "japanese": "莫大に" },
+{ "english": "graceful", "japanese": "優雅な" },
+{ "english": "impatient", "japanese": "せっかちな" },
+{ "english": "custody", "japanese": "親権" },
+{ "english": "inhabit", "japanese": "生息する" },
+{ "english": "fleet", "japanese": "艦隊" },
+{ "english": "insure", "japanese": "保険をかける" },
+{ "english": "outsider", "japanese": "部外者" },
+{ "english": "desperately", "japanese": "必死に" },
+{ "english": "compel", "japanese": "無理にさせる" },
+{ "english": "ivory", "japanese": "象牙" },
+{ "english": "proclaim", "japanese": "宣言する" },
+{ "english": "confrontation", "japanese": "対決" },
+{ "english": "lame", "japanese": "不十分な，不自由な" },
+{ "english": "lark", "japanese": "戯れ，冗談" },
+{ "english": "scent", "japanese": "香り" },
+{ "english": "lastly", "japanese": "最後に" },
+{ "english": "eyebrow", "japanese": "眉" },
+{ "english": "sack", "japanese": "袋" },
+{ "english": "inherit", "japanese": "受け継ぐ" },
+{ "english": "lick", "japanese": "なめる" },
+{ "english": "nasty", "japanese": "不快な" },
+{ "english": "shrink", "japanese": "縮小する" },
+{ "english": "fierce", "japanese": "激しい，凶暴な" },
+{ "english": "envision", "japanese": "想像する" },
+{ "english": "magnificent", "japanese": "壮大な" },
+{ "english": "majesty", "japanese": "威厳，主権" },
+{ "english": "aisle", "japanese": "通路" },
+{ "english": "weaken", "japanese": "弱める" },
+{ "english": "protocol", "japanese": "儀礼，協定" },
+{ "english": "unfair", "japanese": "不公平な" },
+{ "english": "terrain", "japanese": "地形" },
+{ "english": "deploy", "japanese": "展開する，配置する" },
+{ "english": "distract", "japanese": "そらす" },
+{ "english": "medieval", "japanese": "中世の" },
+{ "english": "depressed", "japanese": "落ち込んだ" },
+{ "english": "chunk", "japanese": "かたまり" },
+{ "english": "microwave", "japanese": "電子レンジ" },
+{ "english": "midday", "japanese": "真昼" },
+{ "english": "migration", "japanese": "移住" },
+{ "english": "mischief", "japanese": "いたずら" },
+{ "english": "misfortune", "japanese": "不幸" },
+{ "english": "invade", "japanese": "侵略する" },
+{ "english": "classify", "japanese": "分類する" },
+{ "english": "moan", "japanese": "うめき声" },
+{ "english": "coup", "japanese": "大当たり" },
+{ "english": "density", "japanese": "密度" },
+{ "english": "monarch", "japanese": "君主" },
+{ "english": "supportive", "japanese": "協力的な" },
+{ "english": "moss", "japanese": "苔" },
+{ "english": "stimulus", "japanese": "刺激" },
+{ "english": "mourn", "japanese": "嘆く" },
+{ "english": "mummy", "japanese": "ミイラ" },
+{ "english": "dip", "japanese": "少し浸す" },
+{ "english": "murmur", "japanese": "つぶやく" },
+{ "english": "informal", "japanese": "非公式な" },
+{ "english": "feather", "japanese": "羽根" },
+{ "english": "sphere", "japanese": "球体" },
+{ "english": "pat", "japanese": "軽くたたく" },
+{ "english": "sole", "japanese": "単独の" },
+{ "english": "unfold", "japanese": "展開する" },
+{ "english": "well-being", "japanese": "幸福，健康" },
+{ "english": "validity", "japanese": "有効性" },
+{ "english": "ecosystem", "japanese": "生態系" },
+{ "english": "collar", "japanese": "襟" },
+{ "english": "obedience", "japanese": "従順" },
+{ "english": "weed", "japanese": "雑草" },
+{ "english": "streak", "japanese": "筋" },
+{ "english": "oblige", "japanese": "義務づける" },
+{ "english": "glimpse", "japanese": "ひと目" },
+{ "english": "omit", "japanese": "省略する" },
+{ "english": "onward", "japanese": "前進的な" },
+{ "english": "deem", "japanese": "考える" },
+{ "english": "artifact", "japanese": "人工物" },
+{ "english": "sneak", "japanese": "こっそり動く，忍び寄る" },
+{ "english": "mentor", "japanese": "指導者" },
+{ "english": "oriental", "japanese": "東洋の" },
+{ "english": "ornament", "japanese": "装飾" },
+{ "english": "sleeve", "japanese": "袖" },
+{ "english": "rib", "japanese": "肋骨" },
+{ "english": "oversleep", "japanese": "寝坊する，寝すぎる" },
+{ "english": "overtake", "japanese": "追い越す" },
+{ "english": "parish", "japanese": "教区" },
+{ "english": "slavery", "japanese": "奴隷制度" },
+{ "english": "commodity", "japanese": "商品" },
+{ "english": "halfway", "japanese": "途中の" },
+{ "english": "pastime", "japanese": "娯楽" },
+{ "english": "cemetery", "japanese": "お墓" },
+{ "english": "pasture", "japanese": "牧草地" },
+{ "english": "likelihood", "japanese": "可能性" },
+{ "english": "atop", "japanese": "頂上に" },
+{ "english": "perish", "japanese": "滅びる" },
+{ "english": "pessimistic", "japanese": "悲観的な" },
+{ "english": "rim", "japanese": "縁" },
+{ "english": "embarrassed", "japanese": "恥ずかしい" },
+{ "english": "isolated", "japanese": "孤立した" },
+{ "english": "pinch", "japanese": "つまむ" },
+{ "english": "squad", "japanese": "分隊" },
+{ "english": "plainly", "japanese": "明白に，率直に" },
+{ "english": "plunge", "japanese": "突入する" },
+{ "english": "plural", "japanese": "複数の" },
+{ "english": "demographic", "japanese": "人口統計の" },
+{ "english": "chill", "japanese": "冷たさ" },
+{ "english": "pope", "japanese": "法王" },
+{ "english": "refuge", "japanese": "避難" },
+{ "english": "steer", "japanese": "操縦する" },
+{ "english": "legislator", "japanese": "議員" },
+{ "english": "rally", "japanese": "結集する" },
+{ "english": "prefecture", "japanese": "県" },
+{ "english": "intact", "japanese": "そのままの" },
+{ "english": "thrive", "japanese": "繁栄する" },
+{ "english": "chew", "japanese": "噛む" },
+{ "english": "conception", "japanese": "概念" },
+{ "english": "triumph", "japanese": "勝利" },
+{ "english": "procession", "japanese": "行列，進行" },
+{ "english": "conscience", "japanese": "良心，善悪の概念" },
+{ "english": "jurisdiction", "japanese": "司法権" },
+{ "english": "inevitably", "japanese": "必然的に" },
+{ "english": "prosper", "japanese": "繁栄する" },
+{ "english": "feminist", "japanese": "男女同権主義者" },
+{ "english": "constraint", "japanese": "拘束，強制" },
+{ "english": "emotionally", "japanese": "感情的に" },
+{ "english": "expedition", "japanese": "遠征" },
+{ "english": "allegedly", "japanese": "申し立てによると" },
+{ "english": "provincial", "japanese": "地方の，田舎の" },
+{ "english": "lid", "japanese": "蓋" },
+{ "english": "sprinkle", "japanese": "振りかける，まき散らす" },
+{ "english": "mortality", "japanese": "死亡者数，死亡(率)" },
+{ "english": "philosophical", "japanese": "哲学的な" },
+{ "english": "tolerance", "japanese": "寛容さ" },
+{ "english": "recess", "japanese": "休憩，休暇" },
+{ "english": "peasant", "japanese": "農民" },
+{ "english": "refine", "japanese": "精製する" },
+{ "english": "refusal", "japanese": "拒否" },
+{ "english": "widow", "japanese": "未亡人" },
+{ "english": "forbid", "japanese": "禁じる" },
+{ "english": "remarkably", "japanese": "著しく" },
+{ "english": "remedy", "japanese": "治療" },
+{ "english": "brutal", "japanese": "残忍な，粗暴な" },
+{ "english": "predator", "japanese": "捕食者" },
+{ "english": "poke", "japanese": "突っつく" },
+{ "english": "opt", "japanese": "選ぶ，選択する" },
+{ "english": "soar", "japanese": "舞い上がる" },
+{ "english": "autonomy", "japanese": "自治" },
+{ "english": "enact", "japanese": "制定する" },
+{ "english": "thread", "japanese": "糸" },
+{ "english": "revive", "japanese": "生き返る" },
+{ "english": "fraction", "japanese": "分数" },
+{ "english": "threshold", "japanese": "敷居" },
+{ "english": "roar", "japanese": "とどろく，吠える" },
+{ "english": "robbery", "japanese": "強盗" },
+{ "english": "theological", "japanese": "神学的な" },
+{ "english": "prevail", "japanese": "打ち勝つ，はびこる" },
+{ "english": "denial", "japanese": "拒否" },
+{ "english": "scar", "japanese": "傷跡" },
+{ "english": "fragment", "japanese": "断片" },
+{ "english": "scarce", "japanese": "乏しい" },
+{ "english": "screw", "japanese": "ねじ" },
+{ "english": "warmth", "japanese": "暖かさ" },
+{ "english": "undergraduate", "japanese": "大学生" },
+{ "english": "projection", "japanese": "投影" },
+{ "english": "cruel", "japanese": "残酷な" },
+{ "english": "shiny", "japanese": "輝いた" },
+{ "english": "sightseeing", "japanese": "観光" },
+{ "english": "singular", "japanese": "特異な" },
+{ "english": "snatch", "japanese": "ひったくる" },
+{ "english": "sneeze", "japanese": "くしゃみ/くしゃみする" },
+{ "english": "frown", "japanese": "眉をひそめる" },
+{ "english": "regain", "japanese": "取り戻す" },
+{ "english": "sob", "japanese": "すすり泣く" },
+{ "english": "rubber", "japanese": "ゴム" },
+{ "english": "retreat", "japanese": "退却" },
+{ "english": "molecule", "japanese": "分子" },
+{ "english": "sow", "japanese": "種をまく" },
+{ "english": "integrated", "japanese": "統合された" },
+{ "english": "accountability", "japanese": "説明責任" },
+{ "english": "contemplate", "japanese": "熟考する" },
+{ "english": "startle", "japanese": "驚愕させる" },
+{ "english": "spark", "japanese": "火花" },
+{ "english": "statesman", "japanese": "政治家" },
+{ "english": "ironically", "japanese": "皮肉なことに" },
+{ "english": "fatigue", "japanese": "疲労" },
+{ "english": "stern", "japanese": "厳格な" },
+{ "english": "lecture", "japanese": "説教" },
+{ "english": "confession", "japanese": "告白" },
+{ "english": "stride", "japanese": "大きく歩く" },
+{ "english": "provoke", "japanese": "挑発する，怒らせる" },
+{ "english": "marble", "japanese": "大理石" },
+{ "english": "substantially", "japanese": "実質的に" },
+{ "english": "stubborn", "japanese": "頑固な" },
+{ "english": "explicit", "japanese": "明らかな" },
+{ "english": "disturbing", "japanese": "邪魔な" },
+{ "english": "surveillance", "japanese": "監視" },
+{ "english": "magnetic", "japanese": "磁気の" },
+{ "english": "summon", "japanese": "召喚する" },
+{ "english": "mutter", "japanese": "つぶやく，ぼそぼそ言う" },
+{ "english": "devastating", "japanese": "壊滅的な" },
+{ "english": "coordinate", "japanese": "座標" },
+{ "english": "swift", "japanese": "迅速な" },
+{ "english": "symphony", "japanese": "交響曲" },
+{ "english": "riot", "japanese": "暴動" },
+{ "english": "tempt", "japanese": "誘惑する" },
+{ "english": "nutrient", "japanese": "栄養素" },
+{ "english": "severely", "japanese": "厳しく" },
+{ "english": "sovereignty", "japanese": "主権" },
+{ "english": "thermometer", "japanese": "温度計" },
+{ "english": "thorn", "japanese": "とげ" },
+{ "english": "articulate", "japanese": "明確にする，はっきり発音する" },
+{ "english": "throne", "japanese": "王位" },
+{ "english": "dense", "japanese": "密な" },
+{ "english": "swell", "japanese": "膨れる" },
+{ "english": "accusation", "japanese": "非難" },
+{ "english": "torch", "japanese": "たいまつ" },
+{ "english": "terribly", "japanese": "ひどく" },
+{ "english": "cue", "japanese": "合図" },
+{ "english": "hazard", "japanese": "危険" },
+{ "english": "tread", "japanese": "足を踏み入れる" },
+{ "english": "compelling", "japanese": "説得力のある" },
+{ "english": "tub", "japanese": "桶" },
+{ "english": "twilight", "japanese": "黄昏時" },
+{ "english": "twinkle", "japanese": "きらきら光る" },
+{ "english": "weave", "japanese": "織る" },
+{ "english": "plea", "japanese": "嘆願，弁解" },
+{ "english": "uncover", "japanese": "明らかにする" },
+{ "english": "spine", "japanese": "脊椎" },
+{ "english": "dock", "japanese": "船着場" },
+{ "english": "fog", "japanese": "霧" },
+{ "english": "utter", "japanese": "純然たる，全くの" },
+{ "english": "diplomat", "japanese": "外交官" },
+{ "english": "missionary", "japanese": "宣教師" },
+{ "english": "epidemic", "japanese": "流行性の" },
+{ "english": "admirable", "japanese": "見事な" },
+{ "english": "fatal", "japanese": "致命的な，破滅的な" },
+{ "english": "vigor", "japanese": "活力" },
+{ "english": "trim", "japanese": "整える" },
+{ "english": "vivid", "japanese": "鮮やかな，鮮明な" },
+{ "english": "volcano", "japanese": "火山" },
+{ "english": "feeble", "japanese": "弱った，微弱な" },
+{ "english": "inherent", "japanese": "本来の，生来の" },
+{ "english": "vow", "japanese": "誓い" },
+{ "english": "nationwide", "japanese": "全国の" },
+{ "english": "ward", "japanese": "区画" },
+{ "english": "spit", "japanese": "唾を吐く" },
+{ "english": "kneel", "japanese": "ひざまずく" },
+{ "english": "dictate", "japanese": "指示する，書き取らせる" },
+{ "english": "wit", "japanese": "機転" },
+{ "english": "naval", "japanese": "海軍の" },
+{ "english": "plaintiff", "japanese": "原告" },
+{ "english": "abrupt", "japanese": "急な，不意の" },
+{ "english": "accumulate", "japanese": "蓄積する，溜まる" },
+{ "english": "anticipation", "japanese": "期待" },
+{ "english": "ape", "japanese": "類人猿" },
+{ "english": "comical", "japanese": "おどけた，滑稽な" },
+{ "english": "architectural", "japanese": "建築の" },
+{ "english": "ascent", "japanese": "上昇" },
+{ "english": "astronaut", "japanese": "宇宙飛行士" },
+{ "english": "astronomy", "japanese": "天文学" },
+{ "english": "bald", "japanese": "禿げた" },
+{ "english": "banish", "japanese": "追放する" },
+{ "english": "beak", "japanese": "くちばし" },
+{ "english": "betrayal", "japanese": "裏切り" },
+{ "english": "bleach", "japanese": "漂白する" },
+{ "english": "blot", "japanese": "しみ" },
+{ "english": "blueprint", "japanese": "青写真" },
+{ "english": "bribe", "japanese": "賄賂" },
+{ "english": "brighten", "japanese": "明るくする" },
+{ "english": "brilliance", "japanese": "明るさ" },
+{ "english": "brook", "japanese": "小川" },
+{ "english": "broom", "japanese": "ほうき" },
+{ "english": "canyon", "japanese": "峡谷" },
+{ "english": "chairperson", "japanese": "議長" },
+{ "english": "chilly", "japanese": "肌寒い" },
+{ "english": "coarse", "japanese": "粗末な，粗い" },
+{ "english": "comet", "japanese": "彗星" },
+{ "english": "contentment", "japanese": "満足" },
+{ "english": "councilor", "japanese": "評議員" },
+{ "english": "cozy", "japanese": "居心地の良い" },
+{ "english": "crook", "japanese": "湾曲させる" },
+{ "english": "crouch", "japanese": "しゃがむ" },
+{ "english": "deceit", "japanese": "詐欺，虚偽" },
+{ "english": "defy", "japanese": "無視する，逆らう" },
+{ "english": "delicately", "japanese": "繊細に" },
+{ "english": "dew", "japanese": "露" },
+{ "english": "digestion", "japanese": "消化" },
+{ "english": "disturbance", "japanese": "騒動，妨害" },
+{ "english": "ditch", "japanese": "溝" },
+{ "english": "dizzy", "japanese": "めまいがする" },
+{ "english": "dreadful", "japanese": "恐ろしい" },
+{ "english": "dullness", "japanese": "鈍さ" },
+{ "english": "dwelling", "japanese": "住居" },
+{ "english": "earnestly", "japanese": "真剣に" },
+{ "english": "electron", "japanese": "電子" },
+{ "english": "endurance", "japanese": "忍耐" },
+{ "english": "corrupt", "japanese": "腐敗した" },
+{ "english": "envious", "japanese": "羨ましい" },
+{ "english": "eternally", "japanese": "永遠に" },
+{ "english": "exaggeration", "japanese": "誇張" },
+{ "english": "examiner", "japanese": "審査官" },
+{ "english": "excursion", "japanese": "遠足" },
+{ "english": "exhaustion", "japanese": "枯渇、疲労" },
+{ "english": "fable", "japanese": "作り話" },
+{ "english": "faraway", "japanese": "遠くの" },
+{ "english": "federation", "japanese": "連合" },
+{ "english": "fling", "japanese": "投げ飛ばす" },
+{ "english": "folly", "japanese": "愚かさ" },
+{ "english": "fossil", "japanese": "化石" },
+{ "english": "fulfillment", "japanese": "遂行，実践" },
+{ "english": "fuss", "japanese": "空騒ぎ" },
+{ "english": "fuzzy", "japanese": "ぼやけた" },
+{ "english": "gateway", "japanese": "出入口" },
+{ "english": "gem", "japanese": "宝石" },
+{ "english": "gratitude", "japanese": "感謝" },
+{ "english": "graze", "japanese": "軽く食べる，草を食う" }
+        ];
+
+        // 単語を50個ずつに分割
+        const wordsPerLevel = 50;
+        const levelData = [];
+        for (let i = 0; i < allWords.length; i += wordsPerLevel) {
+            levelData.push({
+                level: levelData.length + 1,
+                words: allWords.slice(i, i + wordsPerLevel)
+            });
+        }
+        
+        let currentLevelIndex = 0; // 現在表示しているレベルのインデックス (0から始まる)
+        const totalLevels = levelData.length;
+        let testQuestions = [];
+        let currentQuestionIndex = 0;
+        let incorrectWords = [];
+        let score = 0;
+
+        const wordListContainer = document.getElementById('wordListContainer');
+        const testContainer = document.getElementById('testContainer');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const currentLevelDisplay = document.getElementById('currentLevelDisplay');
+        const prevLevelBtn = document.getElementById('prevLevelBtn');
+        const nextLevelBtn = document.getElementById('nextLevelBtn');
+        const copyAllWordsBtn = document.getElementById('copyAllWordsBtn');
+        const startTestBtn = document.getElementById('startTestBtn');
+        const backToLevelBtn = document.getElementById('backToLevelBtn');
+        const copyIncorrectWordsBtn = document.getElementById('copyIncorrectWordsBtn');
+        const questionArea = document.getElementById('questionArea');
+        const questionCount = document.getElementById('questionCount');
+        const questionText = document.getElementById('questionText');
+        const answerOptions = document.getElementById('answerOptions');
+        const feedbackArea = document.getElementById('feedbackArea');
+        const feedbackText = document.getElementById('feedbackText');
+        const rationaleText = document.getElementById('rationaleText');
+        const levelNav = document.getElementById('levelNav');
+        const actionButtons = document.getElementById('actionButtons');
+
+        function displayWordList(levelIndex) {
+            hideAllContainers();
+            wordListContainer.classList.remove('hidden');
+            
+            if (levelIndex < 0 || levelIndex >= levelData.length) {
+                wordListContainer.innerHTML = `<p class="text-red-500 text-center">このレベルのデータはまだありません。</p>`;
+                currentLevelDisplay.textContent = `レベル ${levelIndex + 1} / ${totalLevels}`;
+                prevLevelBtn.disabled = levelIndex === 0;
+                nextLevelBtn.disabled = levelIndex >= totalLevels - 1;
+                copyAllWordsBtn.disabled = true;
+                startTestBtn.disabled = true;
+                return;
+            }
+
+            const currentLevel = levelData[levelIndex];
+            let htmlContent = `<ul class="list-disc pl-5 space-y-2 text-gray-700">`;
+            currentLevel.words.forEach(word => {
+                htmlContent += `
+                    <li class="flex items-center justify-between">
+                        <span class="flex-1">
+                            <strong class="text-blue-600">${word.english}</strong> (<span class="text-gray-500">${word.japanese}</span>)
+                        </span>
+                        <button onclick="copyWord('${word.english.replace(/'/g, "\\'")}', '${word.japanese.replace(/'/g, "\\'")}')" class="bg-green-200 hover:bg-green-300 text-green-800 text-xs font-semibold py-1 px-2 rounded-full shadow-sm transition-colors duration-200 ml-2 flex-shrink-0">
+                            コピー
+                        </button>
+                    </li>`;
+            });
+            htmlContent += `</ul>`;
+            wordListContainer.innerHTML = htmlContent;
+
+            currentLevelDisplay.textContent = `レベル ${currentLevel.level} / ${totalLevels}`;
+            prevLevelBtn.disabled = currentLevelIndex === 0;
+            nextLevelBtn.disabled = currentLevelIndex >= totalLevels - 1;
+            copyAllWordsBtn.disabled = false;
+            startTestBtn.disabled = false;
+            levelNav.classList.remove('hidden');
+            actionButtons.classList.remove('hidden');
+        }
+
+        function copyWord(english, japanese) {
+            const textToCopy = `${english} (${japanese})`;
+            copyToClipboard(textToCopy);
+            showFeedback('単語をコピーしました！');
+        }
+
+        function copyAllWords() {
+            if (currentLevelIndex >= levelData.length) {
+                showFeedback('このレベルのデータはありません。');
+                return;
+            }
+            const currentLevel = levelData[currentLevelIndex];
+            const allWordsText = currentLevel.words.map(word => `${word.english} (${word.japanese})`).join('\n');
+            copyToClipboard(allWordsText);
+            showFeedback('全単語をコピーしました！');
+        }
+        
+        function copyIncorrectWords() {
+            if (incorrectWords.length === 0) {
+                showFeedback('間違えた単語はありません。');
+                return;
+            }
+            const allWordsText = incorrectWords.map(word => `${word.english} (${word.japanese})`).join('\n');
+            copyToClipboard(allWordsText);
+            showFeedback('間違えた単語をすべてコピーしました！');
+        }
+
+        function copyToClipboard(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+            } catch (err) {
+                console.error('コピーに失敗しました', err);
+            } finally {
+                document.body.removeChild(textarea);
+            }
+        }
+
+        function showFeedback(message) {
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.textContent = message;
+            feedbackDiv.className = 'fixed bottom-4 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50 transition-opacity duration-300 opacity-0';
+            document.body.appendChild(feedbackDiv);
+
+            setTimeout(() => {
+                feedbackDiv.classList.remove('opacity-0');
+                feedbackDiv.classList.add('opacity-100');
+            }, 10);
+
+            setTimeout(() => {
+                feedbackDiv.classList.remove('opacity-100');
+                feedbackDiv.classList.add('opacity-0');
+                feedbackDiv.addEventListener('transitionend', () => feedbackDiv.remove(), { once: true });
+            }, 2000);
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function hideAllContainers() {
+            wordListContainer.classList.add('hidden');
+            testContainer.classList.add('hidden');
+            resultsContainer.classList.add('hidden');
+            levelNav.classList.add('hidden');
+            actionButtons.classList.add('hidden');
+        }
+
+        function startTest() {
+            hideAllContainers();
+            testContainer.classList.remove('hidden');
+            
+            const currentWords = levelData[currentLevelIndex].words;
+            shuffleArray(currentWords);
+            testQuestions = currentWords.map(word => createQuestion(word, currentWords));
+            
+            currentQuestionIndex = 0;
+            incorrectWords = [];
+            score = 0;
+            
+            displayQuestion();
+        }
+
+        function createQuestion(correctWord, allWords) {
+            const questionType = Math.random() < 0.5 ? 'englishToJapanese' : 'japaneseToEnglish';
+            let questionTextContent;
+            let correctAnswer;
+
+            if (questionType === 'englishToJapanese') {
+                questionTextContent = `「${correctWord.english}」の意味として正しいものを選びなさい。`;
+                correctAnswer = correctWord.japanese;
+            } else {
+                questionTextContent = `「${correctWord.japanese}」に当てはまる英単語として正しいものを選びなさい。`;
+                correctAnswer = correctWord.english;
+            }
+        
+            // 選択肢を生成するための単語リスト
+            const potentialWords = allWords.filter(word => word !== correctWord);
+            shuffleArray(potentialWords);
+        
+            const answerOptions = [correctAnswer];
+        
+            // 最大3つの誤った選択肢を追加
+            const numIncorrectOptions = Math.min(3, potentialWords.length);
+            for (let i = 0; i < numIncorrectOptions; i++) {
+                if (questionType === 'englishToJapanese') {
+                    answerOptions.push(potentialWords[i].japanese);
+                } else {
+                    answerOptions.push(potentialWords[i].english);
+                }
+            }
+        
+            shuffleArray(answerOptions);
+        
+            const options = answerOptions.map(option => ({
+                text: option,
+                isCorrect: option === correctAnswer
+            }));
+        
+            const hint = `正解は「${correctWord.japanese}」です。`;
+            const rationale = `正解は「${correctWord.japanese}」です。`;
+        
+            return {
+                question: questionTextContent,
+                options: options,
+                hint: hint,
+                correctWord: correctWord
+            };
+        }
+
+        function displayQuestion() {
+            feedbackArea.classList.add('hidden');
+            
+            if (currentQuestionIndex >= testQuestions.length) {
+                showResults();
+                return;
+            }
+            
+            const question = testQuestions[currentQuestionIndex];
+            
+            questionCount.textContent = `問題 ${currentQuestionIndex + 1} / ${testQuestions.length}`;
+            questionText.textContent = question.question;
+            
+            answerOptions.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('button');
+                optionElement.textContent = option.text;
+                optionElement.className = 'w-full text-left p-3 rounded-lg border border-gray-300 bg-white hover:bg-gray-100 transition-colors duration-200';
+                optionElement.dataset.isCorrect = option.isCorrect;
+                optionElement.addEventListener('click', () => {
+                    checkAnswer(optionElement);
+                });
+                answerOptions.appendChild(optionElement);
+            });
+        }
+
+        function checkAnswer(selectedOption) {
+            const isCorrect = selectedOption.dataset.isCorrect === 'true';
+            
+            document.querySelectorAll('#answerOptions button').forEach(btn => {
+                const optionIsCorrect = btn.dataset.isCorrect === 'true';
+                if (optionIsCorrect) {
+                    btn.classList.remove('bg-white', 'border-gray-300', 'hover:bg-gray-100');
+                    btn.classList.add('bg-green-200', 'border-green-500');
+                } else if (btn === selectedOption) {
+                    btn.classList.remove('bg-blue-100', 'border-blue-500');
+                    btn.classList.add('bg-red-200', 'border-red-500');
+                }
+                btn.disabled = true;
+            });
+            
+            feedbackArea.classList.remove('hidden');
+            if (isCorrect) {
+                feedbackArea.className = 'mt-4 p-4 rounded-lg bg-green-100';
+                feedbackText.className = 'font-bold text-green-700';
+                feedbackText.textContent = '正解です！';
+                score++;
+            } else {
+                feedbackArea.className = 'mt-4 p-4 rounded-lg bg-red-100';
+                feedbackText.className = 'font-bold text-red-700';
+                feedbackText.textContent = '残念、不正解です。';
+                incorrectWords.push(testQuestions[currentQuestionIndex].correctWord);
+            }
+            rationaleText.textContent = testQuestions[currentQuestionIndex].hint;
+            
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < testQuestions.length) {
+                    displayQuestion();
+                } else {
+                    showResults();
+                }
+            }, 2000);
+        }
+
+        function showResults() {
+            hideAllContainers();
+            resultsContainer.classList.remove('hidden');
+            
+            const totalQuestions = testQuestions.length;
+            testScore.textContent = `正解数: ${score} / ${totalQuestions}`;
+            
+            incorrectWordsList.innerHTML = '';
+            if (incorrectWords.length > 0) {
+                incorrectWordsHeading.classList.remove('hidden');
+                incorrectWords.forEach(word => {
+                    const listItem = document.createElement('div');
+                    listItem.textContent = `${word.english} (${word.japanese})`;
+                    listItem.className = 'bg-white p-3 rounded-lg shadow-sm cursor-pointer hover:bg-gray-100 transition-colors duration-200';
+                    listItem.onclick = () => {
+                        copyWord(word.english, word.japanese);
+                    };
+                    incorrectWordsList.appendChild(listItem);
+                });
+                incorrectCopyButton.classList.remove('hidden');
+            } else {
+                incorrectWordsHeading.classList.add('hidden');
+                incorrectCopyButton.classList.add('hidden');
+                const p = document.createElement('p');
+                p.textContent = 'お見事！すべての問題を正解しました。';
+                p.className = 'text-center text-gray-700';
+                incorrectWordsList.appendChild(p);
+            }
+        }
+
+        prevLevelBtn.addEventListener('click', () => {
+            if (currentLevelIndex > 0) {
+                currentLevelIndex--;
+                displayWordList(currentLevelIndex);
+            }
+        });
+
+        nextLevelBtn.addEventListener('click', () => {
+            if (currentLevelIndex < totalLevels - 1) {
+                currentLevelIndex++;
+                displayWordList(currentLevelIndex);
+            }
+        });
+
+        copyAllWordsBtn.addEventListener('click', copyAllWords);
+        startTestBtn.addEventListener('click', startTest);
+        backToLevelBtn.addEventListener('click', () => {
+            displayWordList(currentLevelIndex);
+        });
+        copyIncorrectWordsBtn.addEventListener('click', copyIncorrectWords);
+
+        window.onload = () => {
+            displayWordList(currentLevelIndex);
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+[
+    {
+        "id": "war-of-the-worlds",
+        "title": "The War of the Worlds",
+        "author": "H.G. Wells",
+        "cover": "https://m.media-amazon.com/images/I/81vC950cwiL._SL1500_.jpg",
+        "description": "A seminal science fiction novel describing an invasion of Earth by Martians.",
+        "difficulty": "Intermediate",
+        "color": "#f59e0b"
+    },
+    {
+        "id": "the-time-machine",
+        "title": "The Time Machine",
+        "author": "H.G. Wells",
+        "cover": "https://m.media-amazon.com/images/I/81KkZYNFNdL._SL1500_.jpg",
+        "description": "The classic tale of a Victorian scientist who travels to the far future.",
+        "difficulty": "Intermediate",
+        "color": "#3b82f6"
+    }
+]
